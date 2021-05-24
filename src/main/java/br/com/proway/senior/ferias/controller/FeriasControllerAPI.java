@@ -9,14 +9,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.proway.senior.ferias.model.Ferias;
-import br.com.proway.senior.ferias.model.FeriasRepository;
 
 public class FeriasControllerAPI {
 
-	private final FeriasRepository repository;
+	private final FeriasController controller;
 
-	public FeriasControllerAPI(FeriasRepository repository) {
-		this.repository = repository;
+	public FeriasControllerAPI(FeriasController controller) {
+		this.controller = controller;
 	}
 
 	/**
@@ -28,11 +27,39 @@ public class FeriasControllerAPI {
 	 * @throws Exception Nao existe uma ferias com esse id.
 	 */
 	@GetMapping("/ferias/{id}")
-	public Ferias consultarFeriasPorId(@PathVariable Long id) throws Exception {
-
-		return repository.findById(id).orElseThrow(() -> new Exception("Nao existe uma ferias com esse id."));
+	Ferias consultarFeriasPorId(@PathVariable Long id) throws Exception {
+		// TODO adicionar FeriasDTO
+		return controller.buscarPorIdFerias(id);
 	}
 
+	/**
+	 * Consulta as {@link Ferias} por id do colaborador.
+	 * 
+	 * @param id {@link id}
+	 * @return Ferias
+	 * @author Lucas Grijó <rksgrijo@gmail.com>
+	 * @throws Exception Nao existe uma ferias com esse id.
+	 */
+	@GetMapping("/ferias/{idColaborador}")
+	List<Ferias> consultarFeriasPorIdColaborador(@PathVariable Long id) throws Exception {
+		// TODO adicionar FeriasDTO
+		return controller.buscarPorIdColaborador(id);
+	}
+	
+	/**
+	 * Consulta as {@link Ferias} ainda nao usufruidas por id do gestor.
+	 * 
+	 * @param id {@link id}
+	 * @return Ferias
+	 * @author Lucas Grijó <rksgrijo@gmail.com>
+	 * @throws Exception Nao existe uma ferias com esse id.
+	 */
+	@GetMapping("/ferias/{idColaborador}")
+	List<Ferias> consultarFeriasPorIdGestorNaoUsufruidas(@PathVariable Long id) throws Exception {
+		// TODO adicionar FeriasDTO
+		return controller.buscarPorIdGestorENaoUsufruidas(id);
+	}
+	
 	/**
 	 * Busca todas as {@link Ferias} do banco.
 	 * 
@@ -40,8 +67,9 @@ public class FeriasControllerAPI {
 	 * @author Lucas Grijó <rksgrijo@gmail.com>
 	 */
 	@GetMapping("/ferias")
-	List<Ferias> all() {
-		return repository.findAll();
+	List<Ferias> buscarTodos() {
+		// TODO adicionar FeriasDTO
+		return controller.buscarTodos();
 	}
 
 	/**
@@ -49,24 +77,11 @@ public class FeriasControllerAPI {
 	 * 
 	 * @return Ferias
 	 * @author Lucas Grijó <rksgrijo@gmail.com>
+	 * @throws Exception Ferias nao encontradas.
 	 */
 	@PutMapping("/ferias/{id}")
-	Ferias alterarFerias(@RequestBody Ferias novaFerias, @PathVariable Long id) {
-
-		return repository.findById(id).map(ferias -> {
-			ferias.setIdColaborador(novaFerias.getIdColaborador());
-			ferias.setIdRequerimento(novaFerias.getIdRequerimento());
-			ferias.setUsufruido(novaFerias.isUsufruido());
-			ferias.setDataInicio(novaFerias.getDataInicio());
-			ferias.setDataFim(novaFerias.getDataFim());
-			ferias.setDiasRequisitados(novaFerias.getDiasRequisitados());
-			ferias.setDiasVendidos(novaFerias.getDiasVendidos());
-			ferias.setTipoFerias(novaFerias.getTipoFerias());
-			return repository.save(ferias);
-		}).orElseGet(() -> {
-			novaFerias.setId(id);
-			return repository.save(novaFerias);
-		});
+	Ferias alterarFerias(@RequestBody Ferias novaFerias, @PathVariable Long id) throws Exception {
+		return controller.alterarDataFerias(id, novaFerias);
 	}
 
 	/**
@@ -76,7 +91,7 @@ public class FeriasControllerAPI {
 	 */
 	@DeleteMapping("/ferias/{id}")
 	void deletarFerias(@PathVariable Long id) {
-		repository.deleteById(id);
+		controller.deletarFeriasPorId(id);
 	}
 
 }

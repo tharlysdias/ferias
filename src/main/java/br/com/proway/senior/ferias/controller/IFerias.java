@@ -2,6 +2,7 @@ package br.com.proway.senior.ferias.controller;
 
 import java.time.LocalDate;
 
+import br.com.proway.senior.ferias.model.enums.EstadoFerias;
 import br.com.proway.senior.ferias.model.enums.TiposFerias;
 
 public interface IFerias {
@@ -12,7 +13,7 @@ public interface IFerias {
 
 	public Long getIdRequerimento();
 
-	public boolean isUsufruido();
+	public EstadoFerias getEstado();
 
 	public LocalDate getDataInicio();
 

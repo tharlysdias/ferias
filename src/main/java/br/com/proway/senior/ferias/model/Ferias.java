@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import br.com.proway.senior.ferias.controller.IFerias;
+import br.com.proway.senior.ferias.model.enums.EstadoFerias;
 import br.com.proway.senior.ferias.model.enums.TiposFerias;
 
 @Entity
@@ -20,8 +21,10 @@ public class Ferias implements IFerias {
 	private Long id;
 
 	private Long idColaborador;
+	private Long idGestor;
 	private Long idRequerimento;
-	private boolean usufruido;
+	@Enumerated(EnumType.STRING)
+	private EstadoFerias estado;
 
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
@@ -35,18 +38,32 @@ public class Ferias implements IFerias {
 	public Ferias() {
 	}
 
-	public Ferias(Long idColaborador, Long idRequerimento, boolean usufruido, LocalDate dataInicio, LocalDate dataFim,
-			int diasRequisitados, int diasVendidos, TiposFerias tipoFerias) {
-		super();
+	/**
+	 * @param id
+	 * @param idColaborador
+	 * @param idGestor
+	 * @param idRequerimento
+	 * @param usufruido
+	 * @param dataInicio
+	 * @param dataFim
+	 * @param diasRequisitados
+	 * @param diasVendidos
+	 * @param tipoFerias
+	 */
+	public Ferias(Long idColaborador, Long idGestor, Long idRequerimento, EstadoFerias estado,
+			LocalDate dataInicio, LocalDate dataFim, int diasRequisitados, int diasVendidos, TiposFerias tipoFerias) {
 		this.idColaborador = idColaborador;
+		this.idGestor = idGestor;
 		this.idRequerimento = idRequerimento;
-		this.usufruido = usufruido;
+		this.estado = estado;
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
 		this.diasRequisitados = diasRequisitados;
 		this.diasVendidos = diasVendidos;
 		this.tipoFerias = tipoFerias;
 	}
+
+
 
 	public Long getId() {
 		return id;
@@ -72,12 +89,12 @@ public class Ferias implements IFerias {
 		this.idRequerimento = idRequerimento;
 	}
 
-	public boolean isUsufruido() {
-		return usufruido;
+	public EstadoFerias getEstado() {
+		return estado;
 	}
 
-	public void setUsufruido(boolean usufruido) {
-		this.usufruido = usufruido;
+	public void setEstado(EstadoFerias estado) {
+		this.estado = estado;
 	}
 
 	public LocalDate getDataInicio() {
@@ -118,6 +135,14 @@ public class Ferias implements IFerias {
 
 	public void setTipoFerias(TiposFerias tipoFerias) {
 		this.tipoFerias = tipoFerias;
+	}
+	
+	public Long getIdGestor() {
+		return idGestor;
+	}
+
+	public void setIdGestor(Long idGestor) {
+		this.idGestor = idGestor;
 	}
 
 }
