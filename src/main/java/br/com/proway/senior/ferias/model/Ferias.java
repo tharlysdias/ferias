@@ -11,7 +11,6 @@ import javax.persistence.Id;
 
 import br.com.proway.senior.ferias.model.enums.TiposFerias;
 
-
 @Entity
 public class Ferias {
 	
