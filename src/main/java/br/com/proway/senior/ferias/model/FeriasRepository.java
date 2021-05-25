@@ -13,4 +13,7 @@ public interface FeriasRepository extends JpaRepository<Ferias, Long> {
 	public List<Ferias> findAllByIdColaborador(Long id);
 	
 	public List<Ferias> findByIdGestorAndEstado(Long id, EstadoFerias estado);
+	
+	public Ferias findByIdColaboradorAndEstado(Long id, EstadoFerias estado);
+
 }

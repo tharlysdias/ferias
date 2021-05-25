@@ -20,11 +20,9 @@ import br.com.proway.senior.ferias.model.enums.EstadoFerias;
 public class FeriasController {
 
 	@Autowired
-	private final FeriasRepository repository;
+	private FeriasRepository repository;
 
-	public FeriasController(FeriasRepository repository) {
-		this.repository = repository;
-	}
+	public FeriasController() {	}
 	
 	public FeriasRepository getRepository() {
 		return repository;
@@ -41,8 +39,8 @@ public class FeriasController {
 	 */
 	public Ferias criarFerias(IRequerimento requerimento) {
 		EstadoFerias estado = EstadoFerias.NAO_USUFRUIDA;
-		Ferias ferias = new Ferias(requerimento.getIdColaborador(), requerimento.getId(), 
-				requerimento.getIdGestor(), estado, requerimento.getDataInicioFeriasRequisitadas(), 
+		Ferias ferias = new Ferias(requerimento.getIdColaborador(), requerimento.getIdGestor(), 
+				requerimento.getId(), estado, requerimento.getDataInicioFeriasRequisitadas(), 
 				requerimento.getDataFimFeriasRequisitadas(), requerimento.getDiasRequisitados(), 
 				requerimento.getDiasVendidos(), requerimento.getTipoFerias());
 		return repository.save(ferias);
@@ -84,6 +82,18 @@ public class FeriasController {
 	 */
 	public List<Ferias> buscarPorIdColaborador(Long id){
 		return repository.findAllByIdColaborador(id);
+	}
+	
+	/**
+	 * Busca {@link Ferias} do colaborador.
+	 * 
+	 * Busca as ferias anda nao usufruidas do colaborador.
+	 * 
+	 * @param id do colaborador
+	 * @return ferias do colaborador
+	 */
+	public Ferias buscarPorIdColaboradorENaoUsufruidas(Long id){
+		return repository.findByIdColaboradorAndEstado(id, EstadoFerias.NAO_USUFRUIDA);
 	}
 	
 	/**
