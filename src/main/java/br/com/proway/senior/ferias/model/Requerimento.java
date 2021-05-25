@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import br.com.proway.senior.ferias.controller.IRequerimento;
-import br.com.proway.senior.ferias.model.dto.RequerimentoDTO;
 import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
 import br.com.proway.senior.ferias.model.enums.TiposFerias;
 
@@ -59,6 +58,7 @@ public class Requerimento implements IRequerimento {
 			Integer diasRequisitados, Integer diasVendidos, Integer diasFracionados,
 			LocalDate dataInicioFeriasRequisitadas, LocalDate dataFimFeriasRequisitadas, boolean vendeuORestante,
 			TiposFerias tipoFerias) {
+		super();
 		this.idColaborador = idColaborador;
 		this.idGestor = idGestor;
 		this.dataAbertura = dataAbertura;
@@ -74,23 +74,6 @@ public class Requerimento implements IRequerimento {
 		this.dataFimFeriasRequisitadas = dataFimFeriasRequisitadas;
 		this.vendeuORestante = vendeuORestante;
 		this.tipoFerias = tipoFerias;
-	}
-
-	public Requerimento(RequerimentoDTO requerimentoDto) {
-		this.idColaborador = requerimentoDto.getIdColaborador();
-		this.idGestor = requerimentoDto.getIdGestor();
-		this.dataAbertura = requerimentoDto.getDataAbertura();
-		this.prazoAnalise = requerimentoDto.getPrazoAnalise();
-		this.dataFechamento = requerimentoDto.getDataFechamento();
-		this.estado = requerimentoDto.getEstado();
-		this.mensagem = requerimentoDto.getMensagem();
-		this.resposta = requerimentoDto.getResposta();
-		this.diasRequisitados = requerimentoDto.getDiasRequisitados();
-		this.diasVendidos = requerimentoDto.getDiasVendidos();
-		this.diasFracionados = requerimentoDto.getDiasFracionados();
-		this.dataInicioFeriasRequisitadas = requerimentoDto.getDataInicioFeriasRequisitadas();
-		this.dataFimFeriasRequisitadas = requerimentoDto.getDataFimFeriasRequisitadas();
-		this.vendeuORestante = requerimentoDto.isVendeuORestante();
 	}
 
 	public Long getId() {
@@ -220,6 +203,4 @@ public class Requerimento implements IRequerimento {
 	public void setTipoFerias(TiposFerias tipoFerias) {
 		this.tipoFerias = tipoFerias;
 	}
-	
-	
 }
