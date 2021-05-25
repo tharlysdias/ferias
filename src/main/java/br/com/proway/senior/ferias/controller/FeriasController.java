@@ -101,7 +101,7 @@ public class FeriasController {
 	 * 
 	 * @return lista de Ferias.
 	 */
-	public List<Ferias> buscarTodos(){
+	public List<Ferias> buscarTodasFerias(){
 		return repository.findAll();
 	}
 	

@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -55,15 +56,6 @@ public class FeriasControllerTest {
 	
 	@Test
 	public void testCriarFerias() {
-		requerimento.setId(1l);
-		requerimento.setIdColaborador(1l);
-		requerimento.setIdGestor(2l);
-		requerimento.setDiasRequisitados(30);
-		requerimento.setDiasVendidos(0);
-		requerimento.setDiasFracionados(0);
-		requerimento.setDataInicioFeriasRequisitadas(LocalDate.now().plusDays(30));
-		requerimento.setDataFimFeriasRequisitadas(LocalDate.now().plusDays(60));
-		requerimento.setTipoFerias(TiposFerias.TOTAL);
 		assertEquals(ferias.getIdColaborador(), controller.criarFerias(requerimento).getIdColaborador());
 	}
 
@@ -89,30 +81,47 @@ public class FeriasControllerTest {
 
 	@Test
 	public void testBuscarPorIdColaborador() {
-		fail("Not yet implemented");
+		int tamanhoAntes = controller.buscarPorIdColaborador(30l).size();
+		requerimento.setIdColaborador(30l);
+		controller.criarFerias(requerimento);
+		assertEquals(tamanhoAntes + 1, controller.buscarPorIdColaborador(30l).size());
 	}
 
 	@Test
-	public void testBuscarTodos() {
-		fail("Not yet implemented");
+	public void testBuscarTodasFerias() {
+		int tamanhoAntes = controller.buscarTodasFerias().size();
+		requerimento.setIdGestor(55l);;
+		controller.criarFerias(requerimento);
+		List<Ferias> listaFerias = controller.buscarTodasFerias();
+		assertEquals(tamanhoAntes + 1, listaFerias.size());
+		assertEquals(55l, listaFerias.get(listaFerias.size()-1).getIdGestor());
 	}
 
 	@Test
-	public void testAlterarEstadoFerias() {
-		fail("Not yet implemented");
+	public void testAlterarEstadoFerias() throws Exception {
+		controller.getRepository().save(ferias);
+		Long id = ferias.getId();
+		assertEquals(EstadoFerias.USUFRUIDA, 
+				controller.alterarEstadoFerias(id, EstadoFerias.USUFRUIDA).getEstado());
 	}
 
+	@Test(expected = Exception.class)
+	public void testAlterarEstadoFeriasException() throws Exception {
+		controller.getRepository().save(ferias);
+		assertEquals(EstadoFerias.USUFRUIDA, 
+				controller.alterarEstadoFerias(-5l, EstadoFerias.USUFRUIDA).getEstado());	}
+	
 	@Test
 	public void testAlterarDataFerias() {
 		fail("Not yet implemented");
 	}
 
-	@Test
+	@Ignore
 	public void testDeletarFeriasPorFerias() {
 		fail("Not yet implemented");
 	}
 
-	@Test
+	@Ignore
 	public void testDeletarFeriasPorId() {
 		fail("Not yet implemented");
 	}
