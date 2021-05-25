@@ -30,79 +30,116 @@ public class RequerimentoDTO {
 	private boolean vendeuORestante;
 
 	public RequerimentoDTO() {}
-	
-	
-	public RequerimentoDTO(Requerimento requerimento) {
-		this.idColaborador = requerimento.getIdColaborador();
-		this.idGestor = requerimento.getIdGestor();
-		this.dataAbertura = requerimento.getDataAbertura();
-		this.prazoAnalise = requerimento.getPrazoAnalise();
-		this.dataFechamento = requerimento.getDataFechamento();
-		this.estado = requerimento.getEstado();
-		this.mensagem = requerimento.getMensagem();
-		this.resposta = requerimento.getResposta();
-		this.diasRequisitados = requerimento.getDiasRequisitados();
-		this.diasVendidos = requerimento.getDiasVendidos();
-		this.diasFracionados = requerimento.getDiasFracionados();
-		this.dataInicioFeriasRequisitadas = requerimento.getDataInicioFeriasRequisitadas();
-		this.dataFimFeriasRequisitadas = requerimento.getDataFimFeriasRequisitadas();
-		this.vendeuORestante = requerimento.isVendeuORestante();
-	}
-	
+
 	public Long getIdColaborador() {
 		return idColaborador;
+	}
+
+	public void setIdColaborador(Long idColaborador) {
+		this.idColaborador = idColaborador;
 	}
 
 	public Long getIdGestor() {
 		return idGestor;
 	}
 
+	public void setIdGestor(Long idGestor) {
+		this.idGestor = idGestor;
+	}
+
 	public LocalDate getDataAbertura() {
 		return dataAbertura;
+	}
+
+	public void setDataAbertura(LocalDate dataAbertura) {
+		this.dataAbertura = dataAbertura;
 	}
 
 	public LocalDate getPrazoAnalise() {
 		return prazoAnalise;
 	}
 
+	public void setPrazoAnalise(LocalDate prazoAnalise) {
+		this.prazoAnalise = prazoAnalise;
+	}
+
 	public LocalDate getDataFechamento() {
 		return dataFechamento;
+	}
+
+	public void setDataFechamento(LocalDate dataFechamento) {
+		this.dataFechamento = dataFechamento;
 	}
 
 	public EstadosRequerimento getEstado() {
 		return estado;
 	}
 
+	public void setEstado(EstadosRequerimento estado) {
+		this.estado = estado;
+	}
+
 	public String getMensagem() {
 		return mensagem;
+	}
+
+	public void setMensagem(String mensagem) {
+		this.mensagem = mensagem;
 	}
 
 	public String getResposta() {
 		return resposta;
 	}
 
+	public void setResposta(String resposta) {
+		this.resposta = resposta;
+	}
+
 	public Integer getDiasRequisitados() {
 		return diasRequisitados;
+	}
+
+	public void setDiasRequisitados(Integer diasRequisitados) {
+		this.diasRequisitados = diasRequisitados;
 	}
 
 	public Integer getDiasVendidos() {
 		return diasVendidos;
 	}
 
+	public void setDiasVendidos(Integer diasVendidos) {
+		this.diasVendidos = diasVendidos;
+	}
+
 	public Integer getDiasFracionados() {
 		return diasFracionados;
+	}
+
+	public void setDiasFracionados(Integer diasFracionados) {
+		this.diasFracionados = diasFracionados;
 	}
 
 	public LocalDate getDataInicioFeriasRequisitadas() {
 		return dataInicioFeriasRequisitadas;
 	}
 
+	public void setDataInicioFeriasRequisitadas(LocalDate dataInicioFeriasRequisitadas) {
+		this.dataInicioFeriasRequisitadas = dataInicioFeriasRequisitadas;
+	}
+
 	public LocalDate getDataFimFeriasRequisitadas() {
 		return dataFimFeriasRequisitadas;
+	}
+
+	public void setDataFimFeriasRequisitadas(LocalDate dataFimFeriasRequisitadas) {
+		this.dataFimFeriasRequisitadas = dataFimFeriasRequisitadas;
 	}
 
 	public boolean isVendeuORestante() {
 		return vendeuORestante;
 	}
-		
+
+	public void setVendeuORestante(boolean vendeuORestante) {
+		this.vendeuORestante = vendeuORestante;
+	}
 }
