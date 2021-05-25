@@ -39,6 +39,7 @@ public class FeriasController {
 	 */
 	public Ferias criarFerias(IRequerimento requerimento) {
 		EstadoFerias estado = EstadoFerias.NAO_USUFRUIDA;
+		// TODO alterar o construtor Ferias e colocar estado em baixo do construtor.
 		Ferias ferias = new Ferias(requerimento.getIdColaborador(), requerimento.getIdGestor(), 
 				requerimento.getId(), estado, requerimento.getDataInicioFeriasRequisitadas(), 
 				requerimento.getDataFimFeriasRequisitadas(), requerimento.getDiasRequisitados(), 
@@ -92,7 +93,7 @@ public class FeriasController {
 	 * @param id do colaborador
 	 * @return ferias do colaborador
 	 */
-	public Ferias buscarPorIdColaboradorENaoUsufruidas(Long id){
+	public List<Ferias> buscarPorIdColaboradorENaoUsufruidas(Long id){
 		return repository.findByIdColaboradorAndEstado(id, EstadoFerias.NAO_USUFRUIDA);
 	}
 	
@@ -161,6 +162,10 @@ public class FeriasController {
 	 */
 	public void deletarFeriasPorId(Long id) {
 		repository.deleteById(id);
+	}
+	
+	public Ferias buscarPorIdRequerimento(Long id) {
+		return repository.findByIdRequerimento(id);
 	}
 	
 }

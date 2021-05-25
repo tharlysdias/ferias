@@ -1,13 +1,11 @@
 package br.com.proway.senior.ferias.controller;
 
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -68,18 +66,6 @@ public class FeriasControllerTest {
 	}
 
 	@Test
-	public void testBuscarPorIdGestorENaoUsufruidas() {
-		int tamanhoAntes = controller.getRepository().findByIdGestorAndEstado(2l, EstadoFerias.NAO_USUFRUIDA).size();
-		controller.criarFerias(requerimento);
-		requerimento.setDiasRequisitados(15);
-		controller.criarFerias(requerimento);
-		List<Ferias> listaFerias = controller.getRepository().findByIdGestorAndEstado(2l, EstadoFerias.NAO_USUFRUIDA); 
-		assertEquals(tamanhoAntes + 2, listaFerias.size());
-		assertEquals(15, listaFerias.get(tamanhoAntes + 1).getDiasRequisitados());
-		
-	}
-
-	@Test
 	public void testBuscarPorIdColaborador() {
 		int tamanhoAntes = controller.buscarPorIdColaborador(30l).size();
 		requerimento.setIdColaborador(30l);
@@ -109,21 +95,106 @@ public class FeriasControllerTest {
 	public void testAlterarEstadoFeriasException() throws Exception {
 		controller.getRepository().save(ferias);
 		assertEquals(EstadoFerias.USUFRUIDA, 
-				controller.alterarEstadoFerias(-5l, EstadoFerias.USUFRUIDA).getEstado());	}
+				controller.alterarEstadoFerias(-5l, EstadoFerias.USUFRUIDA).getEstado());	
+	}
 	
 	@Test
-	public void testAlterarDataFerias() {
-		fail("Not yet implemented");
+	public void testAlterarDataFerias() throws Exception {
+		controller.getRepository().save(ferias);
+		Ferias novaFerias = new Ferias();
+		novaFerias.setIdRequerimento(1l);
+		novaFerias.setIdColaborador(1l);
+		novaFerias.setIdGestor(2l);
+		novaFerias.setDiasRequisitados(30);
+		novaFerias.setDiasVendidos(0);
+		novaFerias.setDataInicio(LocalDate.now().plusDays(50));
+		novaFerias.setDataFim(LocalDate.now().plusDays(80));
+		novaFerias.setTipoFerias(TiposFerias.TOTAL);
+		novaFerias.setEstado(EstadoFerias.NAO_USUFRUIDA);
+		assertEquals(LocalDate.now().plusDays(50), 
+				controller.alterarDataFerias(ferias.getId(), novaFerias).getDataInicio());
+		assertEquals(LocalDate.now().plusDays(50), 
+				controller.getRepository().findById(ferias.getId()).get().getDataInicio());
 	}
 
-	@Ignore
-	public void testDeletarFeriasPorFerias() {
-		fail("Not yet implemented");
+	@Test(expected = Exception.class)
+	public void testAlterarDataFeriasException() throws Exception {
+		controller.getRepository().save(ferias);
+		Ferias novaFerias = new Ferias();
+		novaFerias.setIdRequerimento(1l);
+		novaFerias.setIdColaborador(1l);
+		novaFerias.setIdGestor(2l);
+		novaFerias.setDiasRequisitados(30);
+		novaFerias.setDiasVendidos(0);
+		novaFerias.setDataInicio(LocalDate.now().plusDays(50));
+		novaFerias.setDataFim(LocalDate.now().plusDays(80));
+		novaFerias.setTipoFerias(TiposFerias.TOTAL);
+		novaFerias.setEstado(EstadoFerias.NAO_USUFRUIDA);
+		assertEquals(LocalDate.now().plusDays(50), 
+				controller.alterarDataFerias(-5l, novaFerias).getDataInicio());
+	}
+	
+	@Test(expected = Exception.class)
+	public void testDeletarFeriasPorFerias() throws Exception {
+		controller.getRepository().save(ferias);
+		int tamanhoAntes = controller.buscarTodasFerias().size(); 
+		Long id = ferias.getId();
+		controller.deletarFeriasPorFerias(ferias);;
+		assertEquals(tamanhoAntes-1, controller.buscarTodasFerias().size());
+		controller.buscarPorIdFerias(id);
 	}
 
-	@Ignore
-	public void testDeletarFeriasPorId() {
-		fail("Not yet implemented");
+	@Test(expected = Exception.class)
+	public void testDeletarFeriasPorId() throws Exception {
+		controller.getRepository().save(ferias);
+		int tamanhoAntes = controller.buscarTodasFerias().size(); 
+		Long id = ferias.getId();
+		controller.deletarFeriasPorId(id);
+		assertEquals(tamanhoAntes-1, controller.buscarTodasFerias().size());
+		controller.buscarPorIdFerias(id);
+	}
+	
+	@Test
+	public void testBuscarPorIdGestorENaoUsufruidas() {
+		requerimento.setDataFimFeriasRequisitadas(LocalDate.now().plusDays(60));
+		controller.criarFerias(requerimento);
+		requerimento.setDataInicioFeriasRequisitadas(LocalDate.now().plusDays(40));
+		controller.criarFerias(requerimento);
+		List<Ferias> listaFerias = controller.buscarPorIdGestorENaoUsufruidas(requerimento.getIdGestor());
+		int tamanhoLista = listaFerias.size();
+		assertEquals(LocalDate.now().plusDays(60), listaFerias.get(tamanhoLista - 2).getDataFim());
+		assertEquals(LocalDate.now().plusDays(40), listaFerias.get(tamanhoLista - 1).getDataInicio());
+	}
+	
+	@Test
+	public void testBuscarPorIdColaboradorENaoUsufruidas() {
+		int tamanhoAntes = controller.buscarPorIdColaboradorENaoUsufruidas(ferias.getIdColaborador()).size();
+		ferias.setEstado(EstadoFerias.NAO_USUFRUIDA);
+		controller.getRepository().save(ferias);
+		Ferias novaFerias = new Ferias();
+		novaFerias.setIdRequerimento(1l);
+		novaFerias.setIdColaborador(1l);
+		novaFerias.setIdGestor(2l);
+		novaFerias.setDiasRequisitados(30);
+		novaFerias.setDiasVendidos(0);
+		novaFerias.setDataInicio(LocalDate.now().plusDays(50));
+		novaFerias.setDataFim(LocalDate.now().plusDays(80));
+		novaFerias.setTipoFerias(TiposFerias.TOTAL);
+		novaFerias.setEstado(EstadoFerias.USUFRUIDA);
+		controller.getRepository().save(novaFerias);
+		int tamanhoDepois = controller.buscarPorIdColaboradorENaoUsufruidas(ferias.getIdColaborador()).size();
+		assertEquals(tamanhoAntes + 1, tamanhoDepois);
+		
 	}
 
+	@Test
+	public void testBucarPorIdRequerimento() {
+		ferias.setIdRequerimento(70l);
+		ferias.setDiasRequisitados(17);
+		if(controller.buscarPorIdRequerimento(70l) == null) {
+			controller.getRepository().save(ferias);
+		}
+		assertEquals(17, controller.buscarPorIdRequerimento(70l).getDiasRequisitados());
+	}
+	
 }
