@@ -1,9 +1,9 @@
 package br.com.proway.senior.ferias.controller;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,49 +12,71 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.proway.senior.ferias.model.Requerimento;
+import br.com.proway.senior.ferias.model.dto.RequerimentoDTO;
+
+/**
+ * ControllerAPI do {@link Requerimento}
+ * 
+ * @author Guilherme Eduardo Bom Guse	<guilherme.guse@senior.com.br>
+ * @author Tharlys Souza Dias			<tharlys.dias@senior.com.br>
+ */
 
 @RestController
 @RequestMapping(path = "/requerimento")
 public class RequerimentoControllerAPI {
 
 	 @Autowired
-	    private RequerimentoController service;
+	    private RequerimentoController controller;
 
-	    @CrossOrigin
 	    @ResponseBody
 	    @RequestMapping(path = "/", method = RequestMethod.GET)
-	    public List<Requerimento> buscarTodos(){
-	        return this.service.buscarTodosRequerimentos();
+	    public ArrayList<RequerimentoDTO> buscarTodos(){
+	        return converterListaRequerimentoParaRequerimentoDTO(this.controller.buscarTodosRequerimentos());
 	    }
 
-	    @CrossOrigin
 	    @ResponseBody
 	    @RequestMapping(path = "/busca/{id}", method = RequestMethod.GET)
-	    public Requerimento buscarRequerimento(@PathVariable("id") Long id){
-	        return this.service.buscarRequerimentoPorId(id);
+	    public RequerimentoDTO buscarRequerimentoPorId(@PathVariable("id") Long id){
+	        return new RequerimentoDTO (this.controller.buscarRequerimentoPorId(id));
 	    }
-
-	    @CrossOrigin
+	   	    
+	    @ResponseBody
+	    @RequestMapping(path = "/busca/{idColaborador}", method = RequestMethod.GET)
+	    public RequerimentoDTO buscarRequerimentoPorIdColaborador(@PathVariable("id") Long id){
+	        return new RequerimentoDTO (this.controller.buscarRequerimentoPorIdColaborador(id));
+	    }
+	   		    
 	    @ResponseBody
 	    @RequestMapping(path = "/cria", method = RequestMethod.POST)
-	    public Requerimento criar(@RequestBody Requerimento requerimento){
-	        return this.service.criarRequerimento(requerimento);
+	    public RequerimentoDTO criar(@RequestBody RequerimentoDTO requerimentoDto){
+	    	Requerimento requerimento = new Requerimento(requerimentoDto);
+	        return new RequerimentoDTO (this.controller.criarRequerimento(requerimento));
 	    }
 
-	    @CrossOrigin
 	    @ResponseBody
 	    @RequestMapping(path = "/atualiza", method = RequestMethod.PUT)
-	    public Requerimento atualizar(@RequestBody Requerimento requerimento){
-	        return this.service.atualizarRequerimento(requerimento);
+	    public RequerimentoDTO atualizar(@RequestBody RequerimentoDTO requerimentoDto){
+	    	Requerimento requerimento = new Requerimento(requerimentoDto);
+	        return new RequerimentoDTO (this.controller.atualizarRequerimento(requerimento));
 	    }
 
-	    @CrossOrigin
 	    @ResponseBody
 	    @RequestMapping(path = "/deleta/{id}", method = RequestMethod.DELETE)
 	    public void deletar(@PathVariable("id") Long id){
-	        this.service.deletar(id);
+	        this.controller.deletar(id);
 	    }
 	
-	
-	
+	    /**
+	     * Converte uma lista de {@link Requerimento} para uma lista de {@link RequerimentoDTO}.
+	     * 
+	     * @param requerimentos
+	     * @return
+	     */
+	    
+	    public static ArrayList<RequerimentoDTO> converterListaRequerimentoParaRequerimentoDTO
+	    (ArrayList<Requerimento> requerimentos){
+			return (ArrayList<RequerimentoDTO>) requerimentos.stream().map(RequerimentoDTO::new).
+					collect(Collectors.toList());
+		}
+			
 }
