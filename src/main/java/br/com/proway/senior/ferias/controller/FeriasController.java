@@ -22,8 +22,9 @@ public class FeriasController {
 	@Autowired
 	private FeriasRepository repository;
 
-	public FeriasController() {	}
-	
+	public FeriasController() {
+	}
+
 	public FeriasRepository getRepository() {
 		return repository;
 	}
@@ -40,13 +41,12 @@ public class FeriasController {
 	public Ferias criarFerias(IRequerimento requerimento) {
 		EstadoFerias estado = EstadoFerias.NAO_USUFRUIDA;
 		// TODO alterar o construtor Ferias e colocar estado em baixo do construtor.
-		Ferias ferias = new Ferias(requerimento.getIdColaborador(), requerimento.getIdGestor(), 
-				requerimento.getId(), estado, requerimento.getDataInicioFeriasRequisitadas(), 
-				requerimento.getDataFimFeriasRequisitadas(), requerimento.getDiasRequisitados(), 
-				requerimento.getDiasVendidos(), requerimento.getTipoFerias());
+		Ferias ferias = new Ferias(requerimento.getIdColaborador(), requerimento.getIdGestor(), requerimento.getId(),
+				estado, requerimento.getDataInicioFeriasRequisitadas(), requerimento.getDataFimFeriasRequisitadas(),
+				requerimento.getDiasRequisitados(), requerimento.getDiasVendidos(), requerimento.getTipoFerias());
 		return repository.save(ferias);
 	}
-	
+
 	/**
 	 * Busca Ferias por id
 	 * 
@@ -54,37 +54,39 @@ public class FeriasController {
 	 * 
 	 * @param id das ferias
 	 * @return ferias
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public Ferias buscarPorIdFerias(Long id) throws Exception {
 		return repository.findById(id).orElseThrow(() -> new Exception("Nao existe uma ferias com esse id."));
 	}
-	
+
 	/**
 	 * Buscar {@link Ferias}
 	 * 
-	 * Busca uma lista com todas as ferias dos colaboradores sob gerencia do gestor com o id passado
-	 * como parametro e que nao tenham sido usufruidas. (Estado = NAO_USUFRUIDA).
-	 *  
+	 * Busca uma lista com todas as ferias dos colaboradores sob gerencia do gestor
+	 * com o id passado como parametro e que nao tenham sido usufruidas. (Estado =
+	 * NAO_USUFRUIDA).
+	 * 
 	 * @param id
 	 * @return Lista de ferias
 	 */
-	public List<Ferias> buscarPorIdGestorENaoUsufruidas(Long id){
-		 return repository.findByIdGestorAndEstado(id, EstadoFerias.NAO_USUFRUIDA);
+	public List<Ferias> buscarPorIdGestorENaoUsufruidas(Long id) {
+		return repository.findByIdGestorAndEstado(id, EstadoFerias.NAO_USUFRUIDA);
 	}
-	
+
 	/**
 	 * Busca {@link Ferias}
 	 * 
-	 * Busca todas as férias com o id do colaborador igual ao passado como parametro.
+	 * Busca todas as férias com o id do colaborador igual ao passado como
+	 * parametro.
 	 * 
 	 * @param id
 	 * @return lista de Ferias.
 	 */
-	public List<Ferias> buscarPorIdColaborador(Long id){
+	public List<Ferias> buscarPorIdColaborador(Long id) {
 		return repository.findAllByIdColaborador(id);
 	}
-	
+
 	/**
 	 * Busca {@link Ferias} do colaborador.
 	 * 
@@ -93,26 +95,26 @@ public class FeriasController {
 	 * @param id do colaborador
 	 * @return ferias do colaborador
 	 */
-	public List<Ferias> buscarPorIdColaboradorENaoUsufruidas(Long id){
+	public List<Ferias> buscarPorIdColaboradorENaoUsufruidas(Long id) {
 		return repository.findByIdColaboradorAndEstado(id, EstadoFerias.NAO_USUFRUIDA);
 	}
-	
+
 	/**
 	 * Busca todas as {@link Ferias} do banco.
 	 * 
 	 * @return lista de Ferias.
 	 */
-	public List<Ferias> buscarTodasFerias(){
+	public List<Ferias> buscarTodasFerias() {
 		return repository.findAll();
 	}
-	
+
 	/**
 	 * Altera o Estado da {@link Ferias}.
 	 * 
-	 * Altera o estado da Ferias com o id igual ao passado como parametro para o estado passado como
-	 * parametro
+	 * Altera o estado da Ferias com o id igual ao passado como parametro para o
+	 * estado passado como parametro
 	 * 
-	 * @param id Da Ferias
+	 * @param id     Da Ferias
 	 * @param estado A ser alterado
 	 * @return Ferias alterada
 	 * @throws Exception .Ferias nao encontradas
@@ -123,7 +125,7 @@ public class FeriasController {
 			return repository.save(ferias);
 		}).orElseThrow(() -> new Exception("Ferias nao encontradas"));
 	}
-	
+
 	/**
 	 * Altera uma {@link Ferias} do banco a partir de seu id.
 	 * 
@@ -131,7 +133,7 @@ public class FeriasController {
 	 * 
 	 * @return Ferias
 	 * @author Lucas Grijó <rksgrijo@gmail.com>
-	 */	
+	 */
 	public Ferias alterarDataFerias(Long id, Ferias novaFerias) throws Exception {
 		return repository.findById(id).map(ferias -> {
 			ferias.setDataInicio(novaFerias.getDataInicio());
@@ -141,29 +143,29 @@ public class FeriasController {
 			return repository.save(ferias);
 		}).orElseThrow(() -> new Exception("Ferias nao encontradas"));
 	}
-	
+
 	/**
 	 * Deleta {@link Ferias}.
 	 * 
-	 * Deleta um objeto Ferias igual ao passado como parametro. 
+	 * Deleta um objeto Ferias igual ao passado como parametro.
 	 * 
 	 * @param ferias
 	 */
 	public void deletarFeriasPorFerias(Ferias ferias) {
 		repository.delete(ferias);
 	}
-	
+
 	/**
 	 * Deleta {@link Ferias}.
 	 * 
-	 * Deleta um objeto Ferias com o id igual ao passado como parametro. 
+	 * Deleta um objeto Ferias com o id igual ao passado como parametro.
 	 * 
 	 * @param ferias
 	 */
 	public void deletarFeriasPorId(Long id) {
 		repository.deleteById(id);
 	}
-	
+
 	/**
 	 * Buscar {@link Ferias}.
 	 * 
@@ -175,5 +177,5 @@ public class FeriasController {
 	public Ferias buscarPorIdRequerimento(Long id) {
 		return repository.findByIdRequerimento(id);
 	}
-	
+
 }

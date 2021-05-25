@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.proway.senior.ferias.model.Ferias;
 import br.com.proway.senior.ferias.model.Saldo;
+import br.com.proway.senior.ferias.model.dto.FeriasDTO;
 import br.com.proway.senior.ferias.model.dto.SaldoDTO;
 
 @RestController
@@ -26,7 +28,7 @@ public class SaldoControllerAPI {
 	public SaldoControllerAPI(SaldoController controller) {
 		this.controller = controller;
 	}
-	
+
 	// Aggregate root
 	// tag::get-aggregate-root[]
 	/**
@@ -39,6 +41,7 @@ public class SaldoControllerAPI {
 		//return converterListaSaldoParaSaldoDTO((ArrayList<Saldo>) controller.buscarTodos());
 		return (ArrayList<SaldoDTO>) controller.buscarTodos().stream().map(this::convertToDTO).collect(Collectors.toList());
 	}
+
 	// end::get-aggregate-root[]
 	/**
 	 * Busca um {@link Saldo} no banco de dados
@@ -76,11 +79,17 @@ public class SaldoControllerAPI {
 	 */
 	@GetMapping(value = "/saldo/{id}")
 	public SaldoDTO buscarPorId(@PathVariable Long id) throws Exception {
-		return convertToDTO(controller.buscarPorId(id));
+		return new SaldoDTO(controller.buscarPorId(id));
 	}
-	
+
+	private ArrayList<SaldoDTO> converterListaSaldoParaSaldoDTO(ArrayList<Saldo> saldos) {
+		return (ArrayList<SaldoDTO>) saldos.stream().map(SaldoDTO::new).collect(Collectors.toList());
+	}
+
+
 	/**
 	 * Este metodo eh apenas para teste manual, sera tirado
+	 * 
 	 * @param saldoDto
 	 * @return
 	 */
@@ -98,4 +107,5 @@ public class SaldoControllerAPI {
 	private Saldo convertToEntity(SaldoDTO saldoDto) {
 	    return modelMapper.map(saldoDto, Saldo.class);
 	}
+
 }
