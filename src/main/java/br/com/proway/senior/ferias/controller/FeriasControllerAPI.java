@@ -35,7 +35,7 @@ public class FeriasControllerAPI {
 	 * 
 	 * @param id {@link id}
 	 * @return Ferias
-	 * @author Lucas Grijó <rksgrijo@gmail.com>
+	 * @author Lucas Grijó <rkssgrijo@gmail.com>
 	 * @throws Exception Nao existe uma ferias com esse id.
 	 */
 	@GetMapping("/ferias/{id}")

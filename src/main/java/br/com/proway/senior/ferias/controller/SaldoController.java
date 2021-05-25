@@ -12,14 +12,14 @@ import br.com.proway.senior.ferias.model.SaldoRepository;
 
 @Controller
 public class SaldoController {
-	
+
 	@Autowired
 	private final SaldoRepository repository;
-	
+
 	public SaldoController(SaldoRepository repository) {
 		this.repository = repository;
 	}
-	
+
 	/**
 	 * Desconta dias de um {@link Saldo}.
 	 * 
@@ -30,15 +30,15 @@ public class SaldoController {
 	 * @return
 	 * @throws Exception
 	 */
-	public Saldo descontarSaldo(Long idColaborador, int diasDescontados) throws Exception {		
-		int diasAtualizados = repository.findByIdColaborador(idColaborador).getDiasDisponiveisDeFerias() - diasDescontados;
+	public Saldo descontarSaldo(Long idColaborador, int diasDescontados) throws Exception {
+		int diasAtualizados = repository.findByIdColaborador(idColaborador).getDiasDisponiveisDeFerias()
+				- diasDescontados;
 		return repository.findById(idColaborador).map(saldo -> {
-							saldo.setDiasDisponiveisDeFerias(diasAtualizados);
-							return repository.save(saldo);			
-						})
-						.orElseThrow(() -> new Exception("Erro: saldo nao atualizado."));
+			saldo.setDiasDisponiveisDeFerias(diasAtualizados);
+			return repository.save(saldo);
+		}).orElseThrow(() -> new Exception("Erro: saldo nao atualizado."));
 	}
-	
+
 	/**
 	 * Desconta dias de um {@link Saldo}.
 	 * 
@@ -49,15 +49,15 @@ public class SaldoController {
 	 * @return
 	 * @throws Exception
 	 */
-	public Saldo adicionarSaldo(Long idColaborador, int diasAdicionados) throws Exception {		
-		int diasAtualizados = repository.findByIdColaborador(idColaborador).getDiasDisponiveisDeFerias() + diasAdicionados;
+	public Saldo adicionarSaldo(Long idColaborador, int diasAdicionados) throws Exception {
+		int diasAtualizados = repository.findByIdColaborador(idColaborador).getDiasDisponiveisDeFerias()
+				+ diasAdicionados;
 		return repository.findById(idColaborador).map(saldo -> {
-							saldo.setDiasDisponiveisDeFerias(diasAtualizados);
-							return repository.save(saldo);			
-						})
-						.orElseThrow(() -> new Exception("Erro: saldo nao atualizado."));
+			saldo.setDiasDisponiveisDeFerias(diasAtualizados);
+			return repository.save(saldo);
+		}).orElseThrow(() -> new Exception("Erro: saldo nao atualizado."));
 	}
-	
+
 	/**
 	 * Retorna toda a lista de {@link Saldo}s do banco de dados.
 	 * 
@@ -112,7 +112,7 @@ public class SaldoController {
 	 */
 	public Saldo criarSaldo(Saldo novoSaldo) {
 		novoSaldo.setDataAdmissao(LocalDate.now());
-			return repository.save(novoSaldo); 
+		return repository.save(novoSaldo);
 	}
 
 	/**
