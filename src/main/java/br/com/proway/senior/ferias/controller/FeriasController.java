@@ -164,6 +164,14 @@ public class FeriasController {
 		repository.deleteById(id);
 	}
 	
+	/**
+	 * Buscar {@link Ferias}.
+	 * 
+	 * Busca uma ferias com o id do requerimento igual ao passado como parametro
+	 * 
+	 * @param id do requerimento
+	 * @return Ferias
+	 */
 	public Ferias buscarPorIdRequerimento(Long id) {
 		return repository.findByIdRequerimento(id);
 	}
