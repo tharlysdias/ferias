@@ -43,16 +43,10 @@ public class Requerimento implements IRequerimento {
 
 	@Enumerated(EnumType.STRING)
 	private TiposFerias tipoFerias;
-<<<<<<< HEAD
 
-	public Requerimento() {
-	}
-
-=======
-	
 	public Requerimento() {}
 	
-	public Requerimento(int idColaborador, int idGestor, LocalDate dataAbertura, LocalDate prazoAnalise,
+	public Requerimento(Long idColaborador, Long idGestor, LocalDate dataAbertura, LocalDate prazoAnalise,
 			LocalDate dataFechamento, EstadosRequerimento estado, String mensagem, String resposta,
 			Integer diasRequisitados, Integer diasVendidos, Integer diasFracionados,
 			LocalDate dataInicioFeriasRequisitadas, LocalDate dataFimFeriasRequisitadas, boolean vendeuORestante,
@@ -74,10 +68,6 @@ public class Requerimento implements IRequerimento {
 		this.tipoFerias = tipoFerias;
 	}
 
-
-
-
->>>>>>> RequerimentoParcial
 	public Long getId() {
 		return id;
 	}
@@ -86,7 +76,6 @@ public class Requerimento implements IRequerimento {
 		this.id = id;
 	}
 
-<<<<<<< HEAD
 	public Long getIdColaborador() {
 		return idColaborador;
 	}
@@ -100,21 +89,6 @@ public class Requerimento implements IRequerimento {
 	}
 
 	public void setIdGestor(Long idGestor) {
-=======
-	public int getIdColaborador() {
-		return idColaborador;
-	}
-
-	public void setIdColaborador(int idColaborador) {
-		this.idColaborador = idColaborador;
-	}
-
-	public int getIdGestor() {
-		return idGestor;
-	}
-
-	public void setIdGestor(int idGestor) {
->>>>>>> RequerimentoParcial
 		this.idGestor = idGestor;
 	}
 
@@ -149,7 +123,6 @@ public class Requerimento implements IRequerimento {
 	public void setEstado(EstadosRequerimento estado) {
 		this.estado = estado;
 	}
-<<<<<<< HEAD
 
 	public String getMensagem() {
 		return mensagem;
@@ -222,80 +195,6 @@ public class Requerimento implements IRequerimento {
 	public void setTipoFerias(TiposFerias tipoFerias) {
 		this.tipoFerias = tipoFerias;
 	}
-=======
->>>>>>> RequerimentoParcial
-
-	public String getMensagem() {
-		return mensagem;
-	}
-
-	public void setMensagem(String mensagem) {
-		this.mensagem = mensagem;
-	}
-
-	public String getResposta() {
-		return resposta;
-	}
-
-	public void setResposta(String resposta) {
-		this.resposta = resposta;
-	}
-
-	public Integer getDiasRequisitados() {
-		return diasRequisitados;
-	}
-
-	public void setDiasRequisitados(Integer diasRequisitados) {
-		this.diasRequisitados = diasRequisitados;
-	}
-
-	public Integer getDiasVendidos() {
-		return diasVendidos;
-	}
-
-	public void setDiasVendidos(Integer diasVendidos) {
-		this.diasVendidos = diasVendidos;
-	}
-
-	public Integer getDiasFracionados() {
-		return diasFracionados;
-	}
-
-	public void setDiasFracionados(Integer diasFracionados) {
-		this.diasFracionados = diasFracionados;
-	}
-
-	public LocalDate getDataInicioFeriasRequisitadas() {
-		return dataInicioFeriasRequisitadas;
-	}
-
-	public void setDataInicioFeriasRequisitadas(LocalDate dataInicioFeriasRequisitadas) {
-		this.dataInicioFeriasRequisitadas = dataInicioFeriasRequisitadas;
-	}
-
-	public LocalDate getDataFimFeriasRequisitadas() {
-		return dataFimFeriasRequisitadas;
-	}
-
-	public void setDataFimFeriasRequisitadas(LocalDate dataFimFeriasRequisitadas) {
-		this.dataFimFeriasRequisitadas = dataFimFeriasRequisitadas;
-	}
-
-	public boolean isVendeuORestante() {
-		return vendeuORestante;
-	}
-
-	public void setVendeuORestante(boolean vendeuORestante) {
-		this.vendeuORestante = vendeuORestante;
-	}
-
-	public TiposFerias getTipoFerias() {
-		return tipoFerias;
-	}
-
-	public void setTipoFerias(TiposFerias tipoFerias) {
-		this.tipoFerias = tipoFerias;
-	}
-			
+	
 	
 }
