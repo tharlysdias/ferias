@@ -2,22 +2,35 @@ package br.com.proway.senior.ferias.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import br.com.proway.senior.ferias.model.dto.SaldoDTO;
 
 @Entity
 public class Saldo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
+	@Column(unique = true)
 	private Long idColaborador;
+	
 	private Long idGestor;
 	private int diasDisponiveisDeFerias;
 	private LocalDate dataAdmissao;
 
 	public Saldo() {
+	}
+	
+	public Saldo(SaldoDTO saldoDto) {
+		this.idColaborador = saldoDto.getIdColaborador();
+		this.idGestor = saldoDto.getIdGestor();
+		this.diasDisponiveisDeFerias = saldoDto.getDiasDisponiveisDeFerias();
+		//this.dataAdmissao = getDataAdmissao(saldoDto.getIdColaborador());
 	}
 
 	public Saldo(Long idColaborador, Long idGestor, int diasDisponiveisDeFerias, LocalDate dataAdmissao) {
@@ -71,7 +84,8 @@ public class Saldo {
 	public void setDataAdmissao(LocalDate dataAdmissao) {
 		this.dataAdmissao = dataAdmissao;
 	}
-
+	
+	/*
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -117,5 +131,5 @@ public class Saldo {
 			return false;
 		return true;
 	}
-
+	*/
 }

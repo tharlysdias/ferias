@@ -7,8 +7,11 @@ public class SaldoDTO {
 	private Long idGestor;
 	private int diasDisponiveisDeFerias;
 	
+	public SaldoDTO() {}
+	
 	public SaldoDTO(Saldo saldo) {
 		this.idColaborador = saldo.getIdColaborador();
+		this.idGestor = saldo.getIdGestor();
 		this.diasDisponiveisDeFerias = saldo.getDiasDisponiveisDeFerias();
 	}
 
@@ -22,17 +25,5 @@ public class SaldoDTO {
 
 	public int getDiasDisponiveisDeFerias() {
 		return diasDisponiveisDeFerias;
-	}
-
-	public void setIdColaborador(Long idColaborador) {
-		this.idColaborador = idColaborador;
-	}
-
-	public void setIdGestor(Long idGestor) {
-		this.idGestor = idGestor;
-	}
-
-	public void setDiasDisponiveisDeFerias(int diasDisponiveisDeFerias) {
-		this.diasDisponiveisDeFerias = diasDisponiveisDeFerias;
 	}
 }

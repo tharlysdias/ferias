@@ -1,5 +1,6 @@
 package br.com.proway.senior.ferias.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,6 +111,7 @@ public class SaldoController {
 	 * @return {@link Saldo}
 	 */
 	public Saldo criarSaldo(Saldo novoSaldo) {
+		novoSaldo.setDataAdmissao(LocalDate.now());
 			return repository.save(novoSaldo); 
 	}
 
