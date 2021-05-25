@@ -63,8 +63,17 @@ public class Ferias implements IFerias {
 		this.tipoFerias = tipoFerias;
 	}
 
-
-
+	public Ferias(Requerimento requerimento) {
+		this.idColaborador = requerimento.getIdColaborador();
+		this.idGestor = requerimento.getIdGestor();
+		this.idRequerimento = requerimento.getId();
+		this.dataInicio = requerimento.getDataInicioFeriasRequisitadas();
+		this.dataFim = requerimento.getDataFimFeriasRequisitadas();
+		this.diasRequisitados = requerimento.getDiasRequisitados();
+		this.diasVendidos = requerimento.getDiasVendidos();
+		this.tipoFerias = requerimento.getTipoFerias();
+	}
+	
 	public Long getId() {
 		return id;
 	}
