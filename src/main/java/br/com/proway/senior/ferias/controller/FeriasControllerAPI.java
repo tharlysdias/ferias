@@ -40,10 +40,10 @@ public class FeriasControllerAPI {
 	 * @author Lucas Grijó <rksgrijo@gmail.com>
 	 * @throws Exception Nao existe uma ferias com esse id.
 	 */
-	@GetMapping("/ferias/{idColaborador}")
-	List<Ferias> consultarFeriasPorIdColaborador(@PathVariable Long id) throws Exception {
+	@GetMapping("colaborador/{idColaborador}/ferias")
+	List<Ferias> consultarFeriasPorIdColaborador(@PathVariable Long idColaborador) throws Exception {
 		// TODO adicionar FeriasDTO
-		return controller.buscarPorIdColaborador(id);
+		return controller.buscarPorIdColaborador(idColaborador);
 	}
 	
 	/**
@@ -54,10 +54,10 @@ public class FeriasControllerAPI {
 	 * @author Lucas Grijó <rksgrijo@gmail.com>
 	 * @throws Exception Nao existe uma ferias com esse id.
 	 */
-	@GetMapping("/ferias/{idColaborador}")
-	List<Ferias> consultarFeriasPorIdGestorNaoUsufruidas(@PathVariable Long id) throws Exception {
+	@GetMapping("colaborador/{idColaborador}/ferias")
+	List<Ferias> consultarFeriasPorIdGestorNaoUsufruidas(@PathVariable Long idColaborador) throws Exception {
 		// TODO adicionar FeriasDTO
-		return controller.buscarPorIdGestorENaoUsufruidas(id);
+		return controller.buscarPorIdGestorENaoUsufruidas(idColaborador);
 	}
 	
 	/**
@@ -69,7 +69,7 @@ public class FeriasControllerAPI {
 	@GetMapping("/ferias")
 	List<Ferias> buscarTodos() {
 		// TODO adicionar FeriasDTO
-		return controller.buscarTodos();
+		return controller.buscarTodasFerias();
 	}
 
 	/**
@@ -93,5 +93,4 @@ public class FeriasControllerAPI {
 	void deletarFerias(@PathVariable Long id) {
 		controller.deletarFeriasPorId(id);
 	}
-
 }
