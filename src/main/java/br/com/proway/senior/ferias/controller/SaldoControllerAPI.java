@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.proway.senior.ferias.model.Ferias;
 import br.com.proway.senior.ferias.model.Saldo;
-import br.com.proway.senior.ferias.model.dto.FeriasDTO;
 import br.com.proway.senior.ferias.model.dto.SaldoDTO;
 
 @RestController
@@ -79,13 +77,8 @@ public class SaldoControllerAPI {
 	 */
 	@GetMapping(value = "/saldo/{id}")
 	public SaldoDTO buscarPorId(@PathVariable Long id) throws Exception {
-		return new SaldoDTO(controller.buscarPorId(id));
+		return convertToDTO(controller.buscarPorId(id));
 	}
-
-	private ArrayList<SaldoDTO> converterListaSaldoParaSaldoDTO(ArrayList<Saldo> saldos) {
-		return (ArrayList<SaldoDTO>) saldos.stream().map(SaldoDTO::new).collect(Collectors.toList());
-	}
-
 
 	/**
 	 * Este metodo eh apenas para teste manual, sera tirado
