@@ -49,9 +49,13 @@ public class RequerimentoControllerAPI {
 		return convertToDTO(controller.buscarRequerimentoPorIdColaborador(id));
 	}
 
-	@ResponseBody
+//	@PostMapping(value = "/requerimento")
+//    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
 	@RequestMapping(path = "/requerimento/", method = RequestMethod.POST)
 	public RequerimentoDTO criar(@RequestBody RequerimentoDTO requerimentoDto) {
+		System.out.println(requerimentoDto.getIdColaborador() + " " + requerimentoDto.getDiasVendidos());
+		System.out.println(convertToEntity(requerimentoDto).getIdColaborador() + " " + convertToEntity(requerimentoDto).getDiasVendidos());
 		return convertToDTO(controller.criarRequerimento(convertToEntity(requerimentoDto)));
 	}
 

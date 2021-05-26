@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import br.com.proway.senior.ferias.controller.IFerias;
+import br.com.proway.senior.ferias.controller.IRequerimento;
 import br.com.proway.senior.ferias.model.enums.EstadoFerias;
 import br.com.proway.senior.ferias.model.enums.TiposFerias;
 
@@ -63,7 +64,7 @@ public class Ferias implements IFerias {
 		this.tipoFerias = tipoFerias;
 	}
 
-	public Ferias(Requerimento requerimento) {
+	public Ferias(IRequerimento requerimento) {
 		this.idColaborador = requerimento.getIdColaborador();
 		this.idGestor = requerimento.getIdGestor();
 		this.idRequerimento = requerimento.getId();

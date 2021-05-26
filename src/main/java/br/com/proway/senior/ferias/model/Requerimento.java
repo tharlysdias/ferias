@@ -58,7 +58,6 @@ public class Requerimento implements IRequerimento {
 			Integer diasRequisitados, Integer diasVendidos, Integer diasFracionados,
 			LocalDate dataInicioFeriasRequisitadas, LocalDate dataFimFeriasRequisitadas, boolean vendeuORestante,
 			TiposFerias tipoFerias) {
-		super();
 		this.idColaborador = idColaborador;
 		this.idGestor = idGestor;
 		this.dataAbertura = dataAbertura;
@@ -203,4 +202,5 @@ public class Requerimento implements IRequerimento {
 	public void setTipoFerias(TiposFerias tipoFerias) {
 		this.tipoFerias = tipoFerias;
 	}
+
 }

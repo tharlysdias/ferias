@@ -100,5 +100,4 @@ public class SaldoControllerAPI {
 	private Saldo convertToEntity(SaldoDTO saldoDto) {
 	    return modelMapper.map(saldoDto, Saldo.class);
 	}
-
 }

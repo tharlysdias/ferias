@@ -96,7 +96,6 @@ public class FeriasControllerAPI {
 		controller.alterarDataFerias(id, novaFerias);
 	}
 	
-
 	/**
 	 * Deleta uma {@link Ferias} do banco a partir de seu id.
 	 * 
@@ -117,5 +116,4 @@ public class FeriasControllerAPI {
 		Ferias ferias = modelMapper.map(feriasDTO, Ferias.class);
 		return ferias;
 	}
-
 }

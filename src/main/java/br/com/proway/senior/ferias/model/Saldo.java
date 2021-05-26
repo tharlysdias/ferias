@@ -10,6 +10,11 @@ import javax.persistence.Id;
 
 import br.com.proway.senior.ferias.model.dto.SaldoDTO;
 
+/**
+ * 
+ * @author Leonardo F Silva <felipeleao217@gmail.com>
+ *
+ */
 @Entity
 public class Saldo {
 	@Id
@@ -84,8 +89,7 @@ public class Saldo {
 	public void setDataAdmissao(LocalDate dataAdmissao) {
 		this.dataAdmissao = dataAdmissao;
 	}
-	
-	/*
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -131,5 +135,4 @@ public class Saldo {
 			return false;
 		return true;
 	}
-	*/
 }
