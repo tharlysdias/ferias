@@ -19,9 +19,9 @@ public class SaldoControllerAPI {
 
 	@Autowired
 	private final SaldoController controller;
-	
-    @Autowired
-    private ModelMapper modelMapper;
+
+	@Autowired
+	private ModelMapper modelMapper;
 
 	public SaldoControllerAPI(SaldoController controller) {
 		this.controller = controller;
@@ -36,8 +36,10 @@ public class SaldoControllerAPI {
 	 */
 	@GetMapping("/saldo")
 	ArrayList<SaldoDTO> buscarTodos() {
-		//return converterListaSaldoParaSaldoDTO((ArrayList<Saldo>) controller.buscarTodos());
-		return (ArrayList<SaldoDTO>) controller.buscarTodos().stream().map(this::convertToDTO).collect(Collectors.toList());
+		// return converterListaSaldoParaSaldoDTO((ArrayList<Saldo>)
+		// controller.buscarTodos());
+		return (ArrayList<SaldoDTO>) controller.buscarTodos().stream().map(this::convertToDTO)
+				.collect(Collectors.toList());
 	}
 
 	// end::get-aggregate-root[]
@@ -65,7 +67,8 @@ public class SaldoControllerAPI {
 	 */
 	@GetMapping(value = "/gestor/{idGestor}/saldo")
 	public ArrayList<SaldoDTO> buscarTodosPorIdGestor(@PathVariable Long idGestor) {
-		return (ArrayList<SaldoDTO>) controller.buscarTodosPorIdGestor(idGestor).stream().map(this::convertToDTO).collect(Collectors.toList());
+		return (ArrayList<SaldoDTO>) controller.buscarTodosPorIdGestor(idGestor).stream().map(this::convertToDTO)
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -91,13 +94,13 @@ public class SaldoControllerAPI {
 		Saldo saldo = new Saldo(saldoDto);
 		return convertToDTO(controller.criarSaldo(saldo));
 	}
-	
+
 	private SaldoDTO convertToDTO(Saldo saldo) {
-	    return modelMapper.map(saldo, SaldoDTO.class);
+		return modelMapper.map(saldo, SaldoDTO.class);
 	}
-	
+
 	@SuppressWarnings("unused")
 	private Saldo convertToEntity(SaldoDTO saldoDto) {
-	    return modelMapper.map(saldoDto, Saldo.class);
+		return modelMapper.map(saldoDto, Saldo.class);
 	}
 }
