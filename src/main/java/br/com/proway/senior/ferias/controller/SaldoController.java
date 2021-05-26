@@ -4,13 +4,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import br.com.proway.senior.ferias.model.Saldo;
 import br.com.proway.senior.ferias.model.SaldoRepository;
 
-@Controller
+@Service
 public class SaldoController {
 
 	@Autowired
@@ -112,6 +112,7 @@ public class SaldoController {
 	 */
 	public Saldo criarSaldo(Saldo novoSaldo) {
 		novoSaldo.setDataAdmissao(LocalDate.now());
+		novoSaldo.setDiasDisponiveisDeFerias(0);
 		return repository.save(novoSaldo);
 	}
 
