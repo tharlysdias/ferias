@@ -1,5 +1,7 @@
 package br.com.proway.senior.ferias.model;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
@@ -14,4 +16,5 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories
 public interface RequerimentoRepository extends JpaRepository<Requerimento, Long> {
 
+	public List<Requerimento> findAllByIdGestor(Long idGestor);
 }

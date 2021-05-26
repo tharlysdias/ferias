@@ -138,13 +138,8 @@ public class RequerimentoController {
 	 * @param requerimento
 	 * @return
 	 */	
-	public Requerimento buscarRequerimentoPorIdGestor(Long idGestor) {
-		Optional<Requerimento> obj = this.repository.findById(idGestor);
-		if (obj.isPresent()) {
-			return obj.get();
-		} else {
-			return null;
-		}
+	public ArrayList<Requerimento> buscarRequerimentoPorIdGestor(Long idGestor) {
+		return (ArrayList<Requerimento>) this.repository.findAllByIdGestor(idGestor);
 	}
 
 	/**
