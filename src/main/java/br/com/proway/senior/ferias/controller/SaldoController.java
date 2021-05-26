@@ -112,6 +112,7 @@ public class SaldoController {
 	 */
 	public Saldo criarSaldo(Saldo novoSaldo) {
 		novoSaldo.setDataAdmissao(LocalDate.now());
+		novoSaldo.setDiasDisponiveisDeFerias(0);
 		return repository.save(novoSaldo);
 	}
 
