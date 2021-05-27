@@ -11,19 +11,29 @@ import br.com.proway.senior.ferias.model.Saldo;
 import br.com.proway.senior.ferias.model.SaldoRepository;
 
 @Service
-public class SaldoController {
+public class SaldoService {
 
 	@Autowired
-	private final SaldoRepository repository;
+	private SaldoRepository repository;
 
-	public SaldoController(SaldoRepository repository) {
-		this.repository = repository;
+	/**
+	 * Cria novo saldo
+	 * 
+	 * @param novoSaldo
+	 * @return {@link Saldo}
+	 */
+	public Saldo criarSaldo(Saldo novoSaldo) {
+		novoSaldo.setDataAdmissao(LocalDate.now());
+		novoSaldo.setDiasDisponiveisDeFerias(0);
+		return repository.save(novoSaldo);
 	}
 
 	/**
 	 * Desconta dias de um {@link Saldo}.
 	 * 
-	 * Recebe uma id de colaborador e o valor de dias a serem descontados
+	 * Busca o saldo de ferias do colaborador e desconta o numero de dias passados
+	 * no argumento. Atualiza o dia de ferias no objeto buscado e devolve o item
+	 * para o banco de dados.
 	 * 
 	 * @param id
 	 * @param diasDescontados
@@ -40,7 +50,7 @@ public class SaldoController {
 	}
 
 	/**
-	 * Desconta dias de um {@link Saldo}.
+	 * Adiciona dias a um {@link Saldo}.
 	 * 
 	 * Recebe uma id de colaborador e o valor de dias a serem descontados
 	 * 
@@ -56,6 +66,18 @@ public class SaldoController {
 			saldo.setDiasDisponiveisDeFerias(diasAtualizados);
 			return repository.save(saldo);
 		}).orElseThrow(() -> new Exception("Erro: saldo nao atualizado."));
+	}
+
+	/**
+	 * Recebe um id e retorna um {@link Saldo} do banco de dados.
+	 * 
+	 * @param id
+	 * @return {@link Saldo}
+	 * @throws Exception
+	 */
+	public Saldo buscarPorId(Long id) throws Exception {
+		return repository.findById(id)
+				.orElseThrow(() -> new Exception("Error: nao existe saldo com este id " + id + "."));
 	}
 
 	/**
@@ -77,30 +99,6 @@ public class SaldoController {
 	 */
 	public Saldo buscarPorIdColaborador(Long idColaborador) {
 		return repository.findByIdColaborador(idColaborador);
-	}
-
-	/**
-	 * Recebe um id e retorna um {@link Saldo} do banco de dados.
-	 * 
-	 * @param id
-	 * @return {@link Saldo}
-	 * @throws Exception
-	 */
-	public Saldo buscarPorId(Long id) throws Exception {
-		return repository.findById(id)
-				.orElseThrow(() -> new Exception("Error: nao existe saldo com este id " + id + "."));
-	}
-
-	/**
-	 * Cria novo saldo
-	 * 
-	 * @param novoSaldo
-	 * @return {@link Saldo}
-	 */
-	public Saldo criarSaldo(Saldo novoSaldo) {
-		novoSaldo.setDataAdmissao(LocalDate.now());
-		novoSaldo.setDiasDisponiveisDeFerias(0);
-		return repository.save(novoSaldo);
 	}
 
 	/**

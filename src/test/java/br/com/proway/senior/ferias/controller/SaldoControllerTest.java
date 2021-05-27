@@ -22,7 +22,7 @@ import br.com.proway.senior.ferias.model.SaldoRepository;
 public class SaldoControllerTest {
 
 	@Autowired
-	public SaldoController controller;
+	public SaldoService controller;
 	
 	@MockBean
 	public SaldoRepository repository;
