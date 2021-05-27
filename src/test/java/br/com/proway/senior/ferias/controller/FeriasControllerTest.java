@@ -62,7 +62,7 @@ public class FeriasControllerTest {
 		ferias.setIdColaborador(5l);
 		Ferias feriasSalvas = controller.getRepository().save(ferias);
 		Long id = feriasSalvas.getId();
-		assertEquals((Long) 5L, controller.buscarPorIdFerias(id).getIdColaborador());
+		assertEquals((Long) 5L, controller.buscarPorIdRequerimento(id).getIdColaborador());
 	}
 
 	@Test
@@ -141,7 +141,7 @@ public class FeriasControllerTest {
 		Long id = ferias.getId();
 		controller.deletarFeriasPorFerias(ferias);;
 		assertEquals(tamanhoAntes-1, controller.buscarTodasFerias().size());
-		controller.buscarPorIdFerias(id);
+		controller.buscarPorIdRequerimento(id);
 	}
 
 	@Test(expected = Exception.class)
@@ -151,7 +151,7 @@ public class FeriasControllerTest {
 		Long id = ferias.getId();
 		controller.deletarFeriasPorId(id);
 		assertEquals(tamanhoAntes-1, controller.buscarTodasFerias().size());
-		controller.buscarPorIdFerias(id);
+		controller.buscarPorIdRequerimento(id);
 	}
 	
 	@Test

@@ -6,102 +6,103 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.proway.senior.ferias.model.Ferias;
-import br.com.proway.senior.ferias.model.Requerimento;
 import br.com.proway.senior.ferias.model.dto.FeriasDTO;
+import br.com.proway.senior.ferias.model.enums.EstadoFerias;
 
 @RestController
 public class FeriasControllerAPI {
 
 	@Autowired
 	private FeriasController controllerFerias;
-	
+
 	@Autowired
 	private RequerimentoController controllerRequerimento;
-	
+
 	@Autowired
 	private ModelMapper modelMapper;
 
-	public FeriasControllerAPI() {}
+	public FeriasControllerAPI() {
+	}
 
-	/**
-	 * Consulta uma {@link Ferias} por id.
-	 * 
-	 * @param id {@link id}
-	 * @return Ferias
-	 * @author Lucas Grijó <rkssgrijo@gmail.com>
-	 * @throws Exception Nao existe uma ferias com esse id.
-	 */
 	@GetMapping("/ferias/{id}")
 	@ResponseBody
-	FeriasDTO consultarFeriasPorId(@PathVariable Long id) throws Exception {
-		return convertToDto(controllerFerias.buscarPorIdFerias(id));
+	FeriasDTO buscarFeriasPorId(@PathVariable Long id) throws Exception {
+		return convertToDto(controllerFerias.buscarPorId(id));
 	}
 
-	/**
-	 * Consulta as {@link Ferias} por id do colaborador.
-	 * 
-	 * @param id {@link id}
-	 * @return Ferias
-	 * @author Lucas Grijó <rksgrijo@gmail.com>
-	 * @throws Exception Nao existe uma ferias com esse id.
-	 */
-	@GetMapping("/feriasColaborador/{idRequerimento}")
-	FeriasDTO consultarFeriasPorIdColaborador(@PathVariable Long idRequerimento) throws Exception {
-		Requerimento requerimento = controllerRequerimento.buscarRequerimentoPorId(idRequerimento);
-		return convertToDto(controllerFerias.buscarPorRequerimento(requerimento));
-	}
-	
-	/**
-	 * Busca todas as {@link Ferias} do banco.
-	 * 
-	 * @return List<Ferias>
-	 * @author Lucas Grijó <rksgrijo@gmail.com>
-	 */
 	@GetMapping("/ferias")
-	ArrayList<FeriasDTO> buscarTodos() {
+	ArrayList<FeriasDTO> buscarTodasAsFerias() {
 		ArrayList<Ferias> ferias = (ArrayList<Ferias>) controllerFerias.buscarTodasFerias();
-        return (ArrayList<FeriasDTO>) ferias.stream().map(this::convertToDto).collect(Collectors.toList());
+		return (ArrayList<FeriasDTO>) ferias.stream().map(this::convertToDto).collect(Collectors.toList());
+	}
+
+	@GetMapping("/feriasColaborador/{idColaborador}")
+	ArrayList<FeriasDTO> buscarTodasAsFeriasPorIdColaborador(@PathVariable Long idColaborador) throws Exception {
+		ArrayList<Ferias> ferias = controllerFerias.buscarTodasAsFeriasPorIdColaborador(idColaborador);
+		return (ArrayList<FeriasDTO>) ferias.stream().map(this::convertToDto).collect(Collectors.toList());
+	}
+	
+	
+	@GetMapping("/feriasColaborador/{idColaborador}")
+	ArrayList<FeriasDTO> buscarFeriasAUsufruirPorIdColaborador(@PathVariable Long idColaborador) throws Exception {
+		ArrayList<Ferias> ferias = controllerFerias.buscarFeriasAUsufruirPorIdColaborador(idColaborador);
+		return (ArrayList<FeriasDTO>) ferias.stream().map(this::convertToDto).collect(Collectors.toList());
+	}
+	
+	@GetMapping("/feriasColaborador/{idGestor}")
+	ArrayList<FeriasDTO> buscarFeriasAUsufruirDosSubordinados(@PathVariable Long idGestor) throws Exception {
+//		Requerimento requerimento = controllerRequerimento.buscarRequerimentoPorId(idRequerimento);
+//		return convertToDto(controllerFerias.buscarPorRequerimento(requerimento));
+		return null;
+	}
+	
+	@GetMapping("/feriasColaborador/{idGestor}")
+	ArrayList<FeriasDTO> buscarFeriasUsufruindoDosSubordinados(@PathVariable Long idGestor) throws Exception {
+//		Requerimento requerimento = controllerRequerimento.buscarRequerimentoPorId(idRequerimento);
+//		return convertToDto(controllerFerias.buscarPorRequerimento(requerimento));
+		return null;
 	}
 
 	/**
-	 * Altera uma {@link Ferias} do banco a partir de seu id.
+	 * Requisicao para cancelar uma ferias, alterando seu estado para cancelada.
 	 * 
-	 * @return Ferias
-	 * @author Lucas Grijó <rksgrijo@gmail.com>
-	 * @throws Exception Ferias nao encontradas.
+	 * @param id
+	 * @throws Exception
 	 */
-	@PutMapping("/ferias/{id}")
+	@PutMapping("/ferias")
 	@ResponseStatus(HttpStatus.OK)
-	public void alterarFerias(@RequestBody FeriasDTO feriasDTO, @PathVariable Long id) throws Exception {
-		Ferias novaFerias = convertToEntity(feriasDTO);
-		controllerFerias.alterarDataFerias(id, novaFerias);
+	public void cancelarFerias(@PathVariable Long id) throws Exception {
+		Ferias ferias = controllerFerias.buscarPorId(id);
+		ferias.setEstado(EstadoFerias.CANCELADA);
+		controllerFerias.alterarFerias(ferias, id);
 	}
-	
+
+
 	/**
-	 * Deleta uma {@link Ferias} do banco a partir de seu id.
+	 * Converte a entidade {@link Ferias} para {@link FeriasDTO}.
 	 * 
-	 * @author Lucas Grijó <rksgrijo@gmail.com>
+	 * @param ferias
+	 * @return feriasDTO
 	 */
-	@DeleteMapping("/ferias/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	void deletarFerias(@PathVariable Long id) {
-		controllerFerias.deletarFeriasPorId(id);
-	}
-	
 	private FeriasDTO convertToDto(IFerias ferias) {
 		FeriasDTO feriasDTO = modelMapper.map(ferias, FeriasDTO.class);
 		return feriasDTO;
 	}
+	
+	/**
+	 * Converte uma {@link FeriasDTO} para entidade {@link Ferias}.
+	 * 
+	 * @param feriasDTO
+	 * @return ferias
+	 */
 
 	private Ferias convertToEntity(FeriasDTO feriasDTO) {
 		Ferias ferias = modelMapper.map(feriasDTO, Ferias.class);

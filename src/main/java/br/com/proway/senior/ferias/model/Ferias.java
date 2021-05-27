@@ -43,6 +43,7 @@ public class Ferias implements IFerias {
 
 	/**
 	 * Construtor que recebe {@link IRequerimento}.
+	 * 
 	 * @param requerimento
 	 */
 	public Ferias(IRequerimento requerimento) {
