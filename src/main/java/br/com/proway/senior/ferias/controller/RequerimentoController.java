@@ -1,5 +1,6 @@
 package br.com.proway.senior.ferias.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -85,7 +86,7 @@ public class RequerimentoController {
 	 */	
 	private Ferias aprovarRequerimento(Requerimento requerimento) {
 		requerimento.setEstado(EstadosRequerimento.APROVADO);
-		repository.save(requerimento);
+//		repository.save(requerimento);
 		return controllerFerias.criarFerias(requerimento);
 	}
 
@@ -97,7 +98,7 @@ public class RequerimentoController {
 	 */
 	private Requerimento recusarRequerimento(Requerimento requerimento) {
 		requerimento.setEstado(EstadosRequerimento.RECUSADO);
-		return repository.save(requerimento);
+		return /*repository.save*/(requerimento);
 	}
 
 	/**
@@ -114,6 +115,8 @@ public class RequerimentoController {
 			} else {
 				recusarRequerimento(obj.get());
 			}
+			obj.get().setDataFechamento(LocalDate.now());
+			repository.save(obj.get());
 			return obj.get();
 		} return null;
 	}
@@ -124,10 +127,10 @@ public class RequerimentoController {
 	 * @param requerimento
 	 * @return
 	 */	
-	public void desativarRequerimento(Requerimento requerimento) {
-		Optional<Requerimento> obj = this.repository.findById(requerimento.getId());
+	public void desativarRequerimento(Long id) {
+		Optional<Requerimento> obj = this.repository.findById(id);
 		if (obj.get().getEstado().equals(EstadosRequerimento.PENDENTE)) {
-			this.repository.delete(requerimento);
+			this.repository.delete(obj.get());
 		}
 
 	}

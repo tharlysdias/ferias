@@ -56,15 +56,14 @@ public class Requerimento implements IRequerimento {
 	public Requerimento() {
 	}
 
-	public Requerimento(Saldo saldo, Long idGestor, LocalDate dataAbertura, LocalDate dataFechamento,
-			LocalDate prazoAnalise, EstadosRequerimento estado, String mensagem, String resposta,
-			Integer diasRequisitados, Integer diasVendidos, LocalDate dataInicioFerias) {
+	public Requerimento(Saldo saldo, Long idGestor, LocalDate dataAbertura, LocalDate prazoAnalise, 
+			String mensagem, String resposta, Integer diasRequisitados, Integer diasVendidos, 
+			LocalDate dataInicioFerias) {
 		this.saldo = saldo;
 		this.idGestor = idGestor;
 		this.dataAbertura = dataAbertura;
-		this.dataFechamento = dataFechamento;
 		this.prazoAnalise = prazoAnalise;
-		this.estado = estado;
+		this.estado = EstadosRequerimento.PENDENTE;
 		this.mensagem = mensagem;
 		this.resposta = resposta;
 		this.diasRequisitados = diasRequisitados;

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.proway.senior.ferias.model.Requerimento;
 import br.com.proway.senior.ferias.model.dto.RequerimentoDTO;
+import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
 
 /**
  * ControllerAPI do {@link Requerimento}
@@ -33,7 +34,7 @@ public class RequerimentoControllerAPI {
 	private ModelMapper modelMapper;
 
 	@ResponseBody
-	@RequestMapping(path = "/requerimento/", method = RequestMethod.GET)
+	@RequestMapping(path = "/requerimento", method = RequestMethod.GET)
 	public List<RequerimentoDTO> buscarTodos() {
 		return controller.buscarTodosRequerimentos().stream().map(this::convertToDTO).collect(Collectors.toList());
 	}
@@ -56,18 +57,19 @@ public class RequerimentoControllerAPI {
 		//System.out.println(convertToEntity(requerimentoDto).getIdColaborador() + " " + convertToEntity(requerimentoDto).getDiasVendidos());
 		return convertToDTO(controller.criarRequerimento(convertToEntity(requerimentoDto)));
 	}
-
-	@ResponseBody
-	@RequestMapping(path = "/requerimento/{id}", method = RequestMethod.PUT)
-	public RequerimentoDTO atualizar(@RequestBody RequerimentoDTO requerimentoDto) {
-		return convertToDTO(controller.atualizarRequerimento(convertToEntity(requerimentoDto)));
-	}
-
+	
 	@ResponseBody
 	@RequestMapping(path = "/requerimento/{id}", method = RequestMethod.DELETE)
-	public void deletar(@PathVariable("id") Long id) {
-		this.controller.deletar(id);
+	public void desativar(@PathVariable("id") Long id) {
+		this.controller.desativarRequerimento(id);
 	}
+	
+	@ResponseBody
+	@RequestMapping(path = "/requerimento/avaliar/{id}", method = RequestMethod.PUT)
+	public RequerimentoDTO avaliar(@PathVariable("id") Long id, @RequestBody EstadosRequerimento estado){
+		return convertToDTO(controller.avaliarRequerimento(id, estado));
+	}
+		
 
 	private RequerimentoDTO convertToDTO(Requerimento requerimento) {
 		return modelMapper.map(requerimento, RequerimentoDTO.class);
