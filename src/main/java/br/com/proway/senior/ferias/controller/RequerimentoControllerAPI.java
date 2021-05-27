@@ -47,8 +47,8 @@ public class RequerimentoControllerAPI {
 
 	@ResponseBody
 	@RequestMapping(path = "/colaborador/{idColaborador}/requerimento", method = RequestMethod.GET)
-	public RequerimentoDTO buscarRequerimentoPorIdColaborador(@PathVariable("id") Long id) {
-		return convertToDTO(controller.buscarRequerimentoPorIdColaborador(id));
+	public List<RequerimentoDTO> buscarRequerimentoPorIdColaborador(@PathVariable("id") Long id) {
+		return controller.buscarRequerimentoPorIdColaborador(id).stream().map(this::convertToDTO).collect(Collectors.toList());
 	}
 
 	@PostMapping(path = "/requerimento/")

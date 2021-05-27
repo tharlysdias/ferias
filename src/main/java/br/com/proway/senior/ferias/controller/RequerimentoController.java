@@ -151,12 +151,8 @@ public class RequerimentoController {
 	 * @param requerimento
 	 * @return
 	 */	
-	public Requerimento buscarRequerimentoPorIdColaborador(Long idColaborador) {
-		Optional<Requerimento> obj = this.repository.findById(idColaborador);
-		if (obj.isPresent()) {
-			return obj.get();
-		} else {
-			return null;
-		}
+	public ArrayList<Requerimento> buscarRequerimentoPorIdColaborador(Long idColaborador) {
+		ArrayList<Requerimento> obj = (ArrayList<Requerimento>) this.repository.findAllByIdColaborador(idColaborador);
+			return obj;
 	}
 }
