@@ -80,19 +80,6 @@ public class SaldoController {
 	}
 
 	/**
-	 * Retorna todos os saldos por id de Gestor
-	 * 
-	 * Busca toda a lista de {@link Saldo} e seleciona aqueles com a id do Gestor
-	 * recebida no parâmetro. Retorna a lista selecionada.
-	 * 
-	 * @param idColaborador
-	 * @return ArrayList<Saldo>
-	 */
-	public ArrayList<Saldo> buscarTodosPorIdGestor(Long idGestor) {
-		return repository.findByIdGestor(idGestor);
-	}
-
-	/**
 	 * Recebe um id e retorna um {@link Saldo} do banco de dados.
 	 * 
 	 * @param id
@@ -133,7 +120,6 @@ public class SaldoController {
 			saldo.setDataAdmissao(novoSaldo.getDataAdmissao());
 			saldo.setDiasDisponiveisDeFerias(novoSaldo.getDiasDisponiveisDeFerias());
 			saldo.setIdColaborador(novoSaldo.getIdColaborador());
-			saldo.setIdGestor(novoSaldo.getIdGestor());
 			return repository.save(saldo);
 		}).orElseThrow(() -> new Exception("Erro: id \"" + id + "\" nao encontrada"));
 	}

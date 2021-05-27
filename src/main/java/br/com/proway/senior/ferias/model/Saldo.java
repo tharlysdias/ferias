@@ -1,55 +1,38 @@
 package br.com.proway.senior.ferias.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import br.com.proway.senior.ferias.model.dto.SaldoDTO;
+import javax.persistence.OneToMany;
 
 /**
  * 
  * @author Leonardo F Silva <felipeleao217@gmail.com>
- *
+ * 
  */
 @Entity
 public class Saldo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	@Column(unique = true)
 	private Long idColaborador;
-	
-	private Long idGestor;
+
 	private int diasDisponiveisDeFerias;
 	private LocalDate dataAdmissao;
 
 	public Saldo() {
 	}
-	
-	public Saldo(SaldoDTO saldoDto) {
-		this.idColaborador = saldoDto.getIdColaborador();
-		this.idGestor = saldoDto.getIdGestor();
-		this.diasDisponiveisDeFerias = saldoDto.getDiasDisponiveisDeFerias();
-		//this.dataAdmissao = getDataAdmissao(saldoDto.getIdColaborador());
-	}
 
-	public Saldo(Long idColaborador, Long idGestor, int diasDisponiveisDeFerias, LocalDate dataAdmissao) {
+	public Saldo(Long idColaborador, int diasDisponiveisDeFerias, LocalDate dataAdmissao) {
 		this.idColaborador = idColaborador;
-		this.idGestor = idGestor;
-		this.diasDisponiveisDeFerias = diasDisponiveisDeFerias;
-		this.dataAdmissao = dataAdmissao;
-	}
-
-	public Saldo(Long id, Long idColaborador, Long idGestor, int diasDisponiveisDeFerias, LocalDate dataAdmissao) {
-		super();
-		this.id = id;
-		this.idColaborador = idColaborador;
-		this.idGestor = idGestor;
 		this.diasDisponiveisDeFerias = diasDisponiveisDeFerias;
 		this.dataAdmissao = dataAdmissao;
 	}
@@ -58,32 +41,28 @@ public class Saldo {
 		return id;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public Long getIdColaborador() {
 		return idColaborador;
-	}
-
-	public Long getIdGestor() {
-		return idGestor;
-	}
-
-	public int getDiasDisponiveisDeFerias() {
-		return diasDisponiveisDeFerias;
-	}
-
-	public LocalDate getDataAdmissao() {
-		return dataAdmissao;
 	}
 
 	public void setIdColaborador(Long idColaborador) {
 		this.idColaborador = idColaborador;
 	}
 
-	public void setIdGestor(Long idGestor) {
-		this.idGestor = idGestor;
+	public int getDiasDisponiveisDeFerias() {
+		return diasDisponiveisDeFerias;
 	}
 
 	public void setDiasDisponiveisDeFerias(int diasDisponiveisDeFerias) {
 		this.diasDisponiveisDeFerias = diasDisponiveisDeFerias;
+	}
+
+	public LocalDate getDataAdmissao() {
+		return dataAdmissao;
 	}
 
 	public void setDataAdmissao(LocalDate dataAdmissao) {
@@ -98,7 +77,6 @@ public class Saldo {
 		result = prime * result + diasDisponiveisDeFerias;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((idColaborador == null) ? 0 : idColaborador.hashCode());
-		result = prime * result + ((idGestor == null) ? 0 : idGestor.hashCode());
 		return result;
 	}
 
@@ -128,11 +106,7 @@ public class Saldo {
 				return false;
 		} else if (!idColaborador.equals(other.idColaborador))
 			return false;
-		if (idGestor == null) {
-			if (other.idGestor != null)
-				return false;
-		} else if (!idGestor.equals(other.idGestor))
-			return false;
 		return true;
 	}
+
 }

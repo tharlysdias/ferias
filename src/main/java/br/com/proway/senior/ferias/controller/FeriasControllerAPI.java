@@ -1,7 +1,6 @@
 package br.com.proway.senior.ferias.controller;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -17,13 +16,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.proway.senior.ferias.model.Ferias;
+import br.com.proway.senior.ferias.model.Requerimento;
 import br.com.proway.senior.ferias.model.dto.FeriasDTO;
 
 @RestController
 public class FeriasControllerAPI {
 
 	@Autowired
-	private FeriasController controller;
+	private FeriasController controllerFerias;
+	
+	@Autowired
+	private RequerimentoController controllerRequerimento;
 	
 	@Autowired
 	private ModelMapper modelMapper;
@@ -41,7 +44,7 @@ public class FeriasControllerAPI {
 	@GetMapping("/ferias/{id}")
 	@ResponseBody
 	FeriasDTO consultarFeriasPorId(@PathVariable Long id) throws Exception {
-		return convertToDto(controller.buscarPorIdFerias(id));
+		return convertToDto(controllerFerias.buscarPorIdFerias(id));
 	}
 
 	/**
@@ -52,22 +55,10 @@ public class FeriasControllerAPI {
 	 * @author Lucas Grijó <rksgrijo@gmail.com>
 	 * @throws Exception Nao existe uma ferias com esse id.
 	 */
-	@GetMapping("/feriasColaborador/{idColaborador}")
-	List<FeriasDTO> consultarFeriasPorIdColaborador(@PathVariable Long idColaborador) throws Exception {
-		return controller.buscarPorIdColaborador(idColaborador).stream().map(this::convertToDto).collect(Collectors.toList());
-	}
-	
-	/**
-	 * Consulta as {@link Ferias} ainda nao usufruidas por id do gestor.
-	 * 
-	 * @param id {@link id}
-	 * @return Ferias
-	 * @author Lucas Grijó <rksgrijo@gmail.com>
-	 * @throws Exception Nao existe uma ferias com esse id.
-	 */
-	@GetMapping("/feriasGestor/{idGestor}")
-	List<FeriasDTO> consultarFeriasPorIdGestorNaoUsufruidas(@PathVariable Long idGestor) throws Exception {
-		return controller.buscarPorIdGestorENaoUsufruidas(idGestor).stream().map(this::convertToDto).collect(Collectors.toList());
+	@GetMapping("/feriasColaborador/{idRequerimento}")
+	FeriasDTO consultarFeriasPorIdColaborador(@PathVariable Long idRequerimento) throws Exception {
+		Requerimento requerimento = controllerRequerimento.buscarRequerimentoPorId(idRequerimento);
+		return convertToDto(controllerFerias.buscarPorRequerimento(requerimento));
 	}
 	
 	/**
@@ -78,7 +69,7 @@ public class FeriasControllerAPI {
 	 */
 	@GetMapping("/ferias")
 	ArrayList<FeriasDTO> buscarTodos() {
-		ArrayList<Ferias> ferias = (ArrayList<Ferias>) controller.buscarTodasFerias();
+		ArrayList<Ferias> ferias = (ArrayList<Ferias>) controllerFerias.buscarTodasFerias();
         return (ArrayList<FeriasDTO>) ferias.stream().map(this::convertToDto).collect(Collectors.toList());
 	}
 
@@ -93,7 +84,7 @@ public class FeriasControllerAPI {
 	@ResponseStatus(HttpStatus.OK)
 	public void alterarFerias(@RequestBody FeriasDTO feriasDTO, @PathVariable Long id) throws Exception {
 		Ferias novaFerias = convertToEntity(feriasDTO);
-		controller.alterarDataFerias(id, novaFerias);
+		controllerFerias.alterarDataFerias(id, novaFerias);
 	}
 	
 	/**
@@ -104,7 +95,7 @@ public class FeriasControllerAPI {
 	@DeleteMapping("/ferias/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	void deletarFerias(@PathVariable Long id) {
-		controller.deletarFeriasPorId(id);
+		controllerFerias.deletarFeriasPorId(id);
 	}
 	
 	private FeriasDTO convertToDto(IFerias ferias) {

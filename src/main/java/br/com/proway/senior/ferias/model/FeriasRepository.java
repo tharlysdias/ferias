@@ -10,12 +10,8 @@ import br.com.proway.senior.ferias.model.enums.EstadoFerias;
 @EnableJpaRepositories
 public interface FeriasRepository extends JpaRepository<Ferias, Long> {
 
-	public List<Ferias> findAllByIdColaborador(Long id);
+	public Ferias findByRequerimento(Requerimento requerimento);
 	
-	public List<Ferias> findByIdGestorAndEstado(Long id, EstadoFerias estado);
+	public List<Ferias> findByRequerimentoAndEstado(Requerimento requerimento, EstadoFerias estado);
 	
-	public List<Ferias> findByIdColaboradorAndEstado(Long id, EstadoFerias estado);
-	
-	public Ferias findByIdRequerimento(Long id);
-
 }

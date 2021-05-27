@@ -2,16 +2,14 @@ package br.com.proway.senior.ferias.controller;
 
 import java.time.LocalDate;
 
+import br.com.proway.senior.ferias.model.Requerimento;
 import br.com.proway.senior.ferias.model.enums.EstadoFerias;
-import br.com.proway.senior.ferias.model.enums.TiposFerias;
 
 public interface IFerias {
 
 	public Long getId();
 
-	public Long getIdColaborador();
-
-	public Long getIdRequerimento();
+	public Requerimento getRequerimento();
 
 	public EstadoFerias getEstado();
 
@@ -19,10 +17,8 @@ public interface IFerias {
 
 	public LocalDate getDataFim();
 
-	public int getDiasRequisitados();
+	public int getDias();
 
 	public int getDiasVendidos();
-
-	public TiposFerias getTipoFerias();
 
 }

@@ -57,21 +57,6 @@ public class SaldoControllerAPI {
 	}
 
 	/**
-	 * Retorna todos os saldos por id de Gestor
-	 * 
-	 * Busca toda a lista de {@link Saldo} e seleciona aqueles com a id do Gestor
-	 * recebida no parâmetro. Retorna a lista selecionada.
-	 * 
-	 * @param idColaborador
-	 * @return ArrayList<Saldo>
-	 */
-	@GetMapping(value = "/gestor/{idGestor}/saldo")
-	public ArrayList<SaldoDTO> buscarTodosPorIdGestor(@PathVariable Long idGestor) {
-		return (ArrayList<SaldoDTO>) controller.buscarTodosPorIdGestor(idGestor).stream().map(this::convertToDTO)
-				.collect(Collectors.toList());
-	}
-
-	/**
 	 * Recebe um id e retorna um {@link Saldo} do banco de dados.
 	 * 
 	 * @param id
@@ -91,15 +76,13 @@ public class SaldoControllerAPI {
 	 */
 	@PostMapping(value = "/saldo")
 	public SaldoDTO criarSaldo(@RequestBody SaldoDTO saldoDto) {
-		Saldo saldo = new Saldo(saldoDto);
-		return convertToDTO(controller.criarSaldo(saldo));
+		return convertToDTO(controller.criarSaldo(convertToEntity(saldoDto)));
 	}
 
 	private SaldoDTO convertToDTO(Saldo saldo) {
 		return modelMapper.map(saldo, SaldoDTO.class);
 	}
 
-	@SuppressWarnings("unused")
 	private Saldo convertToEntity(SaldoDTO saldoDto) {
 		return modelMapper.map(saldoDto, Saldo.class);
 	}

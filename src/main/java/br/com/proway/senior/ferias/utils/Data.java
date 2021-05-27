@@ -11,7 +11,16 @@ import java.time.temporal.ChronoUnit;
  */
 public class Data {
 	
-	private static final int PRAZO_MINIMO_SOLICITACAO_FERIAS = 15;
+	private static final int PRAZO_MINIMO_SOLICITACAO_FERIAS = 14;
+	
+	/**
+	 * Calcula data fim a partir da data de inicio e os diasRequisitados.
+	 * 
+	 * @return dataInicio.plusDays(dias).
+	 */
+	public static LocalDate calcularDataFim(LocalDate dataInicio, int dias) {
+		return dataInicio.plusDays(dias);
+	}
 
 	/**
 	 * Retorna quantidade de dias

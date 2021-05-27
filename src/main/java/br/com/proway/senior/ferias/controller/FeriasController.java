@@ -40,7 +40,7 @@ public class FeriasController {
 	 */
 	public Ferias criarFerias(IRequerimento requerimento) {
 		Ferias ferias = new Ferias(requerimento);
-		ferias.setEstado(EstadoFerias.NAO_USUFRUIDA);
+		ferias.setEstado(EstadoFerias.A_USUFRUIR);
 		return repository.save(ferias);
 	}
 
@@ -58,20 +58,6 @@ public class FeriasController {
 	}
 
 	/**
-	 * Buscar {@link Ferias}
-	 * 
-	 * Busca uma lista com todas as ferias dos colaboradores sob gerencia do gestor
-	 * com o id passado como parametro e que nao tenham sido usufruidas. (Estado =
-	 * NAO_USUFRUIDA).
-	 * 
-	 * @param id
-	 * @return Lista de ferias
-	 */
-	public List<Ferias> buscarPorIdGestorENaoUsufruidas(Long id) {
-		return repository.findByIdGestorAndEstado(id, EstadoFerias.NAO_USUFRUIDA);
-	}
-
-	/**
 	 * Busca {@link Ferias}
 	 * 
 	 * Busca todas as férias com o id do colaborador igual ao passado como
@@ -80,8 +66,8 @@ public class FeriasController {
 	 * @param id
 	 * @return lista de Ferias.
 	 */
-	public List<Ferias> buscarPorIdColaborador(Long id) {
-		return repository.findAllByIdColaborador(id);
+	public Ferias buscarPorRequerimento(Requerimento requerimento) {
+		return repository.findByRequerimento(requerimento);
 	}
 
 	/**
@@ -92,8 +78,8 @@ public class FeriasController {
 	 * @param id do colaborador
 	 * @return ferias do colaborador
 	 */
-	public List<Ferias> buscarPorIdColaboradorENaoUsufruidas(Long id) {
-		return repository.findByIdColaboradorAndEstado(id, EstadoFerias.NAO_USUFRUIDA);
+	public List<Ferias> buscarPorRequerimentoENaoUsufruidas(Requerimento requerimento) {
+		return repository.findByRequerimentoAndEstado(requerimento, EstadoFerias.A_USUFRUIR);
 	}
 
 	/**
@@ -135,7 +121,7 @@ public class FeriasController {
 		return repository.findById(id).map(ferias -> {
 			ferias.setDataInicio(novaFerias.getDataInicio());
 			ferias.setDataFim(novaFerias.getDataFim());
-			ferias.setDiasRequisitados(novaFerias.getDiasRequisitados());
+			ferias.setDias(novaFerias.getDias());
 			ferias.setDiasVendidos(novaFerias.getDiasVendidos());
 			return repository.save(ferias);
 		}).orElseThrow(() -> new Exception("Ferias nao encontradas"));
@@ -171,7 +157,7 @@ public class FeriasController {
 	 * @param id do requerimento
 	 * @return Ferias
 	 */
-	public Ferias buscarPorIdRequerimento(Long id) {
-		return repository.findByIdRequerimento(id);
+	public Ferias buscarPorIdRequerimento(Requerimento requerimento) {
+		return repository.findByRequerimento(requerimento);
 	}
 }

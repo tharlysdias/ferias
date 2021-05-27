@@ -8,35 +8,24 @@ import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
 /**
  * DTO do {@link Requerimento}
  * 
- * @author Guilherme Eduardo Bom Guse	<guilherme.guse@senior.com.br>
- * @author Tharlys Souza Dias			<tharlys.dias@senior.com.br>
+ * @author Guilherme Eduardo Bom Guse <guilherme.guse@senior.com.br>
+ * @author Tharlys Souza Dias <tharlys.dias@senior.com.br>
  */
 
 public class RequerimentoDTO {
-	
-	private Long idColaborador;
+
 	private Long idGestor;
-	private LocalDate dataAbertura;
-	private LocalDate prazoAnalise;
-	private LocalDate dataFechamento;
-	private EstadosRequerimento estado;
+	private String dataAbertura;
+	private String dataFechamento;
+	private String prazoAnalise;
+	private String estado;
 	private String mensagem;
 	private String resposta;
 	private Integer diasRequisitados;
 	private Integer diasVendidos;
-	private Integer diasFracionados;
-	private LocalDate dataInicioFeriasRequisitadas;
-	private LocalDate dataFimFeriasRequisitadas;
-	private boolean vendeuORestante;
+	private String dataInicioFerias;
 
-	public RequerimentoDTO() {}
-
-	public Long getIdColaborador() {
-		return idColaborador;
-	}
-
-	public void setIdColaborador(Long idColaborador) {
-		this.idColaborador = idColaborador;
+	public RequerimentoDTO() {
 	}
 
 	public Long getIdGestor() {
@@ -48,35 +37,35 @@ public class RequerimentoDTO {
 	}
 
 	public LocalDate getDataAbertura() {
-		return dataAbertura;
+		return LocalDate.parse(this.dataAbertura);
 	}
 
 	public void setDataAbertura(LocalDate dataAbertura) {
-		this.dataAbertura = dataAbertura;
-	}
-
-	public LocalDate getPrazoAnalise() {
-		return prazoAnalise;
-	}
-
-	public void setPrazoAnalise(LocalDate prazoAnalise) {
-		this.prazoAnalise = prazoAnalise;
+		this.dataAbertura = dataAbertura.toString();
 	}
 
 	public LocalDate getDataFechamento() {
-		return dataFechamento;
+		return LocalDate.parse(this.dataFechamento);
 	}
 
 	public void setDataFechamento(LocalDate dataFechamento) {
-		this.dataFechamento = dataFechamento;
+		this.dataFechamento = dataFechamento.toString();
+	}
+
+	public LocalDate getPrazoAnalise() {
+		return LocalDate.parse(this.prazoAnalise);
+	}
+
+	public void setPrazoAnalise(LocalDate prazoAnalise) {
+		this.prazoAnalise = prazoAnalise.toString();
 	}
 
 	public EstadosRequerimento getEstado() {
-		return estado;
+		return EstadosRequerimento.valueOf(this.estado);
 	}
 
 	public void setEstado(EstadosRequerimento estado) {
-		this.estado = estado;
+		this.estado = estado.toString();
 	}
 
 	public String getMensagem() {
@@ -111,35 +100,12 @@ public class RequerimentoDTO {
 		this.diasVendidos = diasVendidos;
 	}
 
-	public Integer getDiasFracionados() {
-		return diasFracionados;
+	public LocalDate getDataInicioFerias() {
+		return LocalDate.parse(this.dataInicioFerias);
 	}
 
-	public void setDiasFracionados(Integer diasFracionados) {
-		this.diasFracionados = diasFracionados;
+	public void setDataInicioFerias(LocalDate dataInicioFerias) {
+		this.dataInicioFerias = dataInicioFerias.toString();
 	}
 
-	public LocalDate getDataInicioFeriasRequisitadas() {
-		return dataInicioFeriasRequisitadas;
-	}
-
-	public void setDataInicioFeriasRequisitadas(LocalDate dataInicioFeriasRequisitadas) {
-		this.dataInicioFeriasRequisitadas = dataInicioFeriasRequisitadas;
-	}
-
-	public LocalDate getDataFimFeriasRequisitadas() {
-		return dataFimFeriasRequisitadas;
-	}
-
-	public void setDataFimFeriasRequisitadas(LocalDate dataFimFeriasRequisitadas) {
-		this.dataFimFeriasRequisitadas = dataFimFeriasRequisitadas;
-	}
-
-	public boolean isVendeuORestante() {
-		return vendeuORestante;
-	}
-
-	public void setVendeuORestante(boolean vendeuORestante) {
-		this.vendeuORestante = vendeuORestante;
-	}
 }

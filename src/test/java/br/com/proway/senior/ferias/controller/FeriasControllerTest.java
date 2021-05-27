@@ -1,6 +1,6 @@
 package br.com.proway.senior.ferias.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -62,7 +62,7 @@ public class FeriasControllerTest {
 		ferias.setIdColaborador(5l);
 		Ferias feriasSalvas = controller.getRepository().save(ferias);
 		Long id = feriasSalvas.getId();
-		assertEquals(5l, controller.buscarPorIdFerias(id).getIdColaborador());
+		assertEquals((Long) 5L, controller.buscarPorIdFerias(id).getIdColaborador());
 	}
 
 	@Test
@@ -80,7 +80,7 @@ public class FeriasControllerTest {
 		controller.criarFerias(requerimento);
 		List<Ferias> listaFerias = controller.buscarTodasFerias();
 		assertEquals(tamanhoAntes + 1, listaFerias.size());
-		assertEquals(55l, listaFerias.get(listaFerias.size()-1).getIdGestor());
+		assertEquals((Long) 55l, listaFerias.get(listaFerias.size()-1).getIdGestor());
 	}
 
 	@Test

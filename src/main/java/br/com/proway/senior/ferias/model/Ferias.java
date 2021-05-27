@@ -5,76 +5,54 @@ import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 
 import br.com.proway.senior.ferias.controller.IFerias;
 import br.com.proway.senior.ferias.controller.IRequerimento;
 import br.com.proway.senior.ferias.model.enums.EstadoFerias;
-import br.com.proway.senior.ferias.model.enums.TiposFerias;
+import br.com.proway.senior.ferias.utils.Data;
 
 @Entity
 public class Ferias implements IFerias {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	private Long idColaborador;
-	private Long idGestor;
-	private Long idRequerimento;
+	/**
+	 * {@link MapsId}
+	 * https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
+	 */
+	@OneToOne(fetch = FetchType.LAZY)
+	@MapsId
+	private Requerimento requerimento;
+
 	@Enumerated(EnumType.STRING)
 	private EstadoFerias estado;
 
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
 
-	private int diasRequisitados;
+	private int dias;
 	private int diasVendidos;
-
-	@Enumerated(EnumType.STRING)
-	private TiposFerias tipoFerias;
 
 	public Ferias() {
 	}
 
 	/**
-	 * @param id
-	 * @param idColaborador
-	 * @param idGestor
-	 * @param idRequerimento
-	 * @param usufruido
-	 * @param dataInicio
-	 * @param dataFim
-	 * @param diasRequisitados
-	 * @param diasVendidos
-	 * @param tipoFerias
+	 * Construtor que recebe {@link IRequerimento}.
+	 * @param requerimento
 	 */
-	public Ferias(Long idColaborador, Long idGestor, Long idRequerimento, EstadoFerias estado,
-			LocalDate dataInicio, LocalDate dataFim, int diasRequisitados, int diasVendidos, TiposFerias tipoFerias) {
-		this.idColaborador = idColaborador;
-		this.idGestor = idGestor;
-		this.idRequerimento = idRequerimento;
-		this.estado = estado;
-		this.dataInicio = dataInicio;
-		this.dataFim = dataFim;
-		this.diasRequisitados = diasRequisitados;
-		this.diasVendidos = diasVendidos;
-		this.tipoFerias = tipoFerias;
+	public Ferias(IRequerimento requerimento) {
+		this.requerimento = (Requerimento) requerimento;
+		this.dataInicio = requerimento.getDataInicioFerias();
+		this.dias = requerimento.getDiasRequisitados();
+		this.diasVendidos = requerimento.getDiasVendidos();
+		this.dataFim = Data.calcularDataFim(dataInicio, dias);
 	}
 
-	public Ferias(IRequerimento requerimento) {
-		this.idColaborador = requerimento.getIdColaborador();
-		this.idGestor = requerimento.getIdGestor();
-		this.idRequerimento = requerimento.getId();
-		this.dataInicio = requerimento.getDataInicioFeriasRequisitadas();
-		this.dataFim = requerimento.getDataFimFeriasRequisitadas();
-		this.diasRequisitados = requerimento.getDiasRequisitados();
-		this.diasVendidos = requerimento.getDiasVendidos();
-		this.tipoFerias = requerimento.getTipoFerias();
-	}
-	
 	public Long getId() {
 		return id;
 	}
@@ -83,20 +61,12 @@ public class Ferias implements IFerias {
 		this.id = id;
 	}
 
-	public Long getIdColaborador() {
-		return idColaborador;
+	public Requerimento getRequerimento() {
+		return requerimento;
 	}
 
-	public void setIdColaborador(Long idColaborador) {
-		this.idColaborador = idColaborador;
-	}
-
-	public Long getIdRequerimento() {
-		return idRequerimento;
-	}
-
-	public void setIdRequerimento(Long idRequerimento) {
-		this.idRequerimento = idRequerimento;
+	public void setRequerimento(Requerimento requerimento) {
+		this.requerimento = requerimento;
 	}
 
 	public EstadoFerias getEstado() {
@@ -123,12 +93,12 @@ public class Ferias implements IFerias {
 		this.dataFim = dataFim;
 	}
 
-	public int getDiasRequisitados() {
-		return diasRequisitados;
+	public int getDias() {
+		return dias;
 	}
 
-	public void setDiasRequisitados(int diasRequisitados) {
-		this.diasRequisitados = diasRequisitados;
+	public void setDias(int dias) {
+		this.dias = dias;
 	}
 
 	public int getDiasVendidos() {
@@ -139,20 +109,56 @@ public class Ferias implements IFerias {
 		this.diasVendidos = diasVendidos;
 	}
 
-	public TiposFerias getTipoFerias() {
-		return tipoFerias;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((dataFim == null) ? 0 : dataFim.hashCode());
+		result = prime * result + ((dataInicio == null) ? 0 : dataInicio.hashCode());
+		result = prime * result + dias;
+		result = prime * result + diasVendidos;
+		result = prime * result + ((estado == null) ? 0 : estado.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((requerimento == null) ? 0 : requerimento.hashCode());
+		return result;
 	}
 
-	public void setTipoFerias(TiposFerias tipoFerias) {
-		this.tipoFerias = tipoFerias;
-	}
-	
-	public Long getIdGestor() {
-		return idGestor;
-	}
-
-	public void setIdGestor(Long idGestor) {
-		this.idGestor = idGestor;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Ferias other = (Ferias) obj;
+		if (dataFim == null) {
+			if (other.dataFim != null)
+				return false;
+		} else if (!dataFim.equals(other.dataFim))
+			return false;
+		if (dataInicio == null) {
+			if (other.dataInicio != null)
+				return false;
+		} else if (!dataInicio.equals(other.dataInicio))
+			return false;
+		if (dias != other.dias)
+			return false;
+		if (diasVendidos != other.diasVendidos)
+			return false;
+		if (estado != other.estado)
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (requerimento == null) {
+			if (other.requerimento != null)
+				return false;
+		} else if (!requerimento.equals(other.requerimento))
+			return false;
+		return true;
 	}
 
 }
