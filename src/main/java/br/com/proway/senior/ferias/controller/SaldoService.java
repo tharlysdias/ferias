@@ -43,10 +43,9 @@ public class SaldoService {
 	public Saldo descontarSaldo(Long idColaborador, int diasDescontados) throws Exception {
 		int diasAtualizados = repository.findByIdColaborador(idColaborador).getDiasDisponiveisDeFerias()
 				- diasDescontados;
-		return repository.findById(idColaborador).map(saldo -> {
-			saldo.setDiasDisponiveisDeFerias(diasAtualizados);
-			return repository.save(saldo);
-		}).orElseThrow(() -> new Exception("Erro: saldo nao atualizado."));
+		Saldo saldo = repository.findByIdColaborador(idColaborador);
+		saldo.setDiasDisponiveisDeFerias(diasAtualizados);
+		return repository.save(saldo);
 	}
 
 	/**
@@ -62,10 +61,9 @@ public class SaldoService {
 	public Saldo adicionarSaldo(Long idColaborador, int diasAdicionados) throws Exception {
 		int diasAtualizados = repository.findByIdColaborador(idColaborador).getDiasDisponiveisDeFerias()
 				+ diasAdicionados;
-		return repository.findById(idColaborador).map(saldo -> {
-			saldo.setDiasDisponiveisDeFerias(diasAtualizados);
-			return repository.save(saldo);
-		}).orElseThrow(() -> new Exception("Erro: saldo nao atualizado."));
+		Saldo saldo = repository.findByIdColaborador(idColaborador);
+		saldo.setDiasDisponiveisDeFerias(diasAtualizados);
+		return repository.save(saldo);
 	}
 
 	/**

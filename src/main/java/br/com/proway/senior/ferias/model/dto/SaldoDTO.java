@@ -1,5 +1,11 @@
 package br.com.proway.senior.ferias.model.dto;
 
+/**
+ * @see {@link Long} idColaborador
+ * @see {@link int} diasDisponiveisDeFerias
+ * 
+ * @author Leonardo F Silva <felipeleao217@gmail.com>
+ */
 public class SaldoDTO {
 
 	private Long idColaborador;
