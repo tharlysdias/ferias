@@ -74,7 +74,7 @@ public class FeriasController {
 	public ArrayList<Ferias> buscarTodasAsFeriasPorIdColaborador(Long idColaborador) {
 		Saldo saldo = repositorySaldo.findByIdColaborador(idColaborador);
 		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento
-				.findByIdSaldo(saldo.getId());
+				.findBySaldo(saldo);
 		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
 		for (Requerimento requerimento : requerimentos) {
 			ferias.add(repositoryFerias.findById(requerimento.getId()).get());
@@ -91,7 +91,7 @@ public class FeriasController {
 	public ArrayList<Ferias> buscarFeriasAUsufruirPorIdColaborador(Long idColaborador) {
 		Saldo saldo = repositorySaldo.findByIdColaborador(idColaborador);
 		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento
-				.findByIdSaldo(saldo.getId());
+				.findBySaldo(saldo);
 		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
 		for (Requerimento requerimento : requerimentos) {
 			Ferias temp = repositoryFerias.findById(requerimento.getId()).get();
