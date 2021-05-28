@@ -1,5 +1,6 @@
 package br.com.proway.senior.ferias.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import br.com.proway.senior.ferias.model.Ferias;
 import br.com.proway.senior.ferias.model.FeriasRepository;
 import br.com.proway.senior.ferias.model.Requerimento;
+import br.com.proway.senior.ferias.model.RequerimentoRepository;
+import br.com.proway.senior.ferias.model.Saldo;
+import br.com.proway.senior.ferias.model.SaldoRepository;
 import br.com.proway.senior.ferias.model.enums.EstadoFerias;
 
 /**
@@ -15,37 +19,31 @@ import br.com.proway.senior.ferias.model.enums.EstadoFerias;
  * 
  * @author David Hildebrandt <davihildebran@gmail.com>
  * @author Lucas Grijo <rksgrijo@gmail.com>
+ * @version Sprint6
+ * 
+ * @author Tharlys de Souza Dias <tharlys.dias@senior.com.br>
+ * @author Lucas Grijo <rksgrijo@gmail.com>
+ * @version Sprint7
  */
 @Controller
 public class FeriasController {
 
+	private FeriasRepository repositoryFerias;
+
+	private RequerimentoRepository repositoryRequerimento;
+
+	private SaldoRepository repositorySaldo;
+
 	@Autowired
-	private FeriasRepository repository;
-
-	public FeriasController() {
-	}
-
-	public FeriasRepository getRepository() {
-		return repository;
-	}
-
-	/**
-	 * Cria o objeto {@link Ferias}
-	 * 
-	 * A partir de um requerimento, faz as validacoes das informacoes e se passarem
-	 * cria um objeto {@link Ferias} e desconta o saldo de férias do usuário.
-	 * 
-	 * @param requerimento {@link Requerimento}.
-	 * @return Ferias
-	 */
-	public Ferias criarFerias(IRequerimento requerimento) {
-		Ferias ferias = new Ferias(requerimento);
-		ferias.setEstado(EstadoFerias.A_USUFRUIR);
-		return repository.save(ferias);
+	public FeriasController(FeriasRepository repositoryFerias, RequerimentoRepository repositoryRequerimento,
+			SaldoRepository repositorySaldo) {
+		this.repositoryFerias = repositoryFerias;
+		this.repositoryRequerimento = repositoryRequerimento;
+		this.repositorySaldo = repositorySaldo;
 	}
 
 	/**
-	 * Busca Ferias por id
+	 * Busca {@link Ferias} por id.
 	 * 
 	 * Busca no banco as ferias com o id igual ao passado como parametro.
 	 * 
@@ -53,33 +51,8 @@ public class FeriasController {
 	 * @return ferias
 	 * @throws Exception
 	 */
-	public Ferias buscarPorIdFerias(Long id) throws Exception {
-		return repository.findById(id).orElseThrow(() -> new Exception("Nao existe uma ferias com esse id."));
-	}
-
-	/**
-	 * Busca {@link Ferias}
-	 * 
-	 * Busca todas as férias com o id do colaborador igual ao passado como
-	 * parametro.
-	 * 
-	 * @param id
-	 * @return lista de Ferias.
-	 */
-	public Ferias buscarPorRequerimento(Requerimento requerimento) {
-		return repository.findByRequerimento(requerimento);
-	}
-
-	/**
-	 * Busca {@link Ferias} do colaborador.
-	 * 
-	 * Busca as ferias anda nao usufruidas do colaborador.
-	 * 
-	 * @param id do colaborador
-	 * @return ferias do colaborador
-	 */
-	public List<Ferias> buscarPorRequerimentoENaoUsufruidas(Requerimento requerimento) {
-		return repository.findByRequerimentoAndEstado(requerimento, EstadoFerias.A_USUFRUIR);
+	public Ferias buscarPorId(Long id) throws Exception {
+		return repositoryFerias.findById(id).orElseThrow(() -> new Exception("Nao existe uma ferias com esse id."));
 	}
 
 	/**
@@ -88,76 +61,108 @@ public class FeriasController {
 	 * @return lista de Ferias.
 	 */
 	public List<Ferias> buscarTodasFerias() {
-		return repository.findAll();
+		return repositoryFerias.findAll();
 	}
 
 	/**
-	 * Altera o Estado da {@link Ferias}.
+	 * Buscar todos os requerimentos cujo o {@link Saldo} corresponde ao {@link Saldo} do
+	 * colaborador procurado.
 	 * 
-	 * Altera o estado da Ferias com o id igual ao passado como parametro para o
-	 * estado passado como parametro
-	 * 
-	 * @param id     Da Ferias
-	 * @param estado A ser alterado
-	 * @return Ferias alterada
-	 * @throws Exception .Ferias nao encontradas
+	 * @param idColaborador
+	 * @return
 	 */
-	public Ferias alterarEstadoFerias(Long id, EstadoFerias estado) throws Exception {
-		return repository.findById(id).map(ferias -> {
-			ferias.setEstado(estado);
-			return repository.save(ferias);
+	public ArrayList<Ferias> buscarTodasAsFeriasPorIdColaborador(Long idColaborador) {
+		Saldo saldo = repositorySaldo.findByIdColaborador(idColaborador);
+		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento
+				.findByIdSaldo(saldo.getId());
+		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
+		for (Requerimento requerimento : requerimentos) {
+			ferias.add(repositoryFerias.findById(requerimento.getId()).get());
+		}
+		return ferias;
+	}
+
+	/**
+	 * Buscar {@link Ferias} do colaborador que estão com estado "A_USUFRUIR".
+	 * 
+	 * @param idColaborador
+	 * @return ferias
+	 */
+	public ArrayList<Ferias> buscarFeriasAUsufruirPorIdColaborador(Long idColaborador) {
+		Saldo saldo = repositorySaldo.findByIdColaborador(idColaborador);
+		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento
+				.findByIdSaldo(saldo.getId());
+		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
+		for (Requerimento requerimento : requerimentos) {
+			Ferias temp = repositoryFerias.findById(requerimento.getId()).get();
+			if (temp.getEstado().equals(EstadoFerias.A_USUFRUIR))
+				ferias.add(temp);
+		}
+		return ferias;
+	}
+
+	/**
+	 * Buscar todas {@link Ferias} "A_USUFRUIR" de todos subordinados do gestor.
+	 * 
+	 * @return ferias
+	 */
+	public ArrayList<Ferias> buscarFeriasAUsufruirDosSubordinados() {
+		return null;
+	}
+
+	/**
+	 * Buscar todas {@link Ferias} "USUFRUINDO" de todos subordinados do gestor.
+	 * 
+	 * @return ferias
+	 */
+	public ArrayList<Ferias> buscarFeriasUsufruindoDosSubordinados() {
+		return null;
+	}
+
+	/**
+	 * Metodo que altera uma {@link Ferias}.
+	 * 
+	 * @param novaferias
+	 * @param id
+	 * @return ferias
+	 * @throws Exception
+	 */
+	public Ferias alterarFerias(Ferias novaferias, Long id) throws Exception {
+		return repositoryFerias.findById(id).map(ferias -> {
+			ferias.setEstado(novaferias.getEstado());
+			ferias.setDataInicio(novaferias.getDataInicio());
+			ferias.setDataFim(novaferias.getDataFim());
+			ferias.setDias(novaferias.getDias());
+			ferias.setDiasVendidos(novaferias.getDiasVendidos());
+			return repositoryFerias.save(ferias);
 		}).orElseThrow(() -> new Exception("Ferias nao encontradas"));
+
 	}
 
 	/**
-	 * Altera uma {@link Ferias} do banco a partir de seu id.
+	 * Deletar {@link Ferias}.
 	 * 
-	 * Metodo para alterar as datas da Ferias.
-	 * 
-	 * @return Ferias
-	 * @author Lucas Grijó <rksgrijo@gmail.com>
-	 */
-	public Ferias alterarDataFerias(Long id, Ferias novaFerias) throws Exception {
-		return repository.findById(id).map(ferias -> {
-			ferias.setDataInicio(novaFerias.getDataInicio());
-			ferias.setDataFim(novaFerias.getDataFim());
-			ferias.setDias(novaFerias.getDias());
-			ferias.setDiasVendidos(novaFerias.getDiasVendidos());
-			return repository.save(ferias);
-		}).orElseThrow(() -> new Exception("Ferias nao encontradas"));
-	}
-
-	/**
-	 * Deleta {@link Ferias}.
-	 * 
-	 * Deleta um objeto Ferias igual ao passado como parametro.
-	 * 
-	 * @param ferias
-	 */
-	public void deletarFeriasPorFerias(Ferias ferias) {
-		repository.delete(ferias);
-	}
-
-	/**
-	 * Deleta {@link Ferias}.
-	 * 
-	 * Deleta um objeto Ferias com o id igual ao passado como parametro.
+	 * Deletar um objeto {@link Ferias} com o id igual ao passado como parametro.
 	 * 
 	 * @param ferias
 	 */
 	public void deletarFeriasPorId(Long id) {
-		repository.deleteById(id);
+		repositoryFerias.deleteById(id);
 	}
 
 	/**
-	 * Buscar {@link Ferias}.
+	 * Cria e salva um objeto {@link Ferias}.
 	 * 
-	 * Busca uma ferias com o id do requerimento igual ao passado como parametro
+	 * Este metodo deve ser chamado assim que um requerimento for aprovado.
 	 * 
-	 * @param id do requerimento
+	 * Uma {@link Ferias} recem criada tem seu estado definido como "A_USUFRUIR".
+	 * 
+	 * @param requerimento {@link Requerimento}.
 	 * @return Ferias
 	 */
-	public Ferias buscarPorIdRequerimento(Requerimento requerimento) {
-		return repository.findByRequerimento(requerimento);
+	public Ferias criarFerias(IRequerimento requerimento) {
+		Ferias ferias = new Ferias(requerimento);
+		ferias.setEstado(EstadoFerias.A_USUFRUIR);
+		return repositoryFerias.save(ferias);
 	}
 }

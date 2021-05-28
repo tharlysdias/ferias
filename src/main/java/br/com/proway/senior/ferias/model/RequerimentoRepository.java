@@ -17,7 +17,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 public interface RequerimentoRepository extends JpaRepository<Requerimento, Long> {
 
 	public List<Requerimento> findAllByIdGestor(Long idGestor);
-	
-	public List<Requerimento> findAllByIdColaborador(Long idColaborador);
-	
+  
+	public List<Requerimento> findByIdSaldo(Long idSaldo);
 }
