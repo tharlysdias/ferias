@@ -26,7 +26,7 @@ public class RequerimentoController {
 
 
 	@Autowired
-    private FeriasController controllerFerias;
+    private FeriasService controllerFerias;
 	
 	private RequerimentoRepository repositoryRequerimento;
 	private SaldoRepository repositorySaldo;

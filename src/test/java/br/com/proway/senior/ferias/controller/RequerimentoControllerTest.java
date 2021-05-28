@@ -20,7 +20,6 @@ import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-
 public class RequerimentoControllerTest {
 
 	@Autowired
@@ -64,6 +63,7 @@ public class RequerimentoControllerTest {
 		Requerimento requerimento = requerimento();
 		controllerRequerimento.criarRequerimento(requerimento);
 		Long id = requerimento.getId();
+		System.out.println("===========" +  id);
 		controllerRequerimento.buscarRequerimentoPorId(id);
 		requerimento.setDataAbertura(LocalDate.of(2021, 10, 10));
 		controllerRequerimento.atualizarRequerimento(requerimento);

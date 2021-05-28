@@ -1,16 +1,16 @@
 package br.com.proway.senior.ferias.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.BDDMockito.given;
 
 import java.time.LocalDate;
 
-import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.runners.MethodSorters;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import br.com.proway.senior.ferias.model.Ferias;
 import br.com.proway.senior.ferias.model.FeriasRepository;
@@ -21,29 +21,29 @@ import br.com.proway.senior.ferias.model.SaldoRepository;
 import br.com.proway.senior.ferias.model.enums.EstadoFerias;
 import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
-@RunWith(MockitoJUnitRunner.class)
-public class FeriasControllerTest {
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class FeriasServiceTest {
 
-	@Mock
+	@Autowired
+	private FeriasService feriasService;
+
+	@Autowired
 	private FeriasRepository feriasRepository;
-	@Mock
+	@Autowired
 	private RequerimentoRepository requerimentoRepository;
-	@Mock
+	@Autowired
 	private SaldoRepository saldoRepository;
-	
-	private FeriasController feriasController;
-	
-	private Saldo saldo;
-	private Requerimento requerimento;
-	
-	@Before
-	public void setup() {
-		feriasController = new FeriasController(feriasRepository, requerimentoRepository, saldoRepository);
 
+	private static Saldo saldo;
+	private static Requerimento requerimento;
+	private static Ferias ferias;
+
+	@Test
+	public void testAPopulateDB() {
+		feriasService = new FeriasService(feriasRepository, requerimentoRepository, saldoRepository);
 		saldo = new Saldo(666l, 30, LocalDate.now());
-		saldoRepository.save(saldo);
-		
 		requerimento = new Requerimento();
 		requerimento.setSaldo(saldo);
 		requerimento.setIdGestor(23l);
@@ -53,20 +53,54 @@ public class FeriasControllerTest {
 		requerimento.setDiasRequisitados(30);
 		requerimento.setDiasVendidos(40);
 		requerimento.setDataInicioFerias(LocalDate.now().plusMonths(1));
-		requerimentoRepository.save(requerimento);
-		
-		
 	}
-	
+
 	@Test
-	public void testCriarFerias() {
-		feriasController.criarFerias(requerimento);
-		assertEquals(feriasRepository.getById(requerimento.getId()).getEstado(), EstadoFerias.A_USUFRUIR);
+	public void testBCriarFerias() {
+		feriasService.criarFerias(requerimento);
+		System.out.println(requerimento.getId());
+		ferias = feriasRepository.getById(requerimento.getId());
+		assertEquals(ferias.getEstado(), EstadoFerias.A_USUFRUIR);
 	}
-	
+
 	@Test
-	public void testBuscarPorId(){
+	public void testCBuscarPorId() {
 //		given(feriasRepository.findById(1l)).willReturn(new Ferias());
+	}
+
+	public void testDBuscarTodasFerias() {
+		
+	}
+	
+	public void testEBuscarTodasAsFeriasPorIdColaborador() {
+		
+	}
+	
+	public void testFBuscarFeriasAUsufruirPorIdColaborador() {
+		
+	}
+	
+	public void testGBuscarFeriasAUsufruirDosSubordinados() {
+		
+	}
+	
+	public void testHBuscarFeriasUsufruindoDosSubordinados() {
+		
+	}
+	
+	public void testIAlterarFerias() {
+		
+	}
+	
+	public void testJDeletarFeriasPorId() {
+		
+	}
+	
+	@Test
+	public void testXCleanDB() {
+		feriasRepository.delete(ferias);
+		requerimentoRepository.delete(requerimento);
+		saldoRepository.delete(saldo);
 	}
 
 //	@Test
@@ -199,6 +233,4 @@ public class FeriasControllerTest {
 //		
 //	}
 
-
-	
 }

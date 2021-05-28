@@ -21,7 +21,7 @@ import br.com.proway.senior.ferias.model.enums.EstadoFerias;
 public class FeriasControllerAPI {
 
 	@Autowired
-	private FeriasController controllerFerias;
+	private FeriasService controllerFerias;
 
 	@Autowired
 	private RequerimentoController controllerRequerimento;

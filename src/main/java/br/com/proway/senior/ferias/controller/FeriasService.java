@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
 import br.com.proway.senior.ferias.model.Ferias;
 import br.com.proway.senior.ferias.model.FeriasRepository;
@@ -25,8 +25,8 @@ import br.com.proway.senior.ferias.model.enums.EstadoFerias;
  * @author Lucas Grijo <rksgrijo@gmail.com>
  * @version Sprint7
  */
-@Controller
-public class FeriasController {
+@Service
+public class FeriasService {
 
 	private FeriasRepository repositoryFerias;
 
@@ -35,7 +35,7 @@ public class FeriasController {
 	private SaldoRepository repositorySaldo;
 
 	@Autowired
-	public FeriasController(FeriasRepository repositoryFerias, RequerimentoRepository repositoryRequerimento,
+	public FeriasService(FeriasRepository repositoryFerias, RequerimentoRepository repositoryRequerimento,
 			SaldoRepository repositorySaldo) {
 		this.repositoryFerias = repositoryFerias;
 		this.repositoryRequerimento = repositoryRequerimento;
