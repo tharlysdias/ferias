@@ -18,13 +18,20 @@ import br.com.proway.senior.ferias.model.dto.SaldoDTO;
 public class SaldoControllerAPI {
 
 	@Autowired
-	private final SaldoController controller;
+	private SaldoService service;
 
 	@Autowired
 	private ModelMapper modelMapper;
-
-	public SaldoControllerAPI(SaldoController controller) {
-		this.controller = controller;
+	
+	/**
+	 * Este metodo eh apenas para teste manual, sera tirado
+	 * 
+	 * @param saldoDto
+	 * @return
+	 */
+	@PostMapping(value = "/saldo")
+	public SaldoDTO criarSaldo(@RequestBody SaldoDTO saldoDto) {
+		return convertToDTO(service.criarSaldo(convertToEntity(saldoDto)));
 	}
 
 	// Aggregate root
@@ -38,7 +45,7 @@ public class SaldoControllerAPI {
 	ArrayList<SaldoDTO> buscarTodos() {
 		// return converterListaSaldoParaSaldoDTO((ArrayList<Saldo>)
 		// controller.buscarTodos());
-		return (ArrayList<SaldoDTO>) controller.buscarTodos().stream().map(this::convertToDTO)
+		return (ArrayList<SaldoDTO>) service.buscarTodos().stream().map(this::convertToDTO)
 				.collect(Collectors.toList());
 	}
 
@@ -53,7 +60,7 @@ public class SaldoControllerAPI {
 	 */
 	@GetMapping(value = "/colaborador/{idColaborador}/saldo")
 	public SaldoDTO buscarPorIdColaborador(@PathVariable Long idColaborador) {
-		return convertToDTO(controller.buscarPorIdColaborador(idColaborador));
+		return convertToDTO(service.buscarPorIdColaborador(idColaborador));
 	}
 
 	/**
@@ -65,18 +72,7 @@ public class SaldoControllerAPI {
 	 */
 	@GetMapping(value = "/saldo/{id}")
 	public SaldoDTO buscarPorId(@PathVariable Long id) throws Exception {
-		return convertToDTO(controller.buscarPorId(id));
-	}
-
-	/**
-	 * Este metodo eh apenas para teste manual, sera tirado
-	 * 
-	 * @param saldoDto
-	 * @return
-	 */
-	@PostMapping(value = "/saldo")
-	public SaldoDTO criarSaldo(@RequestBody SaldoDTO saldoDto) {
-		return convertToDTO(controller.criarSaldo(convertToEntity(saldoDto)));
+		return convertToDTO(service.buscarPorId(id));
 	}
 
 	private SaldoDTO convertToDTO(Saldo saldo) {

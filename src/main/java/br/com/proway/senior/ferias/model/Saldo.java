@@ -1,17 +1,18 @@
 package br.com.proway.senior.ferias.model;
 
 import java.time.LocalDate;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
 /**
+ * @see {@link Long} id
+ * @see {@link Long} idColaborador
+ * @see int diasDisponiveisDeFerias
+ * @see {@link LocalDate} dataAdmissao
  * 
  * @author Leonardo F Silva <felipeleao217@gmail.com>
  * 
