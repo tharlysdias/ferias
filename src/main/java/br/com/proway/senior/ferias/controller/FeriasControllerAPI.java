@@ -24,7 +24,7 @@ public class FeriasControllerAPI {
 	private FeriasController controllerFerias;
 
 	@Autowired
-	private RequerimentoController controllerRequerimento;
+	private RequerimentoService controllerRequerimento;
 
 	@Autowired
 	private ModelMapper modelMapper;

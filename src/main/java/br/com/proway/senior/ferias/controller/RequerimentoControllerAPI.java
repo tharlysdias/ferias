@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,13 +21,14 @@ import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
  * 
  * @author Guilherme Eduardo Bom Guse <guilherme.guse@senior.com.br>
  * @author Tharlys Souza Dias <tharlys.dias@senior.com.br>
+ * @author David Hildebrand <davihildebran@gmail.com>
+ * @author Lucas Grijó <rksgrijo@gmail.com>
  */
-
 @RestController
 public class RequerimentoControllerAPI {
 
 	@Autowired
-	private RequerimentoController controller;
+	private RequerimentoService controller;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -51,12 +51,17 @@ public class RequerimentoControllerAPI {
 		return controller.buscarRequerimentoPorIdColaborador(id).stream().map(this::convertToDTO).collect(Collectors.toList());
 	}
 
-	@PostMapping(path = "/requerimento/")
-	public RequerimentoDTO criar(@RequestBody RequerimentoDTO requerimentoDto) {
-		//System.out.println(requerimentoDto.getIdColaborador() + " " + requerimentoDto.getDiasVendidos());
-		//System.out.println(convertToEntity(requerimentoDto).getIdColaborador() + " " + convertToEntity(requerimentoDto).getDiasVendidos());
-		return convertToDTO(controller.criarRequerimento(convertToEntity(requerimentoDto)));
+	@ResponseBody
+	@RequestMapping(path = "/colaborador/{idColaborador}/requerimentoestado", method = RequestMethod.GET)
+	public List<RequerimentoDTO> buscarRequerimentoPorIdEEstadoColaborador(@PathVariable("idColaborador") Long idColaborador, @RequestBody EstadosRequerimento estado){
+		return controller.buscarRequerimentoPorEstadoIdColaborador(idColaborador, estado).stream().map(this::convertToDTO).collect(Collectors.toList());
 	}
+		
+//	@ResponseBody
+//	@RequestMapping(path = "/requerimento/{idSaldo}", method= RequestMethod.POST)
+//	public RequerimentoDTO criar(@PathVariable Long idSaldo, @RequestBody RequerimentoDTO requerimentoDto) {
+//		return convertToDTO(controller.criarRequerimento(convertToEntity(requerimentoDto), idSaldo));
+//	}
 	
 	@ResponseBody
 	@RequestMapping(path = "/requerimento/{id}", method = RequestMethod.DELETE)
@@ -70,11 +75,22 @@ public class RequerimentoControllerAPI {
 		return convertToDTO(controller.avaliarRequerimento(id, estado));
 	}
 		
-
+	/**
+	 * Converte a entidade {@link Requerimento} para {@link RequerimentoDTO}.
+	 * 
+	 * @param requerimento
+	 * @return requerimentoDTO
+	 */
 	private RequerimentoDTO convertToDTO(Requerimento requerimento) {
 		return modelMapper.map(requerimento, RequerimentoDTO.class);
 	}
-	
+		
+	/**
+	 * Converte uma {@link RequerimentoDTO} para entidade {@link Requerimento}.
+	 * 
+	 * @param requerimentoDTO
+	 * @return requerimento
+	 */
 	private Requerimento convertToEntity(RequerimentoDTO requerimentoDto) {
 		return modelMapper.map(requerimentoDto, Requerimento.class);
 	}

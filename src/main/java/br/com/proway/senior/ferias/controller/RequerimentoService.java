@@ -20,19 +20,16 @@ import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
  * @author Guilherme Eduardo Bom Guse	<guilherme.guse@senior.com.br>
  * @author Tharlys Souza Dias			<tharlys.dias@senior.com.br>
  */
-
 @Service
-public class RequerimentoController {
-
+public class RequerimentoService {
 
 	@Autowired
     private FeriasController controllerFerias;
-	
 	private RequerimentoRepository repositoryRequerimento;
 	private SaldoRepository repositorySaldo;
 		
 	@Autowired
-	public RequerimentoController(RequerimentoRepository repositoryRequerimento, SaldoRepository repositorySaldo) {
+	public RequerimentoService(RequerimentoRepository repositoryRequerimento, SaldoRepository repositorySaldo) {
 		this.repositoryRequerimento = repositoryRequerimento;
 		this.repositorySaldo = repositorySaldo;
 	}
@@ -56,7 +53,8 @@ public class RequerimentoController {
 	 * @param requerimento
 	 * @return
 	 */
-	public Requerimento criarRequerimento(Requerimento requerimento) {
+	public Requerimento criarRequerimento(Requerimento requerimento, Saldo saldo) {
+		requerimento.setSaldo(saldo);
 		return this.repositoryRequerimento.save(requerimento);
 	}
 	
@@ -84,7 +82,6 @@ public class RequerimentoController {
 	public void deletar(Long id) {
 		this.repositoryRequerimento.deleteById(id);
 	}
-
 	
 	/**
 	 * Aprova um {@link Requerimento} em estado de pendencia.
@@ -94,7 +91,6 @@ public class RequerimentoController {
 	 */	
 	private Ferias aprovarRequerimento(Requerimento requerimento) {
 		requerimento.setEstado(EstadosRequerimento.APROVADO);
-//		repository.save(requerimento);
 		return controllerFerias.criarFerias(requerimento);
 	}
 
@@ -106,7 +102,7 @@ public class RequerimentoController {
 	 */
 	private Requerimento recusarRequerimento(Requerimento requerimento) {
 		requerimento.setEstado(EstadosRequerimento.RECUSADO);
-		return /*repository.save*/(requerimento);
+		return (requerimento);
 	}
 
 	/**
@@ -140,7 +136,6 @@ public class RequerimentoController {
 		if (obj.get().getEstado().equals(EstadosRequerimento.PENDENTE)) {
 			this.repositoryRequerimento.delete(obj.get());
 		}
-
 	}
 
 	/**
@@ -164,4 +159,11 @@ public class RequerimentoController {
 		ArrayList<Requerimento> obj = (ArrayList<Requerimento>) this.repositoryRequerimento.findBySaldo(saldo);
 			return obj;
 	}
+	
+	public ArrayList<Requerimento> buscarRequerimentoPorEstadoIdColaborador(Long idColaborador, EstadosRequerimento estados) {
+		Saldo saldo = repositorySaldo.findByIdColaborador(idColaborador);
+		ArrayList<Requerimento> obj = (ArrayList<Requerimento>) this.repositoryRequerimento.findAllByEstadoAndSaldo(estados, saldo);
+			return obj;
+	}
+		
 }
