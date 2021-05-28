@@ -57,9 +57,11 @@ public class SaldoServiceTest {
 	}
 	
 	@Test
-	public void testBuscarPorId()  {
-		Long idBuscado = (long) service.buscarTodos().size();
-		
-		
+	public void testBuscarPorId() throws Exception  {
+		Saldo saldo = new Saldo();
+		saldo.setIdColaborador((long) 666);
+		service.criarSaldo(saldo);
+		Long idBuscado = (long) service.buscarTodos().get(service.buscarTodos().size() - 1).getId();
+		assertTrue(service.buscarPorId(idBuscado).getIdColaborador() == (long) 666);
 	}
 }

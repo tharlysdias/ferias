@@ -72,14 +72,15 @@ public class FeriasController {
 	 * @return
 	 */
 	public ArrayList<Ferias> buscarTodasAsFeriasPorIdColaborador(Long idColaborador) {
-		Saldo saldo = repositorySaldo.findByIdColaborador(idColaborador);
-		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento
-				.findBySaldo(saldo);
-		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
-		for (Requerimento requerimento : requerimentos) {
-			ferias.add(repositoryFerias.findById(requerimento.getId()).get());
-		}
-		return ferias;
+//		Saldo saldo = repositorySaldo.findByIdColaborador(idColaborador);
+//		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento
+//				.findBySaldo(saldo);
+//		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
+//		for (Requerimento requerimento : requerimentos) {
+//			ferias.add(repositoryFerias.findById(requerimento.getId()).get());
+//		}
+//		return ferias;
+		return null;
 	}
 
 	/**
@@ -89,16 +90,17 @@ public class FeriasController {
 	 * @return ferias
 	 */
 	public ArrayList<Ferias> buscarFeriasAUsufruirPorIdColaborador(Long idColaborador) {
-		Saldo saldo = repositorySaldo.findByIdColaborador(idColaborador);
-		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento
-				.findBySaldo(saldo);
-		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
-		for (Requerimento requerimento : requerimentos) {
-			Ferias temp = repositoryFerias.findById(requerimento.getId()).get();
-			if (temp.getEstado().equals(EstadoFerias.A_USUFRUIR))
-				ferias.add(temp);
-		}
-		return ferias;
+//		Saldo saldo = repositorySaldo.findByIdColaborador(idColaborador);
+//		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento
+//				.findBySaldo(saldo);
+//		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
+//		for (Requerimento requerimento : requerimentos) {
+//			Ferias temp = repositoryFerias.findById(requerimento.getId()).get();
+//			if (temp.getEstado().equals(EstadoFerias.A_USUFRUIR))
+//				ferias.add(temp);
+//		}
+//		return ferias;
+		return null;
 	}
 
 	/**
