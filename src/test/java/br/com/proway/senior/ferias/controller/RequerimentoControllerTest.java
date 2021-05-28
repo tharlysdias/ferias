@@ -7,15 +7,16 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import br.com.proway.senior.ferias.model.Requerimento;
+import br.com.proway.senior.ferias.model.Saldo;
 import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
-import br.com.proway.senior.ferias.model.enums.TiposFerias;
+
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -24,6 +25,15 @@ public class RequerimentoControllerTest {
 
 	@Autowired
 	private RequerimentoController controllerRequerimento;
+	
+	private Requerimento requerimento() {
+		Saldo saldo = new Saldo();
+//		saldo.setId(null);
+		Requerimento requerimento = new Requerimento(saldo, 10l, LocalDate.of(2021, 5, 5), 
+				LocalDate.of(2021, 5, 5), "ola", "opa", 10, 0, LocalDate.of(2021, 5, 5));
+		
+		return requerimento;
+	}
 
 	@Test
 	public void testBuscarTodosRequerimentos() {
@@ -45,7 +55,7 @@ public class RequerimentoControllerTest {
 		this.controllerRequerimento.criarRequerimento(requerimento);
 		Assertions.assertThat(requerimento.getId()).isNotNull();
 		Assertions.assertThat(requerimento.getEstado()).isEqualTo(EstadosRequerimento.PENDENTE);
-		Assertions.assertThat(requerimento.getTipoFerias()).isEqualTo(TiposFerias.TOTAL);
+		
 
 	}
 
@@ -90,7 +100,7 @@ public class RequerimentoControllerTest {
 		Requerimento requerimento = requerimento();
 		controllerRequerimento.criarRequerimento(requerimento);
 		Long id = requerimento.getId();
-		controllerRequerimento.desativarRequerimento(requerimento);
+		controllerRequerimento.desativarRequerimento(id);
 		Assertions.assertThat(controllerRequerimento.buscarRequerimentoPorId(id)).isNull();
 	}
 
@@ -108,12 +118,5 @@ public class RequerimentoControllerTest {
 		assertNotNull(controllerRequerimento.buscarRequerimentoPorIdColaborador(id));
 	}
 
-	private Requerimento requerimento() {
-		Requerimento requerimento = new Requerimento(5l, 10l, LocalDate.now(), LocalDate.now().plusDays(30),
-				LocalDate.now().plusDays(60), EstadosRequerimento.PENDENTE, "Me da ferias", "nao", 30, 10, 5,
-				LocalDate.now().plusDays(65), LocalDate.now().plusDays(70), false, TiposFerias.TOTAL);
-	
-		return requerimento;
-	}
 
 }
