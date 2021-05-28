@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import br.com.proway.senior.ferias.model.Ferias;
 import br.com.proway.senior.ferias.model.Requerimento;
 import br.com.proway.senior.ferias.model.RequerimentoRepository;
+import br.com.proway.senior.ferias.model.Saldo;
+import br.com.proway.senior.ferias.model.SaldoRepository;
 import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
 
 /**
@@ -22,19 +24,25 @@ import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
 @Service
 public class RequerimentoController {
 
-	@Autowired
-	private RequerimentoRepository repository;
 
 	@Autowired
     private FeriasController controllerFerias;
+	
+	private RequerimentoRepository repositoryRequerimento;
+	private SaldoRepository repositorySaldo;
 		
-		
+	@Autowired
+	public RequerimentoController(RequerimentoRepository repositoryRequerimento, SaldoRepository repositorySaldo) {
+		this.repositoryRequerimento = repositoryRequerimento;
+		this.repositorySaldo = repositorySaldo;
+	}
+	
 	public ArrayList<Requerimento> buscarTodosRequerimentos() {
-		return (ArrayList<Requerimento>) this.repository.findAll();
+		return (ArrayList<Requerimento>) this.repositoryRequerimento.findAll();
 	}
 
 	public Requerimento buscarRequerimentoPorId(Long id) {
-		Optional<Requerimento> obj = this.repository.findById(id);
+		Optional<Requerimento> obj = this.repositoryRequerimento.findById(id);
 		if (obj.isPresent()) {
 			return obj.get();
 		} else {
@@ -49,7 +57,7 @@ public class RequerimentoController {
 	 * @return
 	 */
 	public Requerimento criarRequerimento(Requerimento requerimento) {
-		return this.repository.save(requerimento);
+		return this.repositoryRequerimento.save(requerimento);
 	}
 	
 	/**
@@ -59,9 +67,9 @@ public class RequerimentoController {
 	 * @return
 	 */	
 	public Requerimento atualizarRequerimento(Requerimento requerimento) {
-		Optional<Requerimento> op = this.repository.findById(requerimento.getId());
+		Optional<Requerimento> op = this.repositoryRequerimento.findById(requerimento.getId());
 		if (op.get().getId().equals(requerimento.getId())) {
-			return this.repository.save(requerimento);
+			return this.repositoryRequerimento.save(requerimento);
 		} else {
 			return null;
 		}
@@ -74,7 +82,7 @@ public class RequerimentoController {
 	 * @return
 	 */
 	public void deletar(Long id) {
-		this.repository.deleteById(id);
+		this.repositoryRequerimento.deleteById(id);
 	}
 
 	
@@ -108,7 +116,7 @@ public class RequerimentoController {
 	 * @return
 	 */
 	public Requerimento avaliarRequerimento(Long id, EstadosRequerimento estado) {
-		Optional<Requerimento> obj = this.repository.findById(id);
+		Optional<Requerimento> obj = this.repositoryRequerimento.findById(id);
 		if (obj.isPresent() && obj.get().getEstado().equals(EstadosRequerimento.PENDENTE)) {
 			if (estado.equals(EstadosRequerimento.APROVADO)) {
 				aprovarRequerimento(obj.get());
@@ -116,7 +124,7 @@ public class RequerimentoController {
 				recusarRequerimento(obj.get());
 			}
 			obj.get().setDataFechamento(LocalDate.now());
-			repository.save(obj.get());
+			repositoryRequerimento.save(obj.get());
 			return obj.get();
 		} return null;
 	}
@@ -128,9 +136,9 @@ public class RequerimentoController {
 	 * @return
 	 */	
 	public void desativarRequerimento(Long id) {
-		Optional<Requerimento> obj = this.repository.findById(id);
+		Optional<Requerimento> obj = this.repositoryRequerimento.findById(id);
 		if (obj.get().getEstado().equals(EstadosRequerimento.PENDENTE)) {
-			this.repository.delete(obj.get());
+			this.repositoryRequerimento.delete(obj.get());
 		}
 
 	}
@@ -142,7 +150,7 @@ public class RequerimentoController {
 	 * @return
 	 */	
 	public ArrayList<Requerimento> buscarRequerimentoPorIdGestor(Long idGestor) {
-		return (ArrayList<Requerimento>) this.repository.findAllByIdGestor(idGestor);
+		return (ArrayList<Requerimento>) this.repositoryRequerimento.findAllByIdGestor(idGestor);
 	}
 
 	/**
@@ -152,7 +160,8 @@ public class RequerimentoController {
 	 * @return
 	 */	
 	public ArrayList<Requerimento> buscarRequerimentoPorIdColaborador(Long idColaborador) {
-		ArrayList<Requerimento> obj = (ArrayList<Requerimento>) this.repository.findAllByIdColaborador(idColaborador);
+		Saldo saldo = repositorySaldo.findByIdColaborador(idColaborador);
+		ArrayList<Requerimento> obj = (ArrayList<Requerimento>) this.repositoryRequerimento.findBySaldo(saldo);
 			return obj;
 	}
 }

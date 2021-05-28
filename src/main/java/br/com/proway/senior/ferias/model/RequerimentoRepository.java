@@ -18,5 +18,6 @@ public interface RequerimentoRepository extends JpaRepository<Requerimento, Long
 
 	public List<Requerimento> findAllByIdGestor(Long idGestor);
   
-	public List<Requerimento> findByIdSaldo(Long idSaldo);
+	public List<Requerimento> findBySaldo(Saldo saldo);
+	
 }

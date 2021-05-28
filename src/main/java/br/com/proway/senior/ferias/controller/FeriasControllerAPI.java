@@ -51,20 +51,20 @@ public class FeriasControllerAPI {
 	}
 	
 	
-	@GetMapping("/feriasColaborador/{idColaborador}")
+	@GetMapping("/feriasAUsufruirColaborador/{idColaborador}")
 	ArrayList<FeriasDTO> buscarFeriasAUsufruirPorIdColaborador(@PathVariable Long idColaborador) throws Exception {
 		ArrayList<Ferias> ferias = controllerFerias.buscarFeriasAUsufruirPorIdColaborador(idColaborador);
 		return (ArrayList<FeriasDTO>) ferias.stream().map(this::convertToDto).collect(Collectors.toList());
 	}
 	
-	@GetMapping("/feriasColaborador/{idGestor}")
+	@GetMapping("/feriasAUsufruirSubordinados/{idGestor}")
 	ArrayList<FeriasDTO> buscarFeriasAUsufruirDosSubordinados(@PathVariable Long idGestor) throws Exception {
 //		Requerimento requerimento = controllerRequerimento.buscarRequerimentoPorId(idRequerimento);
 //		return convertToDto(controllerFerias.buscarPorRequerimento(requerimento));
 		return null;
 	}
 	
-	@GetMapping("/feriasColaborador/{idGestor}")
+	@GetMapping("/feriasUsufruindoSubordinados/gestor/{idGestor}")
 	ArrayList<FeriasDTO> buscarFeriasUsufruindoDosSubordinados(@PathVariable Long idGestor) throws Exception {
 //		Requerimento requerimento = controllerRequerimento.buscarRequerimentoPorId(idRequerimento);
 //		return convertToDto(controllerFerias.buscarPorRequerimento(requerimento));
