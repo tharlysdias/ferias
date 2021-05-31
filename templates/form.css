@@ -25,6 +25,7 @@ header img{
 header p{
     margin-top: 2rem;
     font-size: 1.5rem;
+    text-align: center;
 }
 footer{
     background-color: var(--main-bg-color);
@@ -36,7 +37,6 @@ footer img{
     margin-right: 2%;
 }
 footer p{
-    position: relative;
     display: inline;
     bottom: 15px;
     font-size: 1rem;
@@ -79,23 +79,25 @@ section{
     border-top: #e8e4e3 2px solid;
     margin: 0;
     width: 100%;
+    padding-top: 2rem;
 }
 .footer_form img{
     float: left;
+    margin-right: 1.5rem;
 }
 .footer_form a{
     list-style: none;
     text-decoration: none;
     color: black;
 }
+.buttons_form{
+    margin-left: 50%;
+    margin-top: -4rem;
+}
 .footer_form button{
-    width: 20%;
-    margin-right: 3rem;
-    float: right;
-    margin-top: -3.7rem;
+    width: 40%;
+    margin-left: 1rem;
     padding: 0.8rem;
     border-radius: 0.5rem;
-}
-.footer_form p {
-    padding-top: 1.6rem;
+    font-size: 1rem;
 }
