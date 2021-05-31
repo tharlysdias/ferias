@@ -3,8 +3,10 @@ package br.com.proway.senior.ferias.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -36,201 +38,110 @@ public class FeriasServiceTest {
 	@Autowired
 	private SaldoRepository saldoRepository;
 
-	private static Saldo saldo;
-	private static Requerimento requerimento;
-	private static Ferias ferias;
+	private static Long idGestor = 444l;
+	private static Long idColaboradorDoSaldo1 = 666l;
+	private static Saldo saldo1;
+	private static Requerimento requerimento1;
+	private static Ferias ferias1;
+	private static Long idColaboradorDoSaldo2 = 2784l;
+	private static Saldo saldo2;
+	private static Requerimento requerimento2;
+	private static Ferias ferias2;
 
 	@Test
-	public void testAPopulateDB() {
+	public void testAPopulateDB() throws Exception {
 		feriasService = new FeriasService(feriasRepository, requerimentoRepository, saldoRepository);
-		saldo = new Saldo(666l, 30, LocalDate.now());
-		requerimento = new Requerimento();
-		requerimento.setSaldo(saldo);
-		requerimento.setIdGestor(23l);
-		requerimento.setDataAbertura(LocalDate.now());
-		requerimento.setPrazoAnalise(LocalDate.now().plusDays(15));
-		requerimento.setEstado(EstadosRequerimento.PENDENTE);
-		requerimento.setDiasRequisitados(30);
-		requerimento.setDiasVendidos(40);
-		requerimento.setDataInicioFerias(LocalDate.now().plusMonths(1));
+		saldo1 = new Saldo(idColaboradorDoSaldo1, 30, LocalDate.now());
+		requerimento1 = new Requerimento();
+		requerimento1.setSaldo(saldo1);
+		requerimento1.setIdGestor(idGestor);
+		requerimento1.setDataAbertura(LocalDate.now());
+		requerimento1.setPrazoAnalise(LocalDate.now().plusDays(15));
+		requerimento1.setEstado(EstadosRequerimento.PENDENTE);
+		requerimento1.setDiasRequisitados(30);
+		requerimento1.setDiasVendidos(40);
+		requerimento1.setDataInicioFerias(LocalDate.now().plusMonths(1));
+
+		saldo2 = new Saldo(idColaboradorDoSaldo2, 60, LocalDate.now().minusMonths(12));
+		requerimento2 = new Requerimento(saldo2, idGestor, LocalDate.now(), LocalDate.now().plusDays(10),
+				"Mensagem de teste", "Resposta de teste", 15, 15, LocalDate.now().plusMonths(4));
+		feriasService.criarFerias(requerimento2);
+		System.out.println(requerimento2.getId());
+		ferias2 = feriasRepository.getById(requerimento2.getId());
+		ferias2.setEstado(EstadoFerias.CANCELADA);
+		feriasService.alterarFerias(ferias2, requerimento2.getId());
 	}
 
 	@Test
-	public void testBCriarFerias() {
-		feriasService.criarFerias(requerimento);
-		System.out.println(requerimento.getId());
-		ferias = feriasRepository.getById(requerimento.getId());
-		assertEquals(ferias.getEstado(), EstadoFerias.A_USUFRUIR);
+	public void testBCriarFeriasEBuscarPorId() {
+		feriasService.criarFerias(requerimento1);
+		System.out.println(requerimento1.getId());
+		ferias1 = feriasRepository.getById(requerimento1.getId());
+		assertEquals(ferias1.getEstado(), EstadoFerias.A_USUFRUIR);
 	}
 
 	@Test
-	public void testCBuscarPorId() {
-//		given(feriasRepository.findById(1l)).willReturn(new Ferias());
+	public void testCBuscarTodasFerias() {
+		ArrayList<Ferias> lista = (ArrayList<Ferias>) feriasService.buscarTodasFerias();
+		assertEquals(2, lista.size());
 	}
 
-	public void testDBuscarTodasFerias() {
-		
+	@Test
+	public void testDBuscarTodasAsFeriasPorIdColaborador() {
+		ArrayList<Ferias> lista = (ArrayList<Ferias>) feriasService.buscarTodasAsFeriasPorIdColaborador(idColaboradorDoSaldo2);
+		assertEquals(1, lista.size());
 	}
-	
-	public void testEBuscarTodasAsFeriasPorIdColaborador() {
-		
+
+	@Test
+	public void testEBuscarFeriasAUsufruirPorIdColaborador() {
+		ArrayList<Ferias> listaColab1 = (ArrayList<Ferias>) feriasService.buscarFeriasAUsufruirPorIdColaborador(idColaboradorDoSaldo1);
+		ArrayList<Ferias> listaColab2 = (ArrayList<Ferias>) feriasService.buscarFeriasAUsufruirPorIdColaborador(idColaboradorDoSaldo2);
+		assertEquals(1, listaColab1.size());
+		assertEquals(0, listaColab2.size());
 	}
-	
-	public void testFBuscarFeriasAUsufruirPorIdColaborador() {
-		
+
+	@Test
+	public void testFBuscarFeriasAUsufruirDosSubordinados() throws Exception {
+		ferias1.setEstado(EstadoFerias.A_USUFRUIR);
+		feriasService.alterarFerias(ferias1, requerimento1.getId());
+		ferias2.setEstado(EstadoFerias.A_USUFRUIR);
+		feriasService.alterarFerias(ferias2, requerimento2.getId());
+		ArrayList<Ferias> lista = feriasService.buscarFeriasAUsufruirDosSubordinados(idGestor);
+		assertEquals(2, lista.size());
 	}
-	
-	public void testGBuscarFeriasAUsufruirDosSubordinados() {
-		
+
+	@Test
+	public void testGBuscarFeriasUsufruindoDosSubordinados() throws Exception {
+		ferias1.setEstado(EstadoFerias.USUFRUINDO);
+		feriasService.alterarFerias(ferias1, requerimento1.getId());
+		ferias2.setEstado(EstadoFerias.CANCELADA);
+		feriasService.alterarFerias(ferias2, requerimento2.getId());
+		ArrayList<Ferias> lista = feriasService.buscarFeriasUsufruindoDosSubordinados(idGestor);
+		assertEquals(1, lista.size());
 	}
-	
-	public void testHBuscarFeriasUsufruindoDosSubordinados() {
-		
+
+	@Test
+	public void testHAlterarFerias() throws Exception {
+		ferias1.setEstado(EstadoFerias.USUFRUIDA);
+		feriasService.alterarFerias(ferias1, requerimento1.getId());
+		ferias1 = feriasRepository.getById(requerimento1.getId());
+		assertEquals(ferias1.getEstado(), EstadoFerias.USUFRUIDA);
 	}
-	
-	public void testIAlterarFerias() {
-		
+
+	@Test
+	public void testIDeletarFeriasPorId() {
+		feriasRepository.delete(ferias2);
+		ArrayList<Ferias> lista = (ArrayList<Ferias>) feriasService.buscarTodasFerias();
+		assertEquals(1, lista.size());
 	}
-	
-	public void testJDeletarFeriasPorId() {
-		
-	}
-	
+
 	@Test
 	public void testXCleanDB() {
-		feriasRepository.delete(ferias);
-		requerimentoRepository.delete(requerimento);
-		saldoRepository.delete(saldo);
+		feriasRepository.delete(ferias1);
+		requerimentoRepository.delete(requerimento1);
+		requerimentoRepository.delete(requerimento2);
+		saldoRepository.delete(saldo1);
+		saldoRepository.delete(saldo2);
 	}
-
-//	@Test
-//	public void testBuscarPorIdFerias() throws Exception {
-//		ferias.setIdColaborador(5l);
-//		Ferias feriasSalvas = controller.getRepository().save(ferias);
-//		Long id = feriasSalvas.getId();
-//		assertEquals((Long) 5L, controller.buscarPorIdRequerimento(id).getIdColaborador());
-//	}
-//
-//	@Test
-//	public void testBuscarPorIdColaborador() {
-//		int tamanhoAntes = controller.buscarPorIdColaborador(30l).size();
-//		requerimento.setIdColaborador(30l);
-//		controller.criarFerias(requerimento);
-//		assertEquals(tamanhoAntes + 1, controller.buscarPorIdColaborador(30l).size());
-//	}
-//
-//	@Test
-//	public void testBuscarTodasFerias() {
-//		int tamanhoAntes = controller.buscarTodasFerias().size();
-//		requerimento.setIdGestor(55l);;
-//		controller.criarFerias(requerimento);
-//		List<Ferias> listaFerias = controller.buscarTodasFerias();
-//		assertEquals(tamanhoAntes + 1, listaFerias.size());
-//		assertEquals((Long) 55l, listaFerias.get(listaFerias.size()-1).getIdGestor());
-//	}
-//
-//	@Test
-//	public void testAlterarEstadoFerias() throws Exception {
-//		controller.getRepository().save(ferias);
-//		Long id = ferias.getId();
-//		assertEquals(EstadoFerias.USUFRUIDA, 
-//				controller.alterarEstadoFerias(id, EstadoFerias.USUFRUIDA).getEstado());
-//	}
-//
-//	@Test(expected = Exception.class)
-//	public void testAlterarEstadoFeriasException() throws Exception {
-//		controller.getRepository().save(ferias);
-//		assertEquals(EstadoFerias.USUFRUIDA, 
-//				controller.alterarEstadoFerias(-5l, EstadoFerias.USUFRUIDA).getEstado());	
-//	}
-//	
-//	@Test
-//	public void testAlterarDataFerias() throws Exception {
-//		controller.getRepository().save(ferias);
-//		Ferias novaFerias = new Ferias();
-//		novaFerias.setIdRequerimento(1l);
-//		novaFerias.setIdColaborador(1l);
-//		novaFerias.setIdGestor(2l);
-//		novaFerias.setDiasRequisitados(30);
-//		novaFerias.setDiasVendidos(0);
-//		novaFerias.setDataInicio(LocalDate.now().plusDays(50));
-//		novaFerias.setDataFim(LocalDate.now().plusDays(80));
-//		novaFerias.setTipoFerias(TiposFerias.TOTAL);
-//		novaFerias.setEstado(EstadoFerias.NAO_USUFRUIDA);
-//		assertEquals(LocalDate.now().plusDays(50), 
-//				controller.alterarDataFerias(ferias.getId(), novaFerias).getDataInicio());
-//		assertEquals(LocalDate.now().plusDays(50), 
-//				controller.getRepository().findById(ferias.getId()).get().getDataInicio());
-//	}
-//
-//	@Test(expected = Exception.class)
-//	public void testAlterarDataFeriasException() throws Exception {
-//		controller.getRepository().save(ferias);
-//		Ferias novaFerias = new Ferias();
-//		novaFerias.setIdRequerimento(1l);
-//		novaFerias.setIdColaborador(1l);
-//		novaFerias.setIdGestor(2l);
-//		novaFerias.setDiasRequisitados(30);
-//		novaFerias.setDiasVendidos(0);
-//		novaFerias.setDataInicio(LocalDate.now().plusDays(50));
-//		novaFerias.setDataFim(LocalDate.now().plusDays(80));
-//		novaFerias.setTipoFerias(TiposFerias.TOTAL);
-//		novaFerias.setEstado(EstadoFerias.NAO_USUFRUIDA);
-//		assertEquals(LocalDate.now().plusDays(50), 
-//				controller.alterarDataFerias(-5l, novaFerias).getDataInicio());
-//	}
-//	
-//	@Test(expected = Exception.class)
-//	public void testDeletarFeriasPorFerias() throws Exception {
-//		controller.getRepository().save(ferias);
-//		int tamanhoAntes = controller.buscarTodasFerias().size(); 
-//		Long id = ferias.getId();
-//		controller.deletarFeriasPorFerias(ferias);;
-//		assertEquals(tamanhoAntes-1, controller.buscarTodasFerias().size());
-//		controller.buscarPorIdRequerimento(id);
-//	}
-//
-//	@Test(expected = Exception.class)
-//	public void testDeletarFeriasPorId() throws Exception {
-//		controller.getRepository().save(ferias);
-//		int tamanhoAntes = controller.buscarTodasFerias().size(); 
-//		Long id = ferias.getId();
-//		controller.deletarFeriasPorId(id);
-//		assertEquals(tamanhoAntes-1, controller.buscarTodasFerias().size());
-//		controller.buscarPorIdRequerimento(id);
-//	}
-//	
-//	@Test
-//	public void testBuscarPorIdGestorENaoUsufruidas() {
-//		requerimento.setDataFimFeriasRequisitadas(LocalDate.now().plusDays(60));
-//		controller.criarFerias(requerimento);
-//		requerimento.setDataInicioFeriasRequisitadas(LocalDate.now().plusDays(40));
-//		controller.criarFerias(requerimento);
-//		List<Ferias> listaFerias = controller.buscarPorIdGestorENaoUsufruidas(requerimento.getIdGestor());
-//		int tamanhoLista = listaFerias.size();
-//		assertEquals(LocalDate.now().plusDays(60), listaFerias.get(tamanhoLista - 2).getDataFim());
-//		assertEquals(LocalDate.now().plusDays(40), listaFerias.get(tamanhoLista - 1).getDataInicio());
-//	}
-//	
-//	@Test
-//	public void testBuscarPorIdColaboradorENaoUsufruidas() {
-//		int tamanhoAntes = controller.buscarPorIdColaboradorENaoUsufruidas(ferias.getIdColaborador()).size();
-//		ferias.setEstado(EstadoFerias.NAO_USUFRUIDA);
-//		controller.getRepository().save(ferias);
-//		Ferias novaFerias = new Ferias();
-//		novaFerias.setIdRequerimento(1l);
-//		novaFerias.setIdColaborador(1l);
-//		novaFerias.setIdGestor(2l);
-//		novaFerias.setDiasRequisitados(30);
-//		novaFerias.setDiasVendidos(0);
-//		novaFerias.setDataInicio(LocalDate.now().plusDays(50));
-//		novaFerias.setDataFim(LocalDate.now().plusDays(80));
-//		novaFerias.setTipoFerias(TiposFerias.TOTAL);
-//		novaFerias.setEstado(EstadoFerias.USUFRUIDA);
-//		controller.getRepository().save(novaFerias);
-//		int tamanhoDepois = controller.buscarPorIdColaboradorENaoUsufruidas(ferias.getIdColaborador()).size();
-//		assertEquals(tamanhoAntes + 1, tamanhoDepois);
-//		
-//	}
 
 }

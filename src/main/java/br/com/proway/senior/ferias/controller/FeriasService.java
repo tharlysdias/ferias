@@ -2,6 +2,7 @@ package br.com.proway.senior.ferias.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import br.com.proway.senior.ferias.model.Requerimento;
 import br.com.proway.senior.ferias.model.RequerimentoRepository;
 import br.com.proway.senior.ferias.model.Saldo;
 import br.com.proway.senior.ferias.model.SaldoRepository;
+import br.com.proway.senior.ferias.model.dto.FeriasDTO;
 import br.com.proway.senior.ferias.model.enums.EstadoFerias;
 
 /**
@@ -65,16 +67,15 @@ public class FeriasService {
 	}
 
 	/**
-	 * Buscar todos os requerimentos cujo o {@link Saldo} corresponde ao {@link Saldo} do
-	 * colaborador procurado.
+	 * Buscar todos os requerimentos cujo o {@link Saldo} corresponde ao
+	 * {@link Saldo} do colaborador procurado.
 	 * 
 	 * @param idColaborador
 	 * @return
 	 */
 	public ArrayList<Ferias> buscarTodasAsFeriasPorIdColaborador(Long idColaborador) {
 		Saldo saldo = repositorySaldo.findByIdColaborador(idColaborador);
-		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento
-				.findBySaldo(saldo);
+		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento.findBySaldo(saldo);
 		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
 		for (Requerimento requerimento : requerimentos) {
 			ferias.add(repositoryFerias.findById(requerimento.getId()).get());
@@ -90,8 +91,7 @@ public class FeriasService {
 	 */
 	public ArrayList<Ferias> buscarFeriasAUsufruirPorIdColaborador(Long idColaborador) {
 		Saldo saldo = repositorySaldo.findByIdColaborador(idColaborador);
-		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento
-				.findBySaldo(saldo);
+		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento.findBySaldo(saldo);
 		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
 		for (Requerimento requerimento : requerimentos) {
 			Ferias temp = repositoryFerias.findById(requerimento.getId()).get();
@@ -105,18 +105,42 @@ public class FeriasService {
 	 * Buscar todas {@link Ferias} "A_USUFRUIR" de todos subordinados do gestor.
 	 * 
 	 * @return ferias
+	 * @throws Exception
 	 */
-	public ArrayList<Ferias> buscarFeriasAUsufruirDosSubordinados() {
-		return null;
+	public ArrayList<Ferias> buscarFeriasAUsufruirDosSubordinados(Long idGestor) throws Exception {
+		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento
+				.findAllByIdGestor(idGestor);
+		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
+		for (Requerimento req : requerimentos) {
+			Ferias temp = this.buscarPorId(req.getId());
+			if (temp != null && temp.getEstado() == EstadoFerias.A_USUFRUIR)
+				ferias.add(temp);
+		}
+		if (!ferias.isEmpty())
+			return ferias;
+		else
+			return null;
 	}
 
 	/**
 	 * Buscar todas {@link Ferias} "USUFRUINDO" de todos subordinados do gestor.
 	 * 
 	 * @return ferias
+	 * @throws Exception 
 	 */
-	public ArrayList<Ferias> buscarFeriasUsufruindoDosSubordinados() {
-		return null;
+	public ArrayList<Ferias> buscarFeriasUsufruindoDosSubordinados(Long idGestor) throws Exception {
+		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento
+				.findAllByIdGestor(idGestor);
+		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
+		for (Requerimento req : requerimentos) {
+			Ferias temp = this.buscarPorId(req.getId());
+			if (temp != null && temp.getEstado() == EstadoFerias.USUFRUINDO)
+				ferias.add(temp);
+		}
+		if (!ferias.isEmpty())
+			return ferias;
+		else
+			return null;
 	}
 
 	/**
