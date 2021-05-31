@@ -2,11 +2,13 @@ package br.com.proway.senior.ferias.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
@@ -25,8 +27,9 @@ public class Ferias implements IFerias {
 	 * {@link MapsId}
 	 * https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
 	 */
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@MapsId
+	@JoinColumn(name = "id")
 	private Requerimento requerimento;
 
 	@Enumerated(EnumType.STRING)

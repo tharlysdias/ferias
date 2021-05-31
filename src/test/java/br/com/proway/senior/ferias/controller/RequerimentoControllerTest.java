@@ -23,7 +23,7 @@ import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
 public class RequerimentoControllerTest {
 
 	@Autowired
-	private RequerimentoController controllerRequerimento;
+	private RequerimentoService requerimentoService;
 	
 	private Requerimento requerimento() {
 		Saldo saldo = new Saldo();
@@ -36,22 +36,22 @@ public class RequerimentoControllerTest {
 
 	@Test
 	public void testBuscarTodosRequerimentos() {
-		ArrayList<Requerimento> lista = controllerRequerimento.buscarTodosRequerimentos();
+		ArrayList<Requerimento> lista = requerimentoService.buscarTodosRequerimentos();
 		assertNotNull(lista);
 	}
 
 	@Test
 	public void testBuscarRequerimentoPorId() {
 		Requerimento requerimento = requerimento();
-		controllerRequerimento.criarRequerimento(requerimento);
+		requerimentoService.criarRequerimento(requerimento);
 		Long id = requerimento.getId();
-		assertNotNull(controllerRequerimento.buscarRequerimentoPorId(id));
+		assertNotNull(requerimentoService.buscarRequerimentoPorId(id));
 	}
 
 	@Test
 	public void testCriarRequerimento() {
 		Requerimento requerimento = requerimento();
-		this.controllerRequerimento.criarRequerimento(requerimento);
+		this.requerimentoService.criarRequerimento(requerimento);
 		Assertions.assertThat(requerimento.getId()).isNotNull();
 		Assertions.assertThat(requerimento.getEstado()).isEqualTo(EstadosRequerimento.PENDENTE);
 		
@@ -61,22 +61,22 @@ public class RequerimentoControllerTest {
 	@Test
 	public void testAtualizarRequerimento() {
 		Requerimento requerimento = requerimento();
-		controllerRequerimento.criarRequerimento(requerimento);
+		requerimentoService.criarRequerimento(requerimento);
 		Long id = requerimento.getId();
 		System.out.println("===========" +  id);
-		controllerRequerimento.buscarRequerimentoPorId(id);
+		requerimentoService.buscarRequerimentoPorId(id);
 		requerimento.setDataAbertura(LocalDate.of(2021, 10, 10));
-		controllerRequerimento.atualizarRequerimento(requerimento);
-		assertEquals(LocalDate.of(2021, 10, 10), controllerRequerimento.buscarRequerimentoPorId(id).getDataAbertura());
+		requerimentoService.atualizarRequerimento(requerimento);
+		assertEquals(LocalDate.of(2021, 10, 10), requerimentoService.buscarRequerimentoPorId(id).getDataAbertura());
 	}
 
 	@Test
 	public void testDeletar() {
 		Requerimento requerimento = requerimento();
-		this.controllerRequerimento.criarRequerimento(requerimento);
-		ArrayList<Requerimento> lista = controllerRequerimento.buscarTodosRequerimentos();
-		this.controllerRequerimento.deletar(requerimento.getId());
-		assertEquals(lista.size() - 1, controllerRequerimento.buscarTodosRequerimentos().size());
+		this.requerimentoService.criarRequerimento(requerimento);
+		ArrayList<Requerimento> lista = requerimentoService.buscarTodosRequerimentos();
+		this.requerimentoService.deletar(requerimento.getId());
+		assertEquals(lista.size() - 1, requerimentoService.buscarTodosRequerimentos().size());
 	}
 
 	@Test
@@ -85,10 +85,10 @@ public class RequerimentoControllerTest {
 		 * Nesse pega o objeto direto do banco de dados.
 		 */
 		Requerimento requerimento = requerimento();
-		controllerRequerimento.criarRequerimento(requerimento);
+		requerimentoService.criarRequerimento(requerimento);
 		Long id = requerimento.getId();
-		controllerRequerimento.avaliarRequerimento(id, EstadosRequerimento.RECUSADO);
-		assertEquals(EstadosRequerimento.RECUSADO, controllerRequerimento.buscarRequerimentoPorId(id).getEstado());
+		requerimentoService.avaliarRequerimento(id, EstadosRequerimento.RECUSADO);
+		assertEquals(EstadosRequerimento.RECUSADO, requerimentoService.buscarRequerimentoPorId(id).getEstado());
 
 	}
 
@@ -98,24 +98,24 @@ public class RequerimentoControllerTest {
 		 * Nesse pega o objeto direto do banco de dados.
 		 */
 		Requerimento requerimento = requerimento();
-		controllerRequerimento.criarRequerimento(requerimento);
+		requerimentoService.criarRequerimento(requerimento);
 		Long id = requerimento.getId();
-		controllerRequerimento.desativarRequerimento(id);
-		Assertions.assertThat(controllerRequerimento.buscarRequerimentoPorId(id)).isNull();
+		requerimentoService.desativarRequerimento(id);
+		Assertions.assertThat(requerimentoService.buscarRequerimentoPorId(id)).isNull();
 	}
 
 	@Test
 	public void testBuscarRequerimentoPorIdGestor() {
-		ArrayList<Requerimento> requerimentos = controllerRequerimento.buscarRequerimentoPorIdGestor(10L);
+		ArrayList<Requerimento> requerimentos = requerimentoService.buscarRequerimentoPorIdGestor(10L);
 		assertNotNull(requerimentos);
 	}
 
 	@Test
 	public void testBuscarRequerimentoPorIdColaborador() {
 		Requerimento requerimento = requerimento();
-		controllerRequerimento.criarRequerimento(requerimento);
+		requerimentoService.criarRequerimento(requerimento);
 		Long id = requerimento.getId();
-		assertNotNull(controllerRequerimento.buscarRequerimentoPorIdColaborador(id));
+		assertNotNull(requerimentoService.buscarRequerimentoPorIdColaborador(id));
 	}
 
 
