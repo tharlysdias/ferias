@@ -96,21 +96,14 @@ public class RequerimentoService {
 	 */
 	public Requerimento avaliarRequerimento(Long idRequerimento, EstadosRequerimento estado) {
 		Optional<Requerimento> obj = this.repositoryRequerimento.findById(idRequerimento);
-		System.out.println("3.1");
 		if (obj.isPresent() && obj.get().getEstado().equals(EstadosRequerimento.PENDENTE)) {
-			System.out.println("3.2");
 			if (estado.equals(EstadosRequerimento.APROVADO)) {
-				System.out.println("3.3");
 				aprovarRequerimento(obj.get());
 			} else {
-				System.out.println("3.4");
 				recusarRequerimento(obj.get());
 			}
-			System.out.println("3.5");
 			obj.get().setDataFechamento(LocalDate.now());
-			System.out.println("3.6");
 			repositoryRequerimento.save(obj.get());
-			System.out.println("3.7");
 			return obj.get();
 		}
 		return null;
@@ -123,14 +116,10 @@ public class RequerimentoService {
 	 * @return
 	 */
 	private Ferias aprovarRequerimento(Requerimento requerimento) {
-		System.out.println("3.3.1");
 		requerimento.setEstado(EstadosRequerimento.APROVADO);
-		System.out.println("3.3.2");
 		atualizarRequerimento(requerimento);
-		System.out.println("3.3.3");
 		Requerimento r = repositoryRequerimento.getById(requerimento.getId());
 		Ferias f = controllerFerias.criarFerias(r);
-		System.out.println("3.3.4");		
 		return f;
 	}
 

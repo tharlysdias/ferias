@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import br.com.proway.senior.ferias.model.FeriasRepository;
 import br.com.proway.senior.ferias.model.Requerimento;
 import br.com.proway.senior.ferias.model.RequerimentoRepository;
 import br.com.proway.senior.ferias.model.Saldo;
@@ -28,6 +29,8 @@ public class RequerimentoServiceTest {
 	@Autowired
 	private RequerimentoService requerimentoService;
 
+	@Autowired
+	private FeriasRepository feriasRepository;
 	@Autowired
 	private RequerimentoRepository requerimentoRepository;
 	@Autowired
@@ -105,15 +108,11 @@ public class RequerimentoServiceTest {
 	@Test
 	public void testGAvaliarRequerimento() {
 		requerimento3.setEstado(EstadosRequerimento.PENDENTE);
-		System.out.println("1");
-		requerimentoService.atualizarRequerimento(requerimento3);
-		System.out.println("2");
-		Requerimento requerimento3Alterado = requerimentoService.buscarRequerimentoPorId(requerimento3.getId());
-		System.out.println("3");
-		requerimentoService.avaliarRequerimento(requerimento3Alterado.getId(), EstadosRequerimento.APROVADO);
-		System.out.println("4");
+		requerimento3 = requerimentoService.atualizarRequerimento(requerimento3);
+//		Requerimento requerimento3Alterado = requerimentoService.buscarRequerimentoPorId(requerimento3.getId());
+		requerimentoService.avaliarRequerimento(requerimento3.getId(), EstadosRequerimento.APROVADO);
 		requerimentoService.avaliarRequerimento(requerimento4.getId(), EstadosRequerimento.RECUSADO);
-		assertEquals(EstadosRequerimento.APROVADO, requerimentoService.buscarRequerimentoPorId(requerimento3Alterado.getId()).getEstado());
+		assertEquals(EstadosRequerimento.APROVADO, requerimentoService.buscarRequerimentoPorId(requerimento3.getId()).getEstado());
 		assertEquals(EstadosRequerimento.RECUSADO, requerimentoService.buscarRequerimentoPorId(requerimento4.getId()).getEstado());
 	}
 
@@ -140,11 +139,17 @@ public class RequerimentoServiceTest {
 
 	@Test
 	public void testXCleanDB() {
+//		Requerimento requerimento3Alterado = requerimentoService.buscarRequerimentoPorId(requerimento3.getId());
+		System.out.println("1");
+		feriasRepository.delete(feriasRepository.findByRequerimento(requerimento3).get());
 		requerimentoRepository.delete(requerimento3);
+		System.out.println("2");
 		requerimentoRepository.delete(requerimento4);
+		System.out.println("3");
 		saldoRepository.delete(saldo1);
 		saldoRepository.delete(saldo2);
 		saldoRepository.delete(saldo3);
+		System.out.println("4");
 	}
 
 }
