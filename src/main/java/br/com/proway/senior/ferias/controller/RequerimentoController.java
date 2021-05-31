@@ -57,7 +57,7 @@ public class RequerimentoController {
 	 * @return
 	 */
 	public Requerimento criarRequerimento(Requerimento requerimento) {
-		return this.repositoryRequerimento.save(requerimento);
+		return this.repositoryRequerimento.saveAndFlush(requerimento);
 	}
 	
 	/**

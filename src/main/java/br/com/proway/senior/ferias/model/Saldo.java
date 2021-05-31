@@ -20,7 +20,7 @@ import javax.persistence.Id;
 @Entity
 public class Saldo {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue
 	private Long id;
 
 	@Column(unique = true)
@@ -109,5 +109,13 @@ public class Saldo {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Saldo [id=" + id + ", idColaborador=" + idColaborador + ", diasDisponiveisDeFerias="
+				+ diasDisponiveisDeFerias + ", dataAdmissao=" + dataAdmissao + "]";
+	}
+	
+	
 
 }

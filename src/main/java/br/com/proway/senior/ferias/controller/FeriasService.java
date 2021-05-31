@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -77,7 +79,7 @@ public class FeriasService {
 		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento.findBySaldo(saldo);
 		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
 		for (Requerimento requerimento : requerimentos) {
-			ferias.add(repositoryFerias.findById(requerimento.getId()).get());
+			ferias.add(repositoryFerias.findByRequerimento(requerimento).get());
 		}
 		return ferias;
 	}
@@ -93,7 +95,7 @@ public class FeriasService {
 		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento.findBySaldo(saldo);
 		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
 		for (Requerimento requerimento : requerimentos) {
-			Ferias temp = repositoryFerias.findById(requerimento.getId()).get();
+			Ferias temp = repositoryFerias.findByRequerimento(requerimento).get();
 			if (temp.getEstado().equals(EstadoFerias.A_USUFRUIR))
 				ferias.add(temp);
 		}
@@ -111,7 +113,7 @@ public class FeriasService {
 				.findAllByIdGestor(idGestor);
 		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
 		for (Requerimento req : requerimentos) {
-			Optional<Ferias> temp = repositoryFerias.findById(req.getId());
+			Optional<Ferias> temp = repositoryFerias.findByRequerimento(req);
 			if (!temp.isEmpty()) {
 				if (temp.get().getEstado() == EstadoFerias.A_USUFRUIR) {
 					ferias.add(temp.get());
@@ -135,7 +137,7 @@ public class FeriasService {
 				.findAllByIdGestor(idGestor);
 		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
 		for (Requerimento req : requerimentos) {
-			Optional<Ferias> temp = repositoryFerias.findById(req.getId());
+			Optional<Ferias> temp = repositoryFerias.findByRequerimento(req);
 			if (!temp.isEmpty()) {
 				if (temp.get().getEstado() == EstadoFerias.USUFRUINDO) {
 					ferias.add(temp.get());
@@ -189,9 +191,9 @@ public class FeriasService {
 	 * @param requerimento {@link Requerimento}.
 	 * @return Ferias
 	 */
-	public Ferias criarFerias(IRequerimento requerimento) {
+	public Ferias criarFerias(Requerimento requerimento) {
 		Ferias ferias = new Ferias(requerimento);
 		ferias.setEstado(EstadoFerias.A_USUFRUIR);
-		return repositoryFerias.save(ferias);
+		return repositoryFerias.saveAndFlush(ferias);
 	}
 }
