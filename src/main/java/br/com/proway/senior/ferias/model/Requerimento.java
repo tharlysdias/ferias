@@ -12,6 +12,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 
 import br.com.proway.senior.ferias.controller.IRequerimento;
 import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
@@ -33,7 +37,7 @@ public class Requerimento implements IRequerimento {
 	/**
 	 * ID do {@link Saldo}.
 	 */
-	@ManyToOne(targetEntity = Saldo.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Saldo.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_saldo")
 	private Saldo saldo;
 
@@ -57,9 +61,8 @@ public class Requerimento implements IRequerimento {
 	public Requerimento() {
 	}
 
-	public Requerimento(Saldo saldo, Long idGestor, LocalDate dataAbertura, LocalDate prazoAnalise, 
-			String mensagem, String resposta, Integer diasRequisitados, Integer diasVendidos, 
-			LocalDate dataInicioFerias) {
+	public Requerimento(Saldo saldo, Long idGestor, LocalDate dataAbertura, LocalDate prazoAnalise, String mensagem,
+			String resposta, Integer diasRequisitados, Integer diasVendidos, LocalDate dataInicioFerias) {
 		this.saldo = saldo;
 		this.idGestor = idGestor;
 		this.dataAbertura = dataAbertura;
@@ -254,6 +257,14 @@ public class Requerimento implements IRequerimento {
 		} else if (!saldo.equals(other.saldo))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Requerimento [id=" + id + ", saldo=" + saldo + ", idGestor=" + idGestor + ", dataAbertura="
+				+ dataAbertura + ", dataFechamento=" + dataFechamento + ", prazoAnalise=" + prazoAnalise + ", estado="
+				+ estado + ", mensagem=" + mensagem + ", resposta=" + resposta + ", diasRequisitados="
+				+ diasRequisitados + ", diasVendidos=" + diasVendidos + ", dataInicioFerias=" + dataInicioFerias + "]";
 	}
 
 }

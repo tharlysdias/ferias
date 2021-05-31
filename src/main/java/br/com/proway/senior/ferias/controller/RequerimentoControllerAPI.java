@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.proway.senior.ferias.model.Requerimento;
+import br.com.proway.senior.ferias.model.Saldo;
 import br.com.proway.senior.ferias.model.dto.RequerimentoDTO;
 import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
 
@@ -28,7 +29,10 @@ import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
 public class RequerimentoControllerAPI {
 
 	@Autowired
-	private RequerimentoService controller;
+	private RequerimentoService requerimentoService;
+
+	@Autowired
+	private SaldoService saldoService;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -36,45 +40,58 @@ public class RequerimentoControllerAPI {
 	@ResponseBody
 	@RequestMapping(path = "/requerimento", method = RequestMethod.GET)
 	public List<RequerimentoDTO> buscarTodos() {
-		return controller.buscarTodosRequerimentos().stream().map(this::convertToDTO).collect(Collectors.toList());
+		return requerimentoService.buscarTodosRequerimentos().stream().map(this::convertToDTO)
+				.collect(Collectors.toList());
 	}
 
 	@ResponseBody
 	@RequestMapping(path = "/requerimento/{id}", method = RequestMethod.GET)
 	public RequerimentoDTO buscarRequerimentoPorId(@PathVariable("id") Long id) {
-		return convertToDTO(controller.buscarRequerimentoPorId(id));
+		return convertToDTO(requerimentoService.buscarRequerimentoPorId(id));
 	}
 
 	@ResponseBody
 	@RequestMapping(path = "/colaborador/{idColaborador}/requerimento", method = RequestMethod.GET)
 	public List<RequerimentoDTO> buscarRequerimentoPorIdColaborador(@PathVariable("id") Long id) {
-		return controller.buscarRequerimentoPorIdColaborador(id).stream().map(this::convertToDTO).collect(Collectors.toList());
+		return requerimentoService.buscarRequerimentoPorIdColaborador(id).stream().map(this::convertToDTO)
+				.collect(Collectors.toList());
 	}
 
 	@ResponseBody
 	@RequestMapping(path = "/colaborador/{idColaborador}/requerimentoestado", method = RequestMethod.GET)
-	public List<RequerimentoDTO> buscarRequerimentoPorIdEEstadoColaborador(@PathVariable("idColaborador") Long idColaborador, @RequestBody EstadosRequerimento estado){
-		return controller.buscarRequerimentoPorEstadoIdColaborador(idColaborador, estado).stream().map(this::convertToDTO).collect(Collectors.toList());
+	public List<RequerimentoDTO> buscarRequerimentoPorIdEEstadoColaborador(
+			@PathVariable("idColaborador") Long idColaborador, @RequestBody EstadosRequerimento estado) {
+		return requerimentoService.buscarRequerimentoPorIdColaboradorEEstado(idColaborador, estado).stream()
+				.map(this::convertToDTO).collect(Collectors.toList());
 	}
-		
-//	@ResponseBody
-//	@RequestMapping(path = "/requerimento/{idSaldo}", method= RequestMethod.POST)
-//	public RequerimentoDTO criar(@PathVariable Long idSaldo, @RequestBody RequerimentoDTO requerimentoDto) {
-//		return convertToDTO(controller.criarRequerimento(convertToEntity(requerimentoDto), idSaldo));
-//	}
-	
+
+	@ResponseBody
+	@RequestMapping(path = "/requerimento/{idSaldo}", method = RequestMethod.POST)
+	public RequerimentoDTO criar(@PathVariable Long idSaldo, @RequestBody RequerimentoDTO requerimentoDto)
+			throws Exception {
+		Requerimento novoRequerimento = convertToEntity(requerimentoDto);
+		System.out.println(novoRequerimento.toString());
+		Saldo saldo = saldoService.buscarPorId(idSaldo);
+		if (saldo != null) {
+			novoRequerimento.setSaldo(saldo);
+			return convertToDTO(requerimentoService.criarRequerimento(novoRequerimento));
+		} else {
+			return null;
+		}
+	}
+
 	@ResponseBody
 	@RequestMapping(path = "/requerimento/{id}", method = RequestMethod.DELETE)
 	public void desativar(@PathVariable("id") Long id) {
-		this.controller.desativarRequerimento(id);
+		this.requerimentoService.desativarRequerimento(id);
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(path = "/requerimento/avaliar/{id}", method = RequestMethod.PUT)
-	public RequerimentoDTO avaliar(@PathVariable("id") Long id, @RequestBody EstadosRequerimento estado){
-		return convertToDTO(controller.avaliarRequerimento(id, estado));
+	public RequerimentoDTO avaliar(@PathVariable("id") Long id, @RequestBody EstadosRequerimento estado) {
+		return convertToDTO(requerimentoService.avaliarRequerimento(id, estado));
 	}
-		
+
 	/**
 	 * Converte a entidade {@link Requerimento} para {@link RequerimentoDTO}.
 	 * 
@@ -84,7 +101,7 @@ public class RequerimentoControllerAPI {
 	private RequerimentoDTO convertToDTO(Requerimento requerimento) {
 		return modelMapper.map(requerimento, RequerimentoDTO.class);
 	}
-		
+
 	/**
 	 * Converte uma {@link RequerimentoDTO} para entidade {@link Requerimento}.
 	 * 

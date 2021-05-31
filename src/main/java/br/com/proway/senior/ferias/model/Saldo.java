@@ -110,4 +110,10 @@ public class Saldo {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Saldo [id=" + id + ", idColaborador=" + idColaborador + ", diasDisponiveisDeFerias="
+				+ diasDisponiveisDeFerias + ", dataAdmissao=" + dataAdmissao + "]";
+	}
+
 }
