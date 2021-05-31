@@ -2,9 +2,10 @@ package br.com.proway.senior.ferias.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
 import br.com.proway.senior.ferias.model.Ferias;
 import br.com.proway.senior.ferias.model.FeriasRepository;
@@ -25,8 +26,8 @@ import br.com.proway.senior.ferias.model.enums.EstadoFerias;
  * @author Lucas Grijo <rksgrijo@gmail.com>
  * @version Sprint7
  */
-@Controller
-public class FeriasController {
+@Service
+public class FeriasService {
 
 	private FeriasRepository repositoryFerias;
 
@@ -35,7 +36,7 @@ public class FeriasController {
 	private SaldoRepository repositorySaldo;
 
 	@Autowired
-	public FeriasController(FeriasRepository repositoryFerias, RequerimentoRepository repositoryRequerimento,
+	public FeriasService(FeriasRepository repositoryFerias, RequerimentoRepository repositoryRequerimento,
 			SaldoRepository repositorySaldo) {
 		this.repositoryFerias = repositoryFerias;
 		this.repositoryRequerimento = repositoryRequerimento;
@@ -65,16 +66,15 @@ public class FeriasController {
 	}
 
 	/**
-	 * Buscar todos os requerimentos cujo o {@link Saldo} corresponde ao {@link Saldo} do
-	 * colaborador procurado.
+	 * Buscar todos os requerimentos cujo o {@link Saldo} corresponde ao
+	 * {@link Saldo} do colaborador procurado.
 	 * 
 	 * @param idColaborador
 	 * @return
 	 */
 	public ArrayList<Ferias> buscarTodasAsFeriasPorIdColaborador(Long idColaborador) {
 		Saldo saldo = repositorySaldo.findByIdColaborador(idColaborador);
-		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento
-				.findBySaldo(saldo);
+		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento.findBySaldo(saldo);
 		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
 		for (Requerimento requerimento : requerimentos) {
 			ferias.add(repositoryFerias.findById(requerimento.getId()).get());
@@ -90,8 +90,7 @@ public class FeriasController {
 	 */
 	public ArrayList<Ferias> buscarFeriasAUsufruirPorIdColaborador(Long idColaborador) {
 		Saldo saldo = repositorySaldo.findByIdColaborador(idColaborador);
-		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento
-				.findBySaldo(saldo);
+		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento.findBySaldo(saldo);
 		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
 		for (Requerimento requerimento : requerimentos) {
 			Ferias temp = repositoryFerias.findById(requerimento.getId()).get();
@@ -105,18 +104,48 @@ public class FeriasController {
 	 * Buscar todas {@link Ferias} "A_USUFRUIR" de todos subordinados do gestor.
 	 * 
 	 * @return ferias
+	 * @throws Exception
 	 */
-	public ArrayList<Ferias> buscarFeriasAUsufruirDosSubordinados() {
-		return null;
+	public ArrayList<Ferias> buscarFeriasAUsufruirDosSubordinados(Long idGestor) throws Exception {
+		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento
+				.findAllByIdGestor(idGestor);
+		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
+		for (Requerimento req : requerimentos) {
+			Optional<Ferias> temp = repositoryFerias.findById(req.getId());
+			if (!temp.isEmpty()) {
+				if (temp.get().getEstado() == EstadoFerias.A_USUFRUIR) {
+					ferias.add(temp.get());
+				}
+			}
+		}
+		if (!ferias.isEmpty())
+			return ferias;
+		else
+			return null;
 	}
 
 	/**
 	 * Buscar todas {@link Ferias} "USUFRUINDO" de todos subordinados do gestor.
 	 * 
 	 * @return ferias
+	 * @throws Exception
 	 */
-	public ArrayList<Ferias> buscarFeriasUsufruindoDosSubordinados() {
-		return null;
+	public ArrayList<Ferias> buscarFeriasUsufruindoDosSubordinados(Long idGestor) throws Exception {
+		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento
+				.findAllByIdGestor(idGestor);
+		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
+		for (Requerimento req : requerimentos) {
+			Optional<Ferias> temp = repositoryFerias.findById(req.getId());
+			if (!temp.isEmpty()) {
+				if (temp.get().getEstado() == EstadoFerias.USUFRUINDO) {
+					ferias.add(temp.get());
+				}
+			}
+		}
+		if (!ferias.isEmpty())
+			return ferias;
+		else
+			return null;
 	}
 
 	/**

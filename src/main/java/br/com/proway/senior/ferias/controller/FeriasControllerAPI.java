@@ -21,10 +21,10 @@ import br.com.proway.senior.ferias.model.enums.EstadoFerias;
 public class FeriasControllerAPI {
 
 	@Autowired
-	private FeriasController controllerFerias;
+	private FeriasService feriasService;
 
 	@Autowired
-	private RequerimentoController controllerRequerimento;
+	private RequerimentoController requerimentoService;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -35,40 +35,52 @@ public class FeriasControllerAPI {
 	@GetMapping("/ferias/{id}")
 	@ResponseBody
 	FeriasDTO buscarFeriasPorId(@PathVariable Long id) throws Exception {
-		return convertToDto(controllerFerias.buscarPorId(id));
+		return convertToDto(feriasService.buscarPorId(id));
 	}
 
 	@GetMapping("/ferias")
 	ArrayList<FeriasDTO> buscarTodasAsFerias() {
-		ArrayList<Ferias> ferias = (ArrayList<Ferias>) controllerFerias.buscarTodasFerias();
-		return (ArrayList<FeriasDTO>) ferias.stream().map(this::convertToDto).collect(Collectors.toList());
+		ArrayList<Ferias> ferias = (ArrayList<Ferias>) feriasService.buscarTodasFerias();
+		if (ferias != null)
+			return (ArrayList<FeriasDTO>) ferias.stream().map(this::convertToDto).collect(Collectors.toList());
+		else
+			return null;
 	}
 
-	@GetMapping("/feriasColaborador/{idColaborador}")
+	@GetMapping("/ferias/colaborador/{idColaborador}")
 	ArrayList<FeriasDTO> buscarTodasAsFeriasPorIdColaborador(@PathVariable Long idColaborador) throws Exception {
-		ArrayList<Ferias> ferias = controllerFerias.buscarTodasAsFeriasPorIdColaborador(idColaborador);
-		return (ArrayList<FeriasDTO>) ferias.stream().map(this::convertToDto).collect(Collectors.toList());
+		ArrayList<Ferias> ferias = feriasService.buscarTodasAsFeriasPorIdColaborador(idColaborador);
+		if (ferias != null)
+			return (ArrayList<FeriasDTO>) ferias.stream().map(this::convertToDto).collect(Collectors.toList());
+		else
+			return null;
 	}
-	
-	
-	@GetMapping("/feriasAUsufruirColaborador/{idColaborador}")
+
+	@GetMapping("/ferias/colaborador/a_usufruir/{idColaborador}")
 	ArrayList<FeriasDTO> buscarFeriasAUsufruirPorIdColaborador(@PathVariable Long idColaborador) throws Exception {
-		ArrayList<Ferias> ferias = controllerFerias.buscarFeriasAUsufruirPorIdColaborador(idColaborador);
-		return (ArrayList<FeriasDTO>) ferias.stream().map(this::convertToDto).collect(Collectors.toList());
+		ArrayList<Ferias> ferias = feriasService.buscarFeriasAUsufruirPorIdColaborador(idColaborador);
+		if (ferias != null)
+			return (ArrayList<FeriasDTO>) ferias.stream().map(this::convertToDto).collect(Collectors.toList());
+		else
+			return null;
 	}
-	
-	@GetMapping("/feriasAUsufruirSubordinados/{idGestor}")
+
+	@GetMapping("/ferias/gestor/a_usufruir/{idGestor}")
 	ArrayList<FeriasDTO> buscarFeriasAUsufruirDosSubordinados(@PathVariable Long idGestor) throws Exception {
-//		Requerimento requerimento = controllerRequerimento.buscarRequerimentoPorId(idRequerimento);
-//		return convertToDto(controllerFerias.buscarPorRequerimento(requerimento));
-		return null;
+		ArrayList<Ferias> ferias = feriasService.buscarFeriasAUsufruirDosSubordinados(idGestor);
+		if (ferias != null)
+			return (ArrayList<FeriasDTO>) ferias.stream().map(this::convertToDto).collect(Collectors.toList());
+		else
+			return null;
 	}
-	
-	@GetMapping("/feriasUsufruindoSubordinados/gestor/{idGestor}")
+
+	@GetMapping("/ferias/gestor/usufruindo/{idGestor}")
 	ArrayList<FeriasDTO> buscarFeriasUsufruindoDosSubordinados(@PathVariable Long idGestor) throws Exception {
-//		Requerimento requerimento = controllerRequerimento.buscarRequerimentoPorId(idRequerimento);
-//		return convertToDto(controllerFerias.buscarPorRequerimento(requerimento));
-		return null;
+		ArrayList<Ferias> ferias = feriasService.buscarFeriasUsufruindoDosSubordinados(idGestor);
+		if (ferias != null)
+			return (ArrayList<FeriasDTO>) ferias.stream().map(this::convertToDto).collect(Collectors.toList());
+		else
+			return null;
 	}
 
 	/**
@@ -77,14 +89,13 @@ public class FeriasControllerAPI {
 	 * @param id
 	 * @throws Exception
 	 */
-	@PutMapping("/ferias")
+	@PutMapping("/ferias/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void cancelarFerias(@PathVariable Long id) throws Exception {
-		Ferias ferias = controllerFerias.buscarPorId(id);
+		Ferias ferias = feriasService.buscarPorId(id);
 		ferias.setEstado(EstadoFerias.CANCELADA);
-		controllerFerias.alterarFerias(ferias, id);
+		feriasService.alterarFerias(ferias, id);
 	}
-
 
 	/**
 	 * Converte a entidade {@link Ferias} para {@link FeriasDTO}.
@@ -96,7 +107,7 @@ public class FeriasControllerAPI {
 		FeriasDTO feriasDTO = modelMapper.map(ferias, FeriasDTO.class);
 		return feriasDTO;
 	}
-	
+
 	/**
 	 * Converte uma {@link FeriasDTO} para entidade {@link Ferias}.
 	 * 
