@@ -2,7 +2,7 @@ package br.com.proway.senior.ferias.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,6 @@ import br.com.proway.senior.ferias.model.Requerimento;
 import br.com.proway.senior.ferias.model.RequerimentoRepository;
 import br.com.proway.senior.ferias.model.Saldo;
 import br.com.proway.senior.ferias.model.SaldoRepository;
-import br.com.proway.senior.ferias.model.dto.FeriasDTO;
 import br.com.proway.senior.ferias.model.enums.EstadoFerias;
 
 /**
@@ -112,9 +111,12 @@ public class FeriasService {
 				.findAllByIdGestor(idGestor);
 		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
 		for (Requerimento req : requerimentos) {
-			Ferias temp = this.buscarPorId(req.getId());
-			if (temp != null && temp.getEstado() == EstadoFerias.A_USUFRUIR)
-				ferias.add(temp);
+			Optional<Ferias> temp = repositoryFerias.findById(req.getId());
+			if (!temp.isEmpty()) {
+				if (temp.get().getEstado() == EstadoFerias.A_USUFRUIR) {
+					ferias.add(temp.get());
+				}
+			}
 		}
 		if (!ferias.isEmpty())
 			return ferias;
@@ -126,16 +128,19 @@ public class FeriasService {
 	 * Buscar todas {@link Ferias} "USUFRUINDO" de todos subordinados do gestor.
 	 * 
 	 * @return ferias
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public ArrayList<Ferias> buscarFeriasUsufruindoDosSubordinados(Long idGestor) throws Exception {
 		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento
 				.findAllByIdGestor(idGestor);
 		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
 		for (Requerimento req : requerimentos) {
-			Ferias temp = this.buscarPorId(req.getId());
-			if (temp != null && temp.getEstado() == EstadoFerias.USUFRUINDO)
-				ferias.add(temp);
+			Optional<Ferias> temp = repositoryFerias.findById(req.getId());
+			if (!temp.isEmpty()) {
+				if (temp.get().getEstado() == EstadoFerias.USUFRUINDO) {
+					ferias.add(temp.get());
+				}
+			}
 		}
 		if (!ferias.isEmpty())
 			return ferias;

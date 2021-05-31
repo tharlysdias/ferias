@@ -129,7 +129,7 @@ public class FeriasServiceTest {
 	}
 
 	@Test
-	public void testIDeletarFeriasPorId() {
+	public void testIDeletarFeriasPorId() throws Exception {
 		feriasRepository.delete(ferias2);
 		ArrayList<Ferias> lista = (ArrayList<Ferias>) feriasService.buscarTodasFerias();
 		assertEquals(1, lista.size());

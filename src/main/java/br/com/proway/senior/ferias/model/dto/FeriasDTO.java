@@ -6,19 +6,19 @@ import br.com.proway.senior.ferias.model.enums.EstadoFerias;
 
 public class FeriasDTO {
 
-	private int idRequerimento;
+	private int id;
 	private String estado;
 	private String dataInicio;
 	private String dataFim;
 	private int dias;
 	private int diasVendidos;
 
-	public int getIdRequerimento() {
-		return idRequerimento;
+	public int getId() {
+		return id;
 	}
 
-	public void setIdRequerimento(int idRequerimento) {
-		this.idRequerimento = idRequerimento;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public EstadoFerias getEstadoConverted() {
