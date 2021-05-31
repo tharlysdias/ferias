@@ -2,9 +2,11 @@ package br.com.proway.senior.ferias.controller;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,6 +19,9 @@ public class SaldoService {
 
 	@Autowired
 	private SaldoRepository repository;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	/**
 	 * Cria novo saldo
@@ -114,11 +119,10 @@ public class SaldoService {
 	 * @return {@link Saldo}
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
-	public Saldo atualizarSaldoPorIdColaborador(Long idColaborador) throws Exception {
-		RestTemplate restTemplate = new RestTemplate();
-		List<JornadaDTO> jornadas = (List<JornadaDTO>) restTemplate.getForObject("http://localhost:8081/api/jornadas/1/", JornadaDTO.class);
-		int novoSaldo = (int) (jornadas.size() / 8.5);
+	public Saldo atualizarSaldoPorIdColaborador(Long idColaborador, String path) throws Exception {
+		ResponseEntity<JornadaDTO[]> responseEntity = restTemplate.getForEntity(path, JornadaDTO[].class);
+		JornadaDTO[] jornadas = responseEntity.getBody();
+		int novoSaldo = (int) (jornadas.length / 8.5);
 		Saldo fetchedSaldo = repository.findByIdColaborador(idColaborador).orElseThrow();
 		
 		return repository.findByIdColaborador(idColaborador).map(saldo -> {
@@ -140,5 +144,9 @@ public class SaldoService {
 	 */
 	public void deletarSaldo(Long id) {
 		repository.deleteById(id);
+	}
+	
+	public String testRestTemplate(String url) {
+		return restTemplate.getForObject(url, String.class);
 	}
 }

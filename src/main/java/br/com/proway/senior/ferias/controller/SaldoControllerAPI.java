@@ -85,7 +85,7 @@ public class SaldoControllerAPI {
 	}
 	
 	@PutMapping("/atualizarSaldo/{id}")
-	SaldoDTO atualizarSaldo(@PathVariable Long id) throws Exception {
-		return convertToDTO(service.atualizarSaldoPorIdColaborador(id));
+	SaldoDTO atualizarSaldo(@PathVariable Long id, @RequestBody String path) throws Exception {
+		return convertToDTO(service.atualizarSaldoPorIdColaborador(id, path));
 	}
 }

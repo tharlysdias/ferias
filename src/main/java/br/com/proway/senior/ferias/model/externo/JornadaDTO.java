@@ -2,6 +2,9 @@ package br.com.proway.senior.ferias.model.externo;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class JornadaDTO {
 	private Long id;
 	private String data;

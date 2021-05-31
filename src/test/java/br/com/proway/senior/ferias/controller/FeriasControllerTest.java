@@ -1,18 +1,16 @@
 package br.com.proway.senior.ferias.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.BDDMockito.given;
 
 import java.time.LocalDate;
 
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import br.com.proway.senior.ferias.model.Ferias;
 import br.com.proway.senior.ferias.model.FeriasRepository;
 import br.com.proway.senior.ferias.model.Requerimento;
 import br.com.proway.senior.ferias.model.RequerimentoRepository;
