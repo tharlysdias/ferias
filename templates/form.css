@@ -3,9 +3,11 @@
     padding: 0%;
     font-family: Ubunto, sans-serif;
     --main-bg-color: #01c699;
+    --cinza: #e8e4e3;
+    outline: 0;
 }
 body{
-    background-color: #e8e4e3;
+    background-color: var(--cinza);
 }
 header{
     padding: 1%;
@@ -53,7 +55,7 @@ section{
 }
 .formulario{
     margin: auto;
-    width: 50%;
+    width: 45%;
     padding: 3rem;
     border-radius: 1rem;
 }
@@ -62,10 +64,12 @@ section{
     margin-top: 0.3rem;
     margin-bottom: 1rem;
     border: none;
-    background-color: #e8e4e3;
+    background-color: var(--cinza);
     border-radius: 0.2rem;
     padding: 0.5rem;
-    width: 60%;
+    width: 90%;
+    margin-left: 5%;
+    border: var(--cinza) 1.5px solid;
 }
 .formulario legend{
     padding-bottom: 1rem;
@@ -74,30 +78,38 @@ section{
 .formulario label{
     color: #b8b5b4;
     padding-top: 1rem;
+    margin-left: 5%;
+}
+.formulario textarea:focus, input:focus{
+    border: #b8b5b4 1.5px solid;
 }
 .footer_form{
-    border-top: #e8e4e3 2px solid;
+    display: flex;
+    justify-content: space-between;
+    border-top: var(--cinza) 2px solid;
     margin: 0;
-    width: 100%;
     padding-top: 2rem;
-}
-.footer_form img{
-    float: left;
-    margin-right: 1.5rem;
 }
 .footer_form a{
     list-style: none;
     text-decoration: none;
     color: black;
 }
-.buttons_form{
-    margin-left: 50%;
-    margin-top: -4rem;
-}
 .footer_form button{
-    width: 40%;
+    width: 45%;
     margin-left: 1rem;
     padding: 0.8rem;
     border-radius: 0.5rem;
-    font-size: 1rem;
+    font-size: 100%;
+}
+.buttons_form{
+    display: flex;
+    justify-content: flex-end;
+}
+.alert_form{
+    display: flex;
+    justify-content: flex-start;
+}
+.alert_form p{
+    margin-left: 1rem;
 }
