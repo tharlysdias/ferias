@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import org.junit.FixMethodOrder;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +22,7 @@ import br.com.proway.senior.ferias.model.SaldoRepository;
 import br.com.proway.senior.ferias.model.enums.EstadoFerias;
 import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
 import br.com.proway.senior.ferias.service.FeriasService;
+import br.com.proway.senior.ferias.service.SaldoService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -30,6 +31,9 @@ public class FeriasServiceTest {
 
 	@Autowired
 	private FeriasService feriasService;
+	
+	@Autowired
+	private SaldoService saldoService;
 
 	@Autowired
 	private FeriasRepository feriasRepository;
@@ -50,8 +54,8 @@ public class FeriasServiceTest {
 
 	@Test
 	public void testAPopulateDB() throws Exception {
-		feriasService = new FeriasService(feriasRepository, requerimentoRepository, saldoRepository);
-		saldo1 = new Saldo(idColaboradorDoSaldo1, 30.0, LocalDate.now());
+		feriasService = new FeriasService(saldoService, feriasRepository, requerimentoRepository, saldoRepository);
+		saldo1 = new Saldo(idColaboradorDoSaldo1, 45.0, LocalDate.now());
 		saldo1 = saldoRepository.saveAndFlush(saldo1);
 		requerimento1 = new Requerimento();
 		requerimento1.setSaldo(saldo1);
@@ -59,8 +63,8 @@ public class FeriasServiceTest {
 		requerimento1.setDataAbertura(LocalDate.now());
 		requerimento1.setPrazoAnalise(LocalDate.now().plusDays(15));
 		requerimento1.setEstado(EstadosRequerimento.PENDENTE);
-		requerimento1.setDiasRequisitados(30);
-		requerimento1.setDiasVendidos(40);
+		requerimento1.setDiasRequisitados(20);
+		requerimento1.setDiasVendidos(10);
 		requerimento1.setDataInicioFerias(LocalDate.now().plusMonths(1));
 		requerimento1 = requerimentoRepository.saveAndFlush(requerimento1);
 
@@ -76,7 +80,7 @@ public class FeriasServiceTest {
 	}
 
 	@Test
-	public void testBCriarFeriasEBuscarPorId() {
+	public void testBCriarFeriasEBuscarPorId() throws Exception {
 		feriasService.criarFerias(requerimento1);
 		ferias1 = feriasRepository.findByRequerimento(requerimento1).get();
 		assertEquals(ferias1.getEstado(), EstadoFerias.A_USUFRUIR);

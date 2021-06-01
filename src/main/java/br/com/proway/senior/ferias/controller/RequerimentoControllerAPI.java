@@ -90,7 +90,7 @@ public class RequerimentoControllerAPI {
 
 	@ResponseBody
 	@RequestMapping(path = "/requerimento/avaliar/{id}", method = RequestMethod.PUT)
-	public RequerimentoDTO avaliar(@PathVariable Long id, @RequestBody EstadosRequerimento estado) {
+	public RequerimentoDTO avaliar(@PathVariable Long id, @RequestBody EstadosRequerimento estado) throws Exception {
 		return convertToDTO(requerimentoService.avaliarRequerimento(id, estado));
 	}
 

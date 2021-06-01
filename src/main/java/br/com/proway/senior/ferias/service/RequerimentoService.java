@@ -93,8 +93,9 @@ public class RequerimentoService {
 	 * 
 	 * @param requerimento
 	 * @return
+	 * @throws Exception 
 	 */
-	public Requerimento avaliarRequerimento(Long idRequerimento, EstadosRequerimento estado) {
+	public Requerimento avaliarRequerimento(Long idRequerimento, EstadosRequerimento estado) throws Exception {
 		Optional<Requerimento> obj = this.repositoryRequerimento.findById(idRequerimento);
 		if (obj.isPresent() && obj.get().getEstado().equals(EstadosRequerimento.PENDENTE)) {
 			if (estado.equals(EstadosRequerimento.APROVADO)) {
@@ -114,8 +115,9 @@ public class RequerimentoService {
 	 * 
 	 * @param requerimento
 	 * @return
+	 * @throws Exception 
 	 */
-	private Ferias aprovarRequerimento(Requerimento requerimento) {
+	private Ferias aprovarRequerimento(Requerimento requerimento) throws Exception {
 		requerimento.setEstado(EstadosRequerimento.APROVADO);
 		atualizarRequerimento(requerimento);
 		Requerimento r = repositoryRequerimento.getById(requerimento.getId());

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +28,8 @@ import br.com.proway.senior.ferias.model.enums.EstadoFerias;
  */
 @Service
 public class FeriasService {
+	
+	private SaldoService serviceSaldo;
 
 	private FeriasRepository repositoryFerias;
 
@@ -38,8 +38,9 @@ public class FeriasService {
 	private SaldoRepository repositorySaldo;
 
 	@Autowired
-	public FeriasService(FeriasRepository repositoryFerias, RequerimentoRepository repositoryRequerimento,
+	public FeriasService(SaldoService serviceSaldo, FeriasRepository repositoryFerias, RequerimentoRepository repositoryRequerimento,
 			SaldoRepository repositorySaldo) {
+		this.serviceSaldo = serviceSaldo;
 		this.repositoryFerias = repositoryFerias;
 		this.repositoryRequerimento = repositoryRequerimento;
 		this.repositorySaldo = repositorySaldo;
@@ -190,10 +191,12 @@ public class FeriasService {
 	 * 
 	 * @param requerimento {@link Requerimento}.
 	 * @return Ferias
+	 * @throws Exception 
 	 */
-	public Ferias criarFerias(Requerimento requerimento) {
+	public Ferias criarFerias(Requerimento requerimento) throws Exception {
 		Ferias ferias = new Ferias(requerimento);
 		ferias.setEstado(EstadoFerias.A_USUFRUIR);
+		serviceSaldo.descontarSaldo(requerimento.getSaldo().getIdColaborador(), requerimento.getDiasRequisitados() + requerimento.getDiasVendidos());
 		return repositoryFerias.saveAndFlush(ferias);
 	}
 }
