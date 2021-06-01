@@ -17,12 +17,16 @@ import br.com.proway.senior.ferias.model.Ferias;
 import br.com.proway.senior.ferias.model.dto.FeriasDTO;
 import br.com.proway.senior.ferias.model.enums.EstadoFerias;
 import br.com.proway.senior.ferias.service.FeriasService;
+import br.com.proway.senior.ferias.service.SaldoService;
 
 @RestController
 public class FeriasControllerAPI {
 
 	@Autowired
 	private FeriasService feriasService;
+
+	@Autowired
+	private SaldoService saldoService;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -92,6 +96,8 @@ public class FeriasControllerAPI {
 	public void cancelarFerias(@PathVariable Long id) throws Exception {
 		Ferias ferias = feriasService.buscarPorId(id);
 		ferias.setEstado(EstadoFerias.CANCELADA);
+		saldoService.adicionarSaldo(ferias.getRequerimento().getSaldo().getIdColaborador(),
+				ferias.getRequerimento().getDiasRequisitados() + ferias.getRequerimento().getDiasVendidos());
 		feriasService.alterarFerias(ferias, id);
 	}
 
