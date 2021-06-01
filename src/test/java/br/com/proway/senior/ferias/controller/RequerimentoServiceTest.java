@@ -105,7 +105,7 @@ public class RequerimentoServiceTest {
 	}
 
 	@Test
-	public void testGAvaliarRequerimento() {
+	public void testGAvaliarRequerimento() throws Exception {
 		requerimento3.setEstado(EstadosRequerimento.PENDENTE);
 		requerimento3 = requerimentoService.atualizarRequerimento(requerimento3);
 		requerimentoService.avaliarRequerimento(requerimento3.getId(), EstadosRequerimento.APROVADO);
