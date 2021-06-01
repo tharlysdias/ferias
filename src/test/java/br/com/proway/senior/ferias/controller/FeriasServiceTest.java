@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -142,7 +141,7 @@ public class FeriasServiceTest {
 		assertEquals(1, lista.size());
 	}
 
-	@Ignore
+	@Test
 	public void testXCleanDB() {
 		feriasRepository.delete(ferias1);
 		requerimentoRepository.delete(requerimento1);
