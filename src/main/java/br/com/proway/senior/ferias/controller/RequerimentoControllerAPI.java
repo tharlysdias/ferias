@@ -16,6 +16,8 @@ import br.com.proway.senior.ferias.model.Requerimento;
 import br.com.proway.senior.ferias.model.Saldo;
 import br.com.proway.senior.ferias.model.dto.RequerimentoDTO;
 import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
+import br.com.proway.senior.ferias.service.RequerimentoService;
+import br.com.proway.senior.ferias.service.SaldoService;
 
 /**
  * ControllerAPI do {@link Requerimento}

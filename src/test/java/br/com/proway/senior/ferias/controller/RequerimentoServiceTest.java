@@ -18,6 +18,7 @@ import br.com.proway.senior.ferias.model.RequerimentoRepository;
 import br.com.proway.senior.ferias.model.Saldo;
 import br.com.proway.senior.ferias.model.SaldoRepository;
 import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
+import br.com.proway.senior.ferias.service.RequerimentoService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -107,7 +108,6 @@ public class RequerimentoServiceTest {
 	public void testGAvaliarRequerimento() {
 		requerimento3.setEstado(EstadosRequerimento.PENDENTE);
 		requerimento3 = requerimentoService.atualizarRequerimento(requerimento3);
-//		Requerimento requerimento3Alterado = requerimentoService.buscarRequerimentoPorId(requerimento3.getId());
 		requerimentoService.avaliarRequerimento(requerimento3.getId(), EstadosRequerimento.APROVADO);
 		requerimentoService.avaliarRequerimento(requerimento4.getId(), EstadosRequerimento.RECUSADO);
 		assertEquals(EstadosRequerimento.APROVADO, requerimentoService.buscarRequerimentoPorId(requerimento3.getId()).getEstado());
@@ -137,17 +137,12 @@ public class RequerimentoServiceTest {
 
 	@Test
 	public void testXCleanDB() {
-//		Requerimento requerimento3Alterado = requerimentoService.buscarRequerimentoPorId(requerimento3.getId());
-		System.out.println("1");
 		feriasRepository.delete(feriasRepository.findByRequerimento(requerimento3).get());
 		requerimentoRepository.delete(requerimento3);
-		System.out.println("2");
 		requerimentoRepository.delete(requerimento4);
-		System.out.println("3");
 		saldoRepository.delete(saldo1);
 		saldoRepository.delete(saldo2);
 		saldoRepository.delete(saldo3);
-		System.out.println("4");
 	}
 
 }

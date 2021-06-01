@@ -1,4 +1,4 @@
-package br.com.proway.senior.ferias.controller;
+package br.com.proway.senior.ferias.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -172,19 +172,4 @@ public class RequerimentoService {
 		this.repositoryRequerimento.deleteById(id);
 	}
 
-<<<<<<< HEAD:src/main/java/br/com/proway/senior/ferias/controller/RequerimentoController.java
-	/**
-	 * Busca um {@link Requerimento} no banco de dados pelo id do colaborador.
-	 * 
-	 * @param requerimento
-	 * @return
-	 */	
-	public ArrayList<Requerimento> buscarRequerimentoPorIdColaborador(Long idColaborador) {
-		//Saldo saldo = repositorySaldo.findByIdColaborador(idColaborador);
-		//ArrayList<Requerimento> obj = (ArrayList<Requerimento>) this.repositoryRequerimento.findBySaldo(saldo);
-			//return obj;
-		return null;
-	}
-=======
->>>>>>> 36f1c1c658da5215423d17f2d08c22a0765c7a88:src/main/java/br/com/proway/senior/ferias/controller/RequerimentoService.java
 }

@@ -1,4 +1,4 @@
-package br.com.proway.senior.ferias.controller;
+package br.com.proway.senior.ferias.service;
 
 import java.util.ArrayList;
 import java.util.List;

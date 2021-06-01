@@ -20,9 +20,9 @@ import javax.persistence.Id;
 @Entity
 public class Saldo {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(columnDefinition = "serial")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+//	@Column(columnDefinition = "serial")
 
 	@Column(unique = true)
 	private Long idColaborador;
