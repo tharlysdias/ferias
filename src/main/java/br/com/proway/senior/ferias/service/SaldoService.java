@@ -117,7 +117,11 @@ public class SaldoService {
 	 * @throws Exception 
 	 */
 	public Saldo buscarPorIdColaborador(Long idColaborador) throws Exception {
-		return repository.findByIdColaborador(idColaborador);
+		Saldo saldo = repository.findByIdColaborador(idColaborador);
+		if(saldo.equals(null)) {
+			throw new Exception("Error: saldo is null");
+		}
+		return saldo;
 	}
 
 	/**

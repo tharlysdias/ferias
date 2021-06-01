@@ -3,6 +3,8 @@ package br.com.proway.senior.ferias.controller;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import java.util.ArrayList;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +22,12 @@ import br.com.proway.senior.ferias.service.SaldoService;
 public class SaldoServiceTest {
 	
 	private Long getNewIdColaborador() {
-		return (repository.findAll().get(repository.findAll().size() - 1).getIdColaborador() + 1);
+		ArrayList<Saldo> saldos = (ArrayList<Saldo>) repository.findAll();
+		if(!saldos.isEmpty()) {
+			return (saldos.get(saldos.size() - 1).getIdColaborador() + 1);
+		} else {
+			return (long) 1;
+		}
 	}
 
 	@Autowired
@@ -49,11 +56,6 @@ public class SaldoServiceTest {
 	@Test
 	public void testBuscarTodos() {
 		assertTrue(repository.findAll().size() == service.buscarTodos().size());
-	}
-	
-	@Test(expected = Exception.class)
-	public void testBuscarPorIdColaboradorThrowsException() throws Exception  {
-		service.buscarPorIdColaborador((long) 949494949);
 	}
 	
 	@Test
@@ -85,6 +87,11 @@ public class SaldoServiceTest {
 		assertTrue(service.buscarPorIdColaborador(buscado.getIdColaborador()).equals(buscado));
 	}
 	
+	@Test(expected = Exception.class)
+	public void testBuscarPorIdColaboradorThrowsException() throws Exception  {
+		System.out.println(service.buscarPorIdColaborador((long) 95959587));
+	}
+	
 	@Test
 	public void testBuscarPorId() throws Exception  {
 		Long newIdColaborador = getNewIdColaborador();
@@ -97,10 +104,10 @@ public class SaldoServiceTest {
 	
 	@Test(expected = Exception.class)
 	public void testBuscarPorIdThrowsException() throws Exception  {
-		service.buscarPorId((long) 949494949);
+		System.out.println(service.buscarPorId((long) 949494949));
 	}
 	
-	@Ignore
+	@Test
 	public void testAutoUpdateSaldo() throws Exception {
 		Long newIdColaborador = getNewIdColaborador();
 		Saldo saldo = new Saldo();
