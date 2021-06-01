@@ -2,12 +2,16 @@ package br.com.proway.senior.ferias.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.MapsId;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import br.com.proway.senior.ferias.controller.IFerias;
@@ -19,14 +23,12 @@ import br.com.proway.senior.ferias.utils.Data;
 public class Ferias implements IFerias {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
 	private Long id;
 
-	/**
-	 * {@link MapsId}
-	 * https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
-	 */
-	@OneToOne(fetch = FetchType.LAZY)
-	@MapsId
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@JoinColumn(name = "id_requerimento", referencedColumnName = "id")
 	private Requerimento requerimento;
 
 	@Enumerated(EnumType.STRING)
@@ -46,8 +48,8 @@ public class Ferias implements IFerias {
 	 * 
 	 * @param requerimento
 	 */
-	public Ferias(IRequerimento requerimento) {
-		this.requerimento = (Requerimento) requerimento;
+	public Ferias(Requerimento requerimento) {
+		this.requerimento = requerimento;
 		this.dataInicio = requerimento.getDataInicioFerias();
 		this.dias = requerimento.getDiasRequisitados();
 		this.diasVendidos = requerimento.getDiasVendidos();
@@ -160,6 +162,12 @@ public class Ferias implements IFerias {
 		} else if (!requerimento.equals(other.requerimento))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Ferias [id=" + id + ", requerimento=" + requerimento + ", estado=" + estado + ", dataInicio="
+				+ dataInicio + ", dataFim=" + dataFim + ", dias=" + dias + ", diasVendidos=" + diasVendidos + "]";
 	}
 
 }

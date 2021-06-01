@@ -2,7 +2,7 @@ package br.com.proway.senior.ferias.model;
 
 import java.time.LocalDate;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import br.com.proway.senior.ferias.controller.IRequerimento;
 import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
@@ -28,12 +29,13 @@ public class Requerimento implements IRequerimento {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
 	private Long id;
 
 	/**
 	 * ID do {@link Saldo}.
 	 */
-	@ManyToOne(targetEntity = Saldo.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Saldo.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_saldo")
 	private Saldo saldo;
 
@@ -54,12 +56,14 @@ public class Requerimento implements IRequerimento {
 
 	private LocalDate dataInicioFerias;
 
+	@OneToOne(mappedBy = "requerimento")
+	private Ferias ferias;
+
 	public Requerimento() {
 	}
 
-	public Requerimento(Saldo saldo, Long idGestor, LocalDate dataAbertura, LocalDate prazoAnalise, 
-			String mensagem, String resposta, Integer diasRequisitados, Integer diasVendidos, 
-			LocalDate dataInicioFerias) {
+	public Requerimento(Saldo saldo, Long idGestor, LocalDate dataAbertura, LocalDate prazoAnalise, String mensagem,
+			String resposta, Integer diasRequisitados, Integer diasVendidos, LocalDate dataInicioFerias) {
 		this.saldo = saldo;
 		this.idGestor = idGestor;
 		this.dataAbertura = dataAbertura;
@@ -168,6 +172,14 @@ public class Requerimento implements IRequerimento {
 		this.dataInicioFerias = dataInicioFerias;
 	}
 
+	public Ferias getFerias() {
+		return ferias;
+	}
+
+	public void setFerias(Ferias ferias) {
+		this.ferias = ferias;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -178,6 +190,7 @@ public class Requerimento implements IRequerimento {
 		result = prime * result + ((diasRequisitados == null) ? 0 : diasRequisitados.hashCode());
 		result = prime * result + ((diasVendidos == null) ? 0 : diasVendidos.hashCode());
 		result = prime * result + ((estado == null) ? 0 : estado.hashCode());
+		result = prime * result + ((ferias == null) ? 0 : ferias.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((idGestor == null) ? 0 : idGestor.hashCode());
 		result = prime * result + ((mensagem == null) ? 0 : mensagem.hashCode());
@@ -223,6 +236,11 @@ public class Requerimento implements IRequerimento {
 			return false;
 		if (estado != other.estado)
 			return false;
+		if (ferias == null) {
+			if (other.ferias != null)
+				return false;
+		} else if (!ferias.equals(other.ferias))
+			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -254,6 +272,15 @@ public class Requerimento implements IRequerimento {
 		} else if (!saldo.equals(other.saldo))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Requerimento [id=" + id + ", saldo=" + saldo + ", idGestor=" + idGestor + ", dataAbertura="
+				+ dataAbertura + ", dataFechamento=" + dataFechamento + ", prazoAnalise=" + prazoAnalise + ", estado="
+				+ estado + ", mensagem=" + mensagem + ", resposta=" + resposta + ", diasRequisitados="
+				+ diasRequisitados + ", diasVendidos=" + diasVendidos + ", dataInicioFerias=" + dataInicioFerias
+				+ ", ferias=" + ferias + "]";
 	}
 
 }

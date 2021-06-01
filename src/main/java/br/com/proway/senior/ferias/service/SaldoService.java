@@ -32,7 +32,7 @@ public class SaldoService {
 	public Saldo criarSaldo(Saldo novoSaldo) {
 		novoSaldo.setDataAdmissao(LocalDate.now());
 		novoSaldo.setDiasDisponiveisDeFerias(0.0);
-		return repository.save(novoSaldo);
+		return repository.saveAndFlush(novoSaldo);
 	}
 
 	/**

@@ -51,6 +51,7 @@ public class FeriasServiceTest {
 	public void testAPopulateDB() throws Exception {
 		feriasService = new FeriasService(feriasRepository, requerimentoRepository, saldoRepository);
 		saldo1 = new Saldo(idColaboradorDoSaldo1, 30.0, LocalDate.now());
+		saldo1 = saldoRepository.saveAndFlush(saldo1);
 		requerimento1 = new Requerimento();
 		requerimento1.setSaldo(saldo1);
 		requerimento1.setIdGestor(idGestor);
@@ -60,22 +61,23 @@ public class FeriasServiceTest {
 		requerimento1.setDiasRequisitados(30);
 		requerimento1.setDiasVendidos(40);
 		requerimento1.setDataInicioFerias(LocalDate.now().plusMonths(1));
+		requerimento1 = requerimentoRepository.saveAndFlush(requerimento1);
 
 		saldo2 = new Saldo(idColaboradorDoSaldo2, 60.0, LocalDate.now().minusMonths(12));
+		saldo2 = saldoRepository.saveAndFlush(saldo2);
 		requerimento2 = new Requerimento(saldo2, idGestor, LocalDate.now(), LocalDate.now().plusDays(10),
 				"Mensagem de teste", "Resposta de teste", 15, 15, LocalDate.now().plusMonths(4));
+		requerimento2 = requerimentoRepository.saveAndFlush(requerimento2);
 		feriasService.criarFerias(requerimento2);
-		System.out.println(requerimento2.getId());
-		ferias2 = feriasRepository.getById(requerimento2.getId());
+		ferias2 = feriasRepository.findByRequerimento(requerimento2).get();
 		ferias2.setEstado(EstadoFerias.CANCELADA);
-		feriasService.alterarFerias(ferias2, requerimento2.getId());
+		feriasService.alterarFerias(ferias2, ferias2.getId());
 	}
 
 	@Test
 	public void testBCriarFeriasEBuscarPorId() {
 		feriasService.criarFerias(requerimento1);
-		System.out.println(requerimento1.getId());
-		ferias1 = feriasRepository.getById(requerimento1.getId());
+		ferias1 = feriasRepository.findByRequerimento(requerimento1).get();
 		assertEquals(ferias1.getEstado(), EstadoFerias.A_USUFRUIR);
 	}
 
@@ -102,9 +104,9 @@ public class FeriasServiceTest {
 	@Test
 	public void testFBuscarFeriasAUsufruirDosSubordinados() throws Exception {
 		ferias1.setEstado(EstadoFerias.A_USUFRUIR);
-		feriasService.alterarFerias(ferias1, requerimento1.getId());
+		feriasService.alterarFerias(ferias1, ferias1.getId());
 		ferias2.setEstado(EstadoFerias.A_USUFRUIR);
-		feriasService.alterarFerias(ferias2, requerimento2.getId());
+		feriasService.alterarFerias(ferias2, ferias2.getId());
 		ArrayList<Ferias> lista = feriasService.buscarFeriasAUsufruirDosSubordinados(idGestor);
 		assertEquals(2, lista.size());
 	}
@@ -112,9 +114,9 @@ public class FeriasServiceTest {
 	@Test
 	public void testGBuscarFeriasUsufruindoDosSubordinados() throws Exception {
 		ferias1.setEstado(EstadoFerias.USUFRUINDO);
-		feriasService.alterarFerias(ferias1, requerimento1.getId());
+		feriasService.alterarFerias(ferias1, ferias1.getId());
 		ferias2.setEstado(EstadoFerias.CANCELADA);
-		feriasService.alterarFerias(ferias2, requerimento2.getId());
+		feriasService.alterarFerias(ferias2, ferias2.getId());
 		ArrayList<Ferias> lista = feriasService.buscarFeriasUsufruindoDosSubordinados(idGestor);
 		assertEquals(1, lista.size());
 	}
@@ -122,8 +124,8 @@ public class FeriasServiceTest {
 	@Test
 	public void testHAlterarFerias() throws Exception {
 		ferias1.setEstado(EstadoFerias.USUFRUIDA);
-		feriasService.alterarFerias(ferias1, requerimento1.getId());
-		ferias1 = feriasRepository.getById(requerimento1.getId());
+		feriasService.alterarFerias(ferias1, ferias1.getId());
+		ferias1 = feriasRepository.findByRequerimento(requerimento1).get();
 		assertEquals(ferias1.getEstado(), EstadoFerias.USUFRUIDA);
 	}
 
