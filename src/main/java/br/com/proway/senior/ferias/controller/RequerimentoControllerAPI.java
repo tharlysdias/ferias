@@ -48,21 +48,21 @@ public class RequerimentoControllerAPI {
 
 	@ResponseBody
 	@RequestMapping(path = "/requerimento/{id}", method = RequestMethod.GET)
-	public RequerimentoDTO buscarRequerimentoPorId(@PathVariable("id") Long id) {
+	public RequerimentoDTO buscarRequerimentoPorId(@PathVariable Long id) {
 		return convertToDTO(requerimentoService.buscarRequerimentoPorId(id));
 	}
 
 	@ResponseBody
-	@RequestMapping(path = "/colaborador/{idColaborador}/requerimento", method = RequestMethod.GET)
-	public List<RequerimentoDTO> buscarRequerimentoPorIdColaborador(@PathVariable("id") Long id) {
-		return requerimentoService.buscarRequerimentoPorIdColaborador(id).stream().map(this::convertToDTO)
+	@RequestMapping(path = "/requerimento/colaborador/{idColaborador}", method = RequestMethod.GET)
+	public List<RequerimentoDTO> buscarRequerimentoPorIdColaborador(@PathVariable Long idColaborador) {
+		return requerimentoService.buscarRequerimentoPorIdColaborador(idColaborador).stream().map(this::convertToDTO)
 				.collect(Collectors.toList());
 	}
 
 	@ResponseBody
-	@RequestMapping(path = "/colaborador/{idColaborador}/requerimentoestado", method = RequestMethod.GET)
+	@RequestMapping(path = "/requerimento/colaborador/{idColaborador}/estado/", method = RequestMethod.GET)
 	public List<RequerimentoDTO> buscarRequerimentoPorIdEEstadoColaborador(
-			@PathVariable("idColaborador") Long idColaborador, @RequestBody EstadosRequerimento estado) {
+			@PathVariable Long idColaborador, @RequestBody EstadosRequerimento estado) {
 		return requerimentoService.buscarRequerimentoPorIdColaboradorEEstado(idColaborador, estado).stream()
 				.map(this::convertToDTO).collect(Collectors.toList());
 	}
@@ -90,7 +90,7 @@ public class RequerimentoControllerAPI {
 
 	@ResponseBody
 	@RequestMapping(path = "/requerimento/avaliar/{id}", method = RequestMethod.PUT)
-	public RequerimentoDTO avaliar(@PathVariable("id") Long id, @RequestBody EstadosRequerimento estado) {
+	public RequerimentoDTO avaliar(@PathVariable Long id, @RequestBody EstadosRequerimento estado) {
 		return convertToDTO(requerimentoService.avaliarRequerimento(id, estado));
 	}
 
