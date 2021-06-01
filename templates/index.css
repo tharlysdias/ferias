@@ -12,6 +12,13 @@ h6 {
     margin-bottom: 12px
 }
 
+.w3-bar-block.w3-center .w3-bar-item {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
 /* Set the width of the sidebar to 120px */
 .w3-sidebar {
     width: 100px;

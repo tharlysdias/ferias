@@ -6,35 +6,39 @@
     --cinza: #e8e4e3;
     outline: 0;
 }
-body{
+body {
     background-color: var(--cinza);
 }
-header{
+header {
     padding: 1%;
     height: 16rem;
     background-color: var(--main-bg-color);
     color: white;
-
+    padding-left: 10.5%;
 }
-header h1{
-    display: inline;
+header h1 {
     font-size: 3rem;
     margin-left: 2rem;
-}
-header img{
     display: inline;
 }
-header p{
+
+.top-buttons {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 35px;
+}
+
+header p {
     margin-top: 2rem;
     font-size: 1.5rem;
-    text-align: center;
+    padding-left: 19.2%;
 }
-footer{
+footer {
     background-color: var(--main-bg-color);
     padding: 2%;
     color: white;
 }
-footer img{
+footer img {
     display: inline;
     margin-right: 2%;
 }
@@ -112,4 +116,8 @@ section{
 }
 .alert_form p{
     margin-left: 1rem;
+}
+
+#mensagem {
+    margin: 0 auto 0 auto;
 }

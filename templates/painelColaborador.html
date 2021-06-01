@@ -12,14 +12,55 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
     <title>Form</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
+
+    <!-- Icon Bar (Sidebar - hidden on small screens) -->
+    <nav class="w3-sidebar w3-bar-block w3-small w3-hide-small w3-center w3-dark-grey">
+        <!-- Avatar image in top left corner -->
+        <div class="logo-color">
+            <a href="https://www.senior.com.br/">
+                <img src="logo-senior.svg" style="width: 80%" class="logo">
+            </a>
+        </div>
+        <a href="#" class="w3-bar-item w3-button w3-padding-large">
+            <i class="fa fa-home w3-xxlarge"></i>
+            <p>HOME</p>
+        </a>
+        <a href="/painelColaborador.html" class="w3-bar-item w3-button w3-padding-large">
+            <i class="fa fa-user w3-xxlarge"></i>
+            <p>SOLICITAR FERIAS</p>
+        </a>
+        <a href="#gestor" class="w3-bar-item w3-button w3-padding-large">
+            <i class="fa fa-eye w3-xxlarge"></i>
+            <p>GESTOR</p>
+        </a>
+        <a href="#avaliar" class="w3-bar-item w3-button w3-padding-large">
+            <i class="fa fa-envelope w3-xxlarge"></i>
+            <p>AVALIAR</p>
+        </a>
+    </nav>
+
+    <!-- Navbar on small screens (Hidden on medium and large screens) -->
+    <div class="w3-top w3-hide-large w3-hide-medium" id="myNavbar">
+        <div class="w3-bar w3-opacity w3-hover-opacity-off w3-center w3-small">
+            <a href="#" class="w3-bar-item w3-button" style="width:25% !important">HOME</a>
+            <a href="#ferias" class="w3-bar-item w3-button" style="width:25% !important">FERIAS</a>
+            <a href="#gestor" class="w3-bar-item w3-button" style="width:25% !important">GESTOR</a>
+            <a href="#avaliar" class="w3-bar-item w3-button" style="width:25% !important">AVALIAR</a>
+        </div>
+    </div>
+
     <header>
-        <!-- <a href="#"><img
-                src="back-button.svg"
-                width="50px" height="50px" /></a> -->
-        <h1>Solicitar Férias</h1>
+        <div class="top-buttons">
+            <a href="index.html"><img src="/back-button.svg" alt="Logo botão voltar" width="67px" height="67px"></a>                
+            <h1>Solicitar Férias</h1>
+        </div>
         <p>Preencha os campos abaixo para cadastrar uma solicitação de férias.</p>
     </header>
     <main>
@@ -35,10 +76,11 @@
                         placeholder="Não coloque uma data do passado">
                     <label for="dias_ferias">Dias de férias a tirar</label>
                     <input type="number" min="0" max="30" name="dias_ferias" id="dias_ferias" placeholder="30">
-                    <input style="display: inline; width: auto;" type="checkbox" name="abono" id="abono" onclick="desabilitar()">
+                    <input style="display: inline; width: auto;" type="checkbox" name="abono" id="abono"
+                        onclick="desabilitar()">
                     <label for="abono" style="margin-left: 0;">Desejo abonar 1/3 do meu direito de férias</label>
                     <label style="display: block;" for="dias_abono">Dias de abono</label>
-                    
+
                     <input type="number" min="0" max="10" name="dias_abono" id="dias_abono"
                         placeholder="Dias de férias que deseja vender" disabled>
 
@@ -51,7 +93,7 @@
                                 height="35px">
                             <p>Importante <br>Todos os campos</p>
                         </div>
-                       <div class="buttons_form">
+                        <div class="buttons_form">
                             <button type="submit" class="btn btn-outline-info">Enviar</button>
                             <button type="button" class="btn btn-outline-danger">Cancelar</button>
                         </div>
@@ -62,8 +104,7 @@
     </main>
     <footer>
         <div class="footer">
-            <img src="logo-senior.svg"
-                alt="Logo Senior">
+            <img src="logo-senior.svg" alt="Logo Senior">
             <p>©Copyright 2021 Controle Férias S.A. Todos os direitos reservados.</p>
         </div>
     </footer>
