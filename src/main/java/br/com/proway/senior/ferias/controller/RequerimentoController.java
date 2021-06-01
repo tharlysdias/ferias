@@ -160,8 +160,9 @@ public class RequerimentoController {
 	 * @return
 	 */	
 	public ArrayList<Requerimento> buscarRequerimentoPorIdColaborador(Long idColaborador) {
-		Saldo saldo = repositorySaldo.findByIdColaborador(idColaborador);
-		ArrayList<Requerimento> obj = (ArrayList<Requerimento>) this.repositoryRequerimento.findBySaldo(saldo);
-			return obj;
+		//Saldo saldo = repositorySaldo.findByIdColaborador(idColaborador);
+		//ArrayList<Requerimento> obj = (ArrayList<Requerimento>) this.repositoryRequerimento.findBySaldo(saldo);
+			//return obj;
+		return null;
 	}
 }

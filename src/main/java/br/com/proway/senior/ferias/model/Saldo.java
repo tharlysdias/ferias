@@ -20,19 +20,21 @@ import javax.persistence.Id;
 @Entity
 public class Saldo {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "serial")
 	private Long id;
 
 	@Column(unique = true)
 	private Long idColaborador;
-
-	private int diasDisponiveisDeFerias;
+	
+	private int jornadas;
+	private Double diasDisponiveisDeFerias;
 	private LocalDate dataAdmissao;
 
-	public Saldo() {
-	}
-
-	public Saldo(Long idColaborador, int diasDisponiveisDeFerias, LocalDate dataAdmissao) {
+	public Saldo() {}
+	
+	public Saldo(Long idColaborador, Double diasDisponiveisDeFerias, LocalDate dataAdmissao) {
+		super();
 		this.idColaborador = idColaborador;
 		this.diasDisponiveisDeFerias = diasDisponiveisDeFerias;
 		this.dataAdmissao = dataAdmissao;
@@ -54,11 +56,19 @@ public class Saldo {
 		this.idColaborador = idColaborador;
 	}
 
-	public int getDiasDisponiveisDeFerias() {
+	public int getJornadas() {
+		return this.jornadas;
+	}
+
+	public void setJornadas(int jornadasAnterior) {
+		this.jornadas = jornadasAnterior;
+	}
+
+	public Double getDiasDisponiveisDeFerias() {
 		return diasDisponiveisDeFerias;
 	}
 
-	public void setDiasDisponiveisDeFerias(int diasDisponiveisDeFerias) {
+	public void setDiasDisponiveisDeFerias(Double diasDisponiveisDeFerias) {
 		this.diasDisponiveisDeFerias = diasDisponiveisDeFerias;
 	}
 
@@ -75,9 +85,10 @@ public class Saldo {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((dataAdmissao == null) ? 0 : dataAdmissao.hashCode());
-		result = prime * result + diasDisponiveisDeFerias;
+		result = prime * result + ((diasDisponiveisDeFerias == null) ? 0 : diasDisponiveisDeFerias.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((idColaborador == null) ? 0 : idColaborador.hashCode());
+		result = prime * result + jornadas;
 		return result;
 	}
 
@@ -95,7 +106,10 @@ public class Saldo {
 				return false;
 		} else if (!dataAdmissao.equals(other.dataAdmissao))
 			return false;
-		if (diasDisponiveisDeFerias != other.diasDisponiveisDeFerias)
+		if (diasDisponiveisDeFerias == null) {
+			if (other.diasDisponiveisDeFerias != null)
+				return false;
+		} else if (!diasDisponiveisDeFerias.equals(other.diasDisponiveisDeFerias))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -107,7 +121,8 @@ public class Saldo {
 				return false;
 		} else if (!idColaborador.equals(other.idColaborador))
 			return false;
+		if (jornadas != other.jornadas)
+			return false;
 		return true;
 	}
-
 }

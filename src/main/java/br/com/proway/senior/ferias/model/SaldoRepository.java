@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository;
 public interface SaldoRepository extends JpaRepository<Saldo, Long> {
 	
 	public Saldo findByIdColaborador(Long idColaborador);
-	
 }

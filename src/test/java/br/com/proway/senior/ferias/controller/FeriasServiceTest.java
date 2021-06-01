@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -51,7 +50,7 @@ public class FeriasServiceTest {
 	@Test
 	public void testAPopulateDB() throws Exception {
 		feriasService = new FeriasService(feriasRepository, requerimentoRepository, saldoRepository);
-		saldo1 = new Saldo(idColaboradorDoSaldo1, 30, LocalDate.now());
+		saldo1 = new Saldo(idColaboradorDoSaldo1, 30.0, LocalDate.now());
 		requerimento1 = new Requerimento();
 		requerimento1.setSaldo(saldo1);
 		requerimento1.setIdGestor(idGestor);
@@ -62,7 +61,7 @@ public class FeriasServiceTest {
 		requerimento1.setDiasVendidos(40);
 		requerimento1.setDataInicioFerias(LocalDate.now().plusMonths(1));
 
-		saldo2 = new Saldo(idColaboradorDoSaldo2, 60, LocalDate.now().minusMonths(12));
+		saldo2 = new Saldo(idColaboradorDoSaldo2, 60.0, LocalDate.now().minusMonths(12));
 		requerimento2 = new Requerimento(saldo2, idGestor, LocalDate.now(), LocalDate.now().plusDays(10),
 				"Mensagem de teste", "Resposta de teste", 15, 15, LocalDate.now().plusMonths(4));
 		feriasService.criarFerias(requerimento2);

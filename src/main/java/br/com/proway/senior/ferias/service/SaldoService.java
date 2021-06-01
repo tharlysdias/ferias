@@ -1,20 +1,27 @@
-package br.com.proway.senior.ferias.controller;
+package br.com.proway.senior.ferias.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.client.RestTemplate;
 
 import br.com.proway.senior.ferias.model.Saldo;
 import br.com.proway.senior.ferias.model.SaldoRepository;
+import br.com.proway.senior.ferias.model.externo.JornadaDTO;
 
 @Service
 public class SaldoService {
 
 	@Autowired
 	private SaldoRepository repository;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	/**
 	 * Cria novo saldo
@@ -24,7 +31,7 @@ public class SaldoService {
 	 */
 	public Saldo criarSaldo(Saldo novoSaldo) {
 		novoSaldo.setDataAdmissao(LocalDate.now());
-		novoSaldo.setDiasDisponiveisDeFerias(0);
+		novoSaldo.setDiasDisponiveisDeFerias(0.0);
 		return repository.save(novoSaldo);
 	}
 
@@ -40,9 +47,15 @@ public class SaldoService {
 	 * @return
 	 * @throws Exception
 	 */
-	public Saldo descontarSaldo(Long idColaborador, int diasDescontados) throws Exception {
-		int diasAtualizados = repository.findByIdColaborador(idColaborador).getDiasDisponiveisDeFerias()
-				- diasDescontados;
+	public Saldo descontarSaldo(Long idColaborador, double diasDescontados) throws Exception {
+		double diasAtualizados = 0.0;
+		
+		try {
+			diasAtualizados = repository.findByIdColaborador(idColaborador).getDiasDisponiveisDeFerias()
+			- diasDescontados;
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 		Saldo saldo = repository.findByIdColaborador(idColaborador);
 		saldo.setDiasDisponiveisDeFerias(diasAtualizados);
 		return repository.save(saldo);
@@ -58,9 +71,16 @@ public class SaldoService {
 	 * @return
 	 * @throws Exception
 	 */
-	public Saldo adicionarSaldo(Long idColaborador, int diasAdicionados) throws Exception {
-		int diasAtualizados = repository.findByIdColaborador(idColaborador).getDiasDisponiveisDeFerias()
-				+ diasAdicionados;
+	public Saldo adicionarSaldo(Long idColaborador, double diasAdicionados) throws Exception {
+		double diasAtualizados = 0.0;
+		
+		try {
+			diasAtualizados = repository.findByIdColaborador(idColaborador).getDiasDisponiveisDeFerias()
+			+ diasAdicionados;
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 		Saldo saldo = repository.findByIdColaborador(idColaborador);
 		saldo.setDiasDisponiveisDeFerias(diasAtualizados);
 		return repository.save(saldo);
@@ -83,7 +103,7 @@ public class SaldoService {
 	 * 
 	 * @return ArrayList<Saldo>
 	 */
-	ArrayList<Saldo> buscarTodos() {
+	public ArrayList<Saldo> buscarTodos() {
 		return (ArrayList<Saldo>) repository.findAll();
 	}
 
@@ -94,8 +114,9 @@ public class SaldoService {
 	 * 
 	 * @param idColaborador
 	 * @return {@link Saldo}
+	 * @throws Exception 
 	 */
-	public Saldo buscarPorIdColaborador(Long idColaborador) {
+	public Saldo buscarPorIdColaborador(Long idColaborador) throws Exception {
 		return repository.findByIdColaborador(idColaborador);
 	}
 
@@ -111,13 +132,19 @@ public class SaldoService {
 	 * @return {@link Saldo}
 	 * @throws Exception
 	 */
-	public Saldo atualizarSaldo(Saldo novoSaldo, @PathVariable Long id) throws Exception {
-		return repository.findById(id).map(saldo -> {
-			saldo.setDataAdmissao(novoSaldo.getDataAdmissao());
-			saldo.setDiasDisponiveisDeFerias(novoSaldo.getDiasDisponiveisDeFerias());
-			saldo.setIdColaborador(novoSaldo.getIdColaborador());
-			return repository.save(saldo);
-		}).orElseThrow(() -> new Exception("Erro: id \"" + id + "\" nao encontrada"));
+	public Saldo atualizarSaldoPorIdColaborador(Long idColaborador) throws Exception {
+		String path = "http://localhost:8081/api/jornadas/";
+		ResponseEntity<JornadaDTO[]> responseEntity = restTemplate.getForEntity(path + idColaborador, JornadaDTO[].class);
+		List<JornadaDTO> jornadas = Arrays.asList(responseEntity.getBody());
+		Saldo fetchedSaldo = repository.findByIdColaborador(idColaborador);
+		int jornadasAntigo = fetchedSaldo.getJornadas();
+		int jornadasAtual = (int) jornadas.size();
+		double saldoParaAdicionar = (jornadasAtual - jornadasAntigo) / 8.5;
+		
+		fetchedSaldo.setDiasDisponiveisDeFerias(fetchedSaldo.getDiasDisponiveisDeFerias() + saldoParaAdicionar);
+		fetchedSaldo.setJornadas(jornadasAtual);
+		
+		return repository.save(fetchedSaldo);
 	}
 
 	/**

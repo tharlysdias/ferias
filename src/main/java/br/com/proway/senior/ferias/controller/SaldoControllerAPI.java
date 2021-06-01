@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.proway.senior.ferias.model.Saldo;
 import br.com.proway.senior.ferias.model.dto.SaldoDTO;
+import br.com.proway.senior.ferias.service.SaldoService;
 
 @RestController
 public class SaldoControllerAPI {
@@ -59,7 +61,7 @@ public class SaldoControllerAPI {
 	 * @return {@link Saldo}
 	 */
 	@GetMapping(value = "/colaborador/{idColaborador}/saldo")
-	public SaldoDTO buscarPorIdColaborador(@PathVariable Long idColaborador) {
+	public SaldoDTO buscarPorIdColaborador(@PathVariable Long idColaborador) throws Exception {
 		return convertToDTO(service.buscarPorIdColaborador(idColaborador));
 	}
 
@@ -81,5 +83,10 @@ public class SaldoControllerAPI {
 
 	private Saldo convertToEntity(SaldoDTO saldoDto) {
 		return modelMapper.map(saldoDto, Saldo.class);
+	}
+	
+	@PutMapping("/atualizarSaldo/{id}")
+	SaldoDTO atualizarSaldo(@PathVariable Long idColaborador) throws Exception {
+		return convertToDTO(service.atualizarSaldoPorIdColaborador(idColaborador));
 	}
 }
