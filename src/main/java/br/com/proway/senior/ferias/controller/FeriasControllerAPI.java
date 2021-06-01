@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.proway.senior.ferias.model.Ferias;
 import br.com.proway.senior.ferias.model.dto.FeriasDTO;
 import br.com.proway.senior.ferias.model.enums.EstadoFerias;
+import br.com.proway.senior.ferias.service.FeriasService;
 
 @RestController
 public class FeriasControllerAPI {

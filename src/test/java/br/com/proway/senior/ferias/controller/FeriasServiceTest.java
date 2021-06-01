@@ -21,6 +21,7 @@ import br.com.proway.senior.ferias.model.Saldo;
 import br.com.proway.senior.ferias.model.SaldoRepository;
 import br.com.proway.senior.ferias.model.enums.EstadoFerias;
 import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
+import br.com.proway.senior.ferias.service.FeriasService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

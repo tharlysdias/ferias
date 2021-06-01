@@ -3,6 +3,7 @@ package br.com.proway.senior.ferias.controller;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -99,7 +100,7 @@ public class SaldoServiceTest {
 		service.buscarPorId((long) 949494949);
 	}
 	
-	@Test
+	@Ignore
 	public void testAutoUpdateSaldo() throws Exception {
 		Long newIdColaborador = getNewIdColaborador();
 		Saldo saldo = new Saldo();
