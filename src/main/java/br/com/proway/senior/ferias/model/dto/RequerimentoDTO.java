@@ -45,11 +45,19 @@ public class RequerimentoDTO {
 	}
 
 	public LocalDate getDataFechamento() {
-		return LocalDate.parse(this.dataFechamento);
+		if(this.dataFechamento != "null") {
+			return LocalDate.parse(this.dataFechamento);			
+		} else {
+			return null;
+		}
 	}
 
 	public void setDataFechamento(LocalDate dataFechamento) {
-		this.dataFechamento = dataFechamento.toString();
+		if(dataFechamento != null) {
+			this.dataFechamento = dataFechamento.toString();			
+		} else {
+			this.dataFechamento = "null";
+		}
 	}
 
 	public LocalDate getPrazoAnalise() {
