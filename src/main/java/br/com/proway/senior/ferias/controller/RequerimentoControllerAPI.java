@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +40,7 @@ public class RequerimentoControllerAPI {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	@CrossOrigin
 	@ResponseBody
 	@RequestMapping(path = "/requerimento", method = RequestMethod.GET)
 	public List<RequerimentoDTO> buscarTodos() {
@@ -46,12 +48,14 @@ public class RequerimentoControllerAPI {
 				.collect(Collectors.toList());
 	}
 
+	@CrossOrigin
 	@ResponseBody
 	@RequestMapping(path = "/requerimento/{id}", method = RequestMethod.GET)
 	public RequerimentoDTO buscarRequerimentoPorId(@PathVariable Long id) {
 		return convertToDTO(requerimentoService.buscarRequerimentoPorId(id));
 	}
 
+	@CrossOrigin
 	@ResponseBody
 	@RequestMapping(path = "/requerimento/colaborador/{idColaborador}", method = RequestMethod.GET)
 	public List<RequerimentoDTO> buscarRequerimentoPorIdColaborador(@PathVariable Long idColaborador) {
@@ -59,6 +63,7 @@ public class RequerimentoControllerAPI {
 				.collect(Collectors.toList());
 	}
 
+	@CrossOrigin
 	@ResponseBody
 	@RequestMapping(path = "/requerimento/colaborador/{idColaborador}/estado/", method = RequestMethod.GET)
 	public List<RequerimentoDTO> buscarRequerimentoPorIdEEstadoColaborador(
@@ -67,6 +72,7 @@ public class RequerimentoControllerAPI {
 				.map(this::convertToDTO).collect(Collectors.toList());
 	}
 
+	@CrossOrigin
 	@ResponseBody
 	@RequestMapping(path = "/requerimento/{idSaldo}", method = RequestMethod.POST)
 	public RequerimentoDTO criar(@PathVariable Long idSaldo, @RequestBody RequerimentoDTO requerimentoDto)
@@ -82,12 +88,14 @@ public class RequerimentoControllerAPI {
 		}
 	}
 
+	@CrossOrigin
 	@ResponseBody
 	@RequestMapping(path = "/requerimento/{id}", method = RequestMethod.DELETE)
 	public void desativar(@PathVariable("id") Long id) {
 		this.requerimentoService.desativarRequerimento(id);
 	}
 
+	@CrossOrigin
 	@ResponseBody
 	@RequestMapping(path = "/requerimento/avaliar/{id}", method = RequestMethod.PUT)
 	public RequerimentoDTO avaliar(@PathVariable Long id, @RequestBody EstadosRequerimento estado) throws Exception {

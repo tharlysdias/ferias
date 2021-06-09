@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,12 +35,14 @@ public class FeriasControllerAPI {
 	public FeriasControllerAPI() {
 	}
 
+	@CrossOrigin
 	@GetMapping("/ferias/{id}")
 	@ResponseBody
 	FeriasDTO buscarFeriasPorId(@PathVariable Long id) throws Exception {
 		return convertToDto(feriasService.buscarPorId(id));
 	}
 
+	@CrossOrigin
 	@GetMapping("/ferias")
 	ArrayList<FeriasDTO> buscarTodasAsFerias() {
 		ArrayList<Ferias> ferias = (ArrayList<Ferias>) feriasService.buscarTodasFerias();
@@ -49,6 +52,7 @@ public class FeriasControllerAPI {
 			return null;
 	}
 
+	@CrossOrigin
 	@GetMapping("/ferias/colaborador/{idColaborador}")
 	ArrayList<FeriasDTO> buscarTodasAsFeriasPorIdColaborador(@PathVariable Long idColaborador) throws Exception {
 		ArrayList<Ferias> ferias = feriasService.buscarTodasAsFeriasPorIdColaborador(idColaborador);
@@ -58,6 +62,7 @@ public class FeriasControllerAPI {
 			return null;
 	}
 
+	@CrossOrigin
 	@GetMapping("/ferias/colaborador/a_usufruir/{idColaborador}")
 	ArrayList<FeriasDTO> buscarFeriasAUsufruirPorIdColaborador(@PathVariable Long idColaborador) throws Exception {
 		ArrayList<Ferias> ferias = feriasService.buscarFeriasAUsufruirPorIdColaborador(idColaborador);
@@ -67,6 +72,7 @@ public class FeriasControllerAPI {
 			return null;
 	}
 
+	@CrossOrigin
 	@GetMapping("/ferias/gestor/a_usufruir/{idGestor}")
 	ArrayList<FeriasDTO> buscarFeriasAUsufruirDosSubordinados(@PathVariable Long idGestor) throws Exception {
 		ArrayList<Ferias> ferias = feriasService.buscarFeriasAUsufruirDosSubordinados(idGestor);
@@ -76,6 +82,7 @@ public class FeriasControllerAPI {
 			return null;
 	}
 
+	@CrossOrigin
 	@GetMapping("/ferias/gestor/usufruindo/{idGestor}")
 	ArrayList<FeriasDTO> buscarFeriasUsufruindoDosSubordinados(@PathVariable Long idGestor) throws Exception {
 		ArrayList<Ferias> ferias = feriasService.buscarFeriasUsufruindoDosSubordinados(idGestor);
@@ -91,6 +98,7 @@ public class FeriasControllerAPI {
 	 * @param id
 	 * @throws Exception
 	 */
+	@CrossOrigin
 	@PutMapping("/ferias/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void cancelarFerias(@PathVariable Long id) throws Exception {

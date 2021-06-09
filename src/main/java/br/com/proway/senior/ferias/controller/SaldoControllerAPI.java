@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +32,7 @@ public class SaldoControllerAPI {
 	 * @param saldoDto
 	 * @return
 	 */
+	@CrossOrigin
 	@PostMapping(value = "/saldo")
 	public SaldoDTO criarSaldo(@RequestBody SaldoDTO saldoDto) {
 		return convertToDTO(service.criarSaldo(convertToEntity(saldoDto)));
@@ -43,6 +45,7 @@ public class SaldoControllerAPI {
 	 * 
 	 * @return ArrayList<Saldo>
 	 */
+	@CrossOrigin
 	@GetMapping("/saldo")
 	ArrayList<SaldoDTO> buscarTodos() {
 		// return converterListaSaldoParaSaldoDTO((ArrayList<Saldo>)
@@ -60,6 +63,7 @@ public class SaldoControllerAPI {
 	 * @param idColaborador
 	 * @return {@link Saldo}
 	 */
+	@CrossOrigin
 	@GetMapping(value = "/colaborador/{idColaborador}/saldo")
 	public SaldoDTO buscarPorIdColaborador(@PathVariable Long idColaborador) throws Exception {
 		return convertToDTO(service.buscarPorIdColaborador(idColaborador));
@@ -72,6 +76,7 @@ public class SaldoControllerAPI {
 	 * @return {@link Saldo}
 	 * @throws Exception
 	 */
+	@CrossOrigin
 	@GetMapping(value = "/saldo/{id}")
 	public SaldoDTO buscarPorId(@PathVariable Long id) throws Exception {
 		return convertToDTO(service.buscarPorId(id));
@@ -85,6 +90,7 @@ public class SaldoControllerAPI {
 		return modelMapper.map(saldoDto, Saldo.class);
 	}
 	
+	@CrossOrigin
 	@PutMapping("/atualizarSaldo/{id}")
 	SaldoDTO atualizarSaldo(@PathVariable Long idColaborador) throws Exception {
 		return convertToDTO(service.atualizarSaldoPorIdColaborador(idColaborador));

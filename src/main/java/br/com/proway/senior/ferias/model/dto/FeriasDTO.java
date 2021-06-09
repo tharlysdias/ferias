@@ -21,7 +21,7 @@ public class FeriasDTO {
 		this.id = id;
 	}
 
-	public EstadoFerias getEstadoConverted() {
+	public EstadoFerias getEstado() {
 		return EstadoFerias.valueOf(this.estado);
 	}
 
@@ -29,7 +29,7 @@ public class FeriasDTO {
 		this.estado = estado.toString();
 	}
 
-	public LocalDate getDataInicioConverted() {
+	public LocalDate getDataInicio() {
 		return LocalDate.parse(this.dataInicio);
 	}
 
@@ -37,7 +37,7 @@ public class FeriasDTO {
 		this.dataInicio = dataInicio.toString();
 	}
 
-	public LocalDate getDataFimConverted() {
+	public LocalDate getDataFim() {
 		return LocalDate.parse(this.dataFim);
 	}
 
@@ -45,11 +45,11 @@ public class FeriasDTO {
 		this.dataFim = dataFim.toString();
 	}
 
-	public int getDiasRequisitados() {
+	public int getDias() {
 		return dias;
 	}
 
-	public void setDiasRequisitados(int diasRequisitados) {
+	public void setDias(int diasRequisitados) {
 		this.dias = diasRequisitados;
 	}
 
