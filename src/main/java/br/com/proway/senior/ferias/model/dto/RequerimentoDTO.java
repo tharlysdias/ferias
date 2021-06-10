@@ -14,6 +14,7 @@ import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
 
 public class RequerimentoDTO {
 
+	private Long id;
 	private Long idGestor;
 	private Long idColaborador;
 	private String dataAbertura;
@@ -27,6 +28,14 @@ public class RequerimentoDTO {
 	private String dataInicioFerias;
 
 	public RequerimentoDTO() {
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Long getIdGestor() {
@@ -54,16 +63,16 @@ public class RequerimentoDTO {
 	}
 
 	public LocalDate getDataFechamento() {
-		if(this.dataFechamento != "null") {
-			return LocalDate.parse(this.dataFechamento);			
+		if (this.dataFechamento != "null") {
+			return LocalDate.parse(this.dataFechamento);
 		} else {
 			return null;
 		}
 	}
 
 	public void setDataFechamento(LocalDate dataFechamento) {
-		if(dataFechamento != null) {
-			this.dataFechamento = dataFechamento.toString();			
+		if (dataFechamento != null) {
+			this.dataFechamento = dataFechamento.toString();
 		} else {
 			this.dataFechamento = "null";
 		}

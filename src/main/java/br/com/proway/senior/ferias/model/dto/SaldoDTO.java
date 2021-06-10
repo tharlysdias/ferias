@@ -1,5 +1,7 @@
 package br.com.proway.senior.ferias.model.dto;
 
+import java.time.LocalDate;
+
 /**
  * @see {@link Long} idColaborador
  * @see {@link int} diasDisponiveisDeFerias
@@ -8,10 +10,19 @@ package br.com.proway.senior.ferias.model.dto;
  */
 public class SaldoDTO {
 
+	private Long id;
 	private Long idColaborador;
 	private int diasDisponiveisDeFerias;
 
 	public SaldoDTO() {
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Long getIdColaborador() {
