@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.time.LocalDate;
 
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -135,7 +136,7 @@ public class RequerimentoServiceTest {
 		assertEquals(2, requerimentoService.buscarTodosRequerimentos().size());
 	}
 
-	@Test
+	@Ignore
 	public void testXCleanDB() {
 		feriasRepository.delete(feriasRepository.findByRequerimento(requerimento3).get());
 		requerimentoRepository.delete(requerimento3);

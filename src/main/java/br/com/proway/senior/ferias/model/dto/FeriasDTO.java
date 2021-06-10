@@ -22,7 +22,14 @@ public class FeriasDTO {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	public long getIdColaborador() {
+		return idColaborador;
+	}
 
+	public void setIdColaborador(long idColaborador) {
+		this.idColaborador = idColaborador;
+	}
 
 	public void setIdRequerimento(Requerimento requerimento) {
 		this.idRequerimento = requerimento.getId();

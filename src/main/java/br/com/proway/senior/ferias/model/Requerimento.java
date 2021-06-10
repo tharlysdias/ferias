@@ -40,6 +40,8 @@ public class Requerimento implements IRequerimento {
 	private Saldo saldo;
 
 	private Long idGestor;
+	
+	private Long idColaborador;
 
 	private LocalDate dataAbertura;
 	private LocalDate dataFechamento;
@@ -82,6 +84,14 @@ public class Requerimento implements IRequerimento {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public Long getIdColaborador() {
+		return idColaborador;
+	}
+
+	public void setIdColaborador(Long idColaborador) {
+		this.idColaborador = idColaborador;
 	}
 
 	public Saldo getSaldo() {
