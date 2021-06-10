@@ -80,7 +80,11 @@ public class FeriasService {
 		ArrayList<Requerimento> requerimentos = (ArrayList<Requerimento>) repositoryRequerimento.findBySaldo(saldo);
 		ArrayList<Ferias> ferias = new ArrayList<Ferias>();
 		for (Requerimento requerimento : requerimentos) {
-			ferias.add(repositoryFerias.findByRequerimento(requerimento).get());
+			Optional<Ferias> f = repositoryFerias.findByRequerimento(requerimento);
+			if(f.isPresent()) {
+				System.out.println(f.get().getId());
+				ferias.add(f.get());
+			}
 		}
 		return ferias;
 	}
