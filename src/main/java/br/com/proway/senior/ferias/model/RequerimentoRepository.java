@@ -24,4 +24,6 @@ public interface RequerimentoRepository extends JpaRepository<Requerimento, Long
 	
 	public List<Requerimento> findAllByEstadoAndSaldo(EstadosRequerimento estado, Saldo saldo);
 	
+	public List<Requerimento> findAllByEstado(EstadosRequerimento estado);
+	
 }

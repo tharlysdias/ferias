@@ -22,7 +22,6 @@ public class FeriasDTO {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
 
 	public void setIdRequerimento(Requerimento requerimento) {
 		this.idRequerimento = requerimento.getId();

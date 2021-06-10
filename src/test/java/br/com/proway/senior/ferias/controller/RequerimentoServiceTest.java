@@ -136,7 +136,7 @@ public class RequerimentoServiceTest {
 		assertEquals(2, requerimentoService.buscarTodosRequerimentos().size());
 	}
 
-	@Ignore
+	@Test
 	public void testXCleanDB() {
 		feriasRepository.delete(feriasRepository.findByRequerimento(requerimento3).get());
 		requerimentoRepository.delete(requerimento3);

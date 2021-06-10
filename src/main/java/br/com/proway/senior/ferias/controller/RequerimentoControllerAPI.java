@@ -62,6 +62,14 @@ public class RequerimentoControllerAPI {
 		return requerimentoService.buscarRequerimentoPorIdColaborador(idColaborador).stream().map(this::convertToDTO)
 				.collect(Collectors.toList());
 	}
+	
+	@CrossOrigin
+	@ResponseBody
+	@RequestMapping(path = "/requerimento/estado/pendente", method = RequestMethod.GET)
+	public List<RequerimentoDTO> buscarRequerimentosPendentes() {
+		return requerimentoService.buscarTodosRequerimentosPendentes().stream().map(this::convertToDTO)
+				.collect(Collectors.toList());
+	}
 
 	@CrossOrigin
 	@ResponseBody

@@ -38,6 +38,10 @@ public class RequerimentoService {
 	public ArrayList<Requerimento> buscarTodosRequerimentos() {
 		return (ArrayList<Requerimento>) this.repositoryRequerimento.findAll();
 	}
+	
+	public ArrayList<Requerimento> buscarTodosRequerimentosPendentes() {
+		return (ArrayList<Requerimento>) this.repositoryRequerimento.findAllByEstado(EstadosRequerimento.PENDENTE);
+	}
 
 	public Requerimento buscarRequerimentoPorId(Long id) {
 		Optional<Requerimento> obj = this.repositoryRequerimento.findById(id);
@@ -119,10 +123,12 @@ public class RequerimentoService {
 	 * @throws Exception 
 	 */
 	private Ferias aprovarRequerimento(Requerimento requerimento) throws Exception {
+		System.out.println("AQUIIIIIIIIIIIIIIIIIIIIIIIIII");
 		requerimento.setEstado(EstadosRequerimento.APROVADO);
 		atualizarRequerimento(requerimento);
 		Requerimento r = repositoryRequerimento.getById(requerimento.getId());
 		Ferias f = controllerFerias.criarFerias(r);
+		System.out.println(f.getId());
 		return f;
 	}
 
