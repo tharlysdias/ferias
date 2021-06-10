@@ -142,7 +142,7 @@ public class FeriasServiceTest {
 		assertEquals(1, lista.size());
 	}
 
-	@Test
+	@Ignore
 	public void testXCleanDB() {
 		feriasRepository.delete(ferias1);
 		requerimentoRepository.delete(requerimento1);

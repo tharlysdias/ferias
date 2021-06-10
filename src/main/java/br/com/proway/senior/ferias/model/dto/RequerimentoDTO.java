@@ -15,6 +15,7 @@ import br.com.proway.senior.ferias.model.enums.EstadosRequerimento;
 public class RequerimentoDTO {
 
 	private Long idGestor;
+	private Long idColaborador;
 	private String dataAbertura;
 	private String dataFechamento;
 	private String prazoAnalise;
@@ -34,6 +35,14 @@ public class RequerimentoDTO {
 
 	public void setIdGestor(Long idGestor) {
 		this.idGestor = idGestor;
+	}
+	
+	public long getIdColaborador() {
+		return idColaborador;
+	}
+
+	public void setIdColaborador(long idColaborador) {
+		this.idColaborador = idColaborador;
 	}
 
 	public LocalDate getDataAbertura() {

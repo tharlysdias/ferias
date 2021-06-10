@@ -7,6 +7,7 @@ import br.com.proway.senior.ferias.model.enums.EstadoFerias;
 public class FeriasDTO {
 
 	private int id;
+	private long idColaborador;
 	private String estado;
 	private String dataInicio;
 	private String dataFim;
@@ -19,6 +20,14 @@ public class FeriasDTO {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public long getIdColaborador() {
+		return idColaborador;
+	}
+
+	public void setIdColaborador(long idColaborador) {
+		this.idColaborador = idColaborador;
 	}
 
 	public EstadoFerias getEstado() {

@@ -85,6 +85,7 @@ public class RequerimentoService {
 	 * @return
 	 */
 	public Requerimento criarRequerimento(Requerimento requerimento) {
+		requerimento.setIdColaborador(requerimento.getSaldo().getIdColaborador());
 		return this.repositoryRequerimento.save(requerimento);
 	}
 
