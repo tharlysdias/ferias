@@ -2,23 +2,30 @@ package br.com.proway.senior.ferias.model.dto;
 
 import java.time.LocalDate;
 
+import br.com.proway.senior.ferias.model.Requerimento;
 import br.com.proway.senior.ferias.model.enums.EstadoFerias;
 
 public class FeriasDTO {
 
-	private int id;
+	private Long id;
+	private Long idRequerimento;
 	private String estado;
 	private String dataInicio;
 	private String dataFim;
 	private int dias;
 	private int diasVendidos;
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
+	}
+
+
+	public void setIdRequerimento(Requerimento requerimento) {
+		this.idRequerimento = requerimento.getId();
 	}
 
 	public EstadoFerias getEstado() {
